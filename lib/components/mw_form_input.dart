@@ -35,7 +35,7 @@ class MyWalletFormInput extends StatelessWidget {
         label: Text(label),
         isDense: true,
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Theme.of(context).colorScheme.secondary,
         contentPadding: const EdgeInsets.all(8),
         border: InputBorder.none,
       ),

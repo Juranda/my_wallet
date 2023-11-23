@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_wallet/pages/cadastro_view.dart';
+import 'package:my_wallet/pages/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login_view.dart';
+import 'package:my_wallet/pages/professor_cadastro_view.dart';
 import 'package:my_wallet/styles.dart';
 
 void main() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
   runApp(const App());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 }
 
 class App extends StatelessWidget {
@@ -24,7 +24,8 @@ class App extends StatelessWidget {
       initialRoute: "/login",
       routes: <String, WidgetBuilder>{
         "/login": (context) => LoginView(),
-        "/siginup": (context) => CadastroView(),
+        "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
+        "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
         "/home": (context) => HomePageView(),
       },
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_input.dart';
 import 'package:my_wallet/styles.dart';
 
@@ -35,14 +36,7 @@ class _LoginViewState extends State<LoginView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SizedBox(
-              width: 206,
-              height: 126,
-              child: Image.network(
-                "https://upload.wikimedia.org/wikipedia/pt/f/f1/Scrooge_McDuck.jpg",
-                fit: BoxFit.fill,
-              ),
-            ),
+            Logo(),
             Form(
               child: Column(
                 children: [
@@ -62,23 +56,13 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(
                     height: 40,
                   ),
-                  Text(
-                    'Esqueci minha senha',
-                    style: Styles.linkTextStyle,
-                  ),
                   const SizedBox(
                     height: 20,
-                  ),
-                  SizedBox(
-                    height: 75,
-                    width: 75,
-                    child: Image.network(
-                        "https://img.freepik.com/vetores-premium/icone-de-seta_701361-329.jpg?w=826"),
                   ),
                 ],
               ),
             ),
-            Column(
+            Row(
               children: [
                 Text(
                   'Não possui uma conta?',
@@ -87,13 +71,61 @@ class _LoginViewState extends State<LoginView> {
                     decoration: TextDecoration.none,
                   ),
                 ),
-                Text(
-                  'Cadastre-se!',
-                  style: Styles.linkTextStyle,
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  onTap: () =>
+                      Navigator.pushNamed(context, "/siginup&pessoa=aluno"),
+                  child: Text(
+                    'Cadastre-se!',
+                    style: Styles.linkTextStyle,
+                  ),
                 )
               ],
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Column(
+                children: [
+                  Text(
+                    'Próx.',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                  ),
+                  NextLoginButton(
+                    action: _tryLogin,
+                  ),
+                ],
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class NextLoginButton extends StatelessWidget {
+  const NextLoginButton({super.key, required this.action});
+
+  final void Function() action;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        height: 100,
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: Colors.white,
+        ),
+        child: Image.asset(
+          "assets/images/seta.png",
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

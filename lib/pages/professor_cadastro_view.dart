@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
+import 'package:my_wallet/pages/login_view.dart';
+import 'package:my_wallet/styles.dart';
 import 'package:validadores/Validador.dart';
 
-class CadastroView extends StatefulWidget {
-  const CadastroView({super.key});
+class ProfessorCadastroView extends StatefulWidget {
+  const ProfessorCadastroView({super.key});
 
   @override
-  State<CadastroView> createState() => _CadastroViewState();
+  State<ProfessorCadastroView> createState() => _ProfessorCadastroViewState();
 }
 
-class _CadastroViewState extends State<CadastroView> {
+class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   final _formKey = GlobalKey<FormState>();
   int escolaridade = 0;
   List<(String nome, int id)> escolaridades = [
@@ -33,14 +36,7 @@ class _CadastroViewState extends State<CadastroView> {
             padding: const EdgeInsets.all(14),
             child: Column(
               children: [
-                SizedBox(
-                  width: 206,
-                  height: 126,
-                  child: Image.network(
-                    "https://upload.wikimedia.org/wikipedia/pt/f/f1/Scrooge_McDuck.jpg",
-                    fit: BoxFit.fill,
-                  ),
-                ),
+                Logo(),
                 const SizedBox(
                   height: 20,
                 ),
@@ -120,34 +116,6 @@ class _CadastroViewState extends State<CadastroView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                              flex: 2,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                child: DropdownButton(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 2,
-                                    horizontal: 8,
-                                  ),
-                                  value: escolaridades[escolaridade].$2,
-                                  items: escolaridades
-                                      .map(
-                                        (tuple) => DropdownMenuItem(
-                                          value: tuple.$2,
-                                          child: Text(tuple.$1),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: (novaEscolaridade) {
-                                    setState(() {
-                                      escolaridade = novaEscolaridade!;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            const Expanded(
                               child: MyWalletFormInput(
                                 label: 'Turma (opcional)',
                                 isRequired: false,
@@ -159,18 +127,25 @@ class _CadastroViewState extends State<CadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return const Text('Hey');
-                              },
-                            );
-                          }
-                        },
-                        child: const Text('Validar'),
+                      Text(
+                        'É aluno(a)?',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.white,
+                            ),
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(
+                            context, "/siginup&pessoa=aluno"),
+                        child: Text(
+                          'Cadastre-se aqui!',
+                          style: Styles.linkTextStyle,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: NextLoginButton(
+                          action: () => Navigator.pushNamed(context, "/home"),
+                        ),
                       ),
                     ],
                   ),
