@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/pages/investiments.dart';
 import 'package:my_wallet/pages/lobby.dart';
 import 'package:my_wallet/pages/trails_view.dart';
+import 'package:my_wallet/pages/turmas_view.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -56,6 +57,7 @@ class _HomePageViewState extends State<HomePageView> {
               Lobby(),
               TrailsView(),
               Investiments(),
+              TurmasView()
             ][selectedPageIndex],
           ],
         ),
@@ -69,6 +71,7 @@ class _HomePageViewState extends State<HomePageView> {
           NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Investimentos'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
         ],
       ),
     );
