@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:my_wallet/pages/app_settings_view.dart';
 import 'package:my_wallet/pages/investiments.dart';
 import 'package:my_wallet/pages/lobby.dart';
 import 'package:my_wallet/pages/trails_view.dart';
@@ -13,6 +16,12 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> {
   int selectedPageIndex = 0;
+  int _currentPageView = 0;
+  set currentPageView(int value)
+  {
+    _currentPageView = value;
+    if (value < 3) selectedPageIndex = value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +31,7 @@ class _HomePageViewState extends State<HomePageView> {
         child: Column(
           children: [
             Container(
-              color: Theme.of(context).colorScheme.primary,
+              decoration: selectedPageIndex == 0? BoxDecoration(gradient: LinearGradient(colors: [Theme.of(context).colorScheme.primary, Color.fromRGBO(34, 95, 8, 1)], begin: Alignment.bottomCenter, end: Alignment.topCenter)) : BoxDecoration(color:Theme.of(context).colorScheme.primary),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Row(
@@ -30,10 +39,7 @@ class _HomePageViewState extends State<HomePageView> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                        ),
+                        Icon(Icons.account_circle, size: 40, color: Theme.of(context).colorScheme.secondary,),
                         SizedBox(
                           width: 10,
                         ),
@@ -46,9 +52,8 @@ class _HomePageViewState extends State<HomePageView> {
                         ),
                       ],
                     ),
-                    CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                    ),
+                    IconButton(onPressed: () =>
+                    setState((){currentPageView = 4;}), icon: Icon(Icons.settings, size: 40, color: Theme.of(context).colorScheme.secondary))
                   ],
                 ),
               ),
@@ -57,15 +62,17 @@ class _HomePageViewState extends State<HomePageView> {
               Lobby(),
               TrailsView(),
               Investiments(),
-              TurmasView()
-            ][selectedPageIndex],
+              TurmasView(),
+              AppSettingsView()
+            ][_currentPageView],
           ],
         ),
       ),
       bottomNavigationBar: NavigationBar(
+
         selectedIndex: selectedPageIndex,
         onDestinationSelected: (value) => setState(() {
-          selectedPageIndex = value;
+          currentPageView = value;
         }),
         destinations: [
           NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),

@@ -41,7 +41,19 @@ class Lobby extends StatelessWidget {
         Column(
           children: [
             Section(
-              sectionTitle: 'Trilhas',
+              sectionTitle: 'Notícias',
+              sectionHeight: 150,
+              items: ['FIIs', 'Cartão de Credito', 'Renda Fixa']
+                  .map(
+                    (e) => TrailLobbyCard(
+                      trailName: e,
+                      trailDescription: 'Lorem ipsum',
+                    ),
+                  )
+                  .toList(),
+            ),
+            Section(
+              sectionTitle: 'Dicas e informações',
               sectionHeight: 150,
               items: ['FIIs', 'Cartão de Credito', 'Renda Fixa']
                   .map(

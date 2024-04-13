@@ -10,7 +10,7 @@ class TurmasView extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 100,
+            height: 60,
               width: double.infinity,
               color: Theme.of(context).colorScheme.primary,
               child: Center(
