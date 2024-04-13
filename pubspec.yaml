@@ -34,9 +34,15 @@ dependencies:
   validadores: ^1.0.1
   gap: ^3.0.1
   floating_navbar: ^2.0.2
-  intl: ^0.18.1
+  intl: ^0.19.0
   uuid: ^4.2.1
   flutter_svg: ^2.0.9
+  
+  #Webview Test
+  webview_flutter: ^4.7.0
+  permission_handler: ^11.3.0
+  url_launcher: ^6.2.5
+  path_provider: ^2.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

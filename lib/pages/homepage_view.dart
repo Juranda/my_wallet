@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/pages/investiments.dart';
 import 'package:my_wallet/pages/lobby.dart';
 import 'package:my_wallet/pages/trails_view.dart';
+import 'package:my_wallet/pages/turmas_view.dart';
+import 'package:my_wallet/webviewexample.dart';
+
+import 'my_wallet_app_bar.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -20,42 +24,13 @@ class _HomePageViewState extends State<HomePageView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              color: Theme.of(context).colorScheme.primary,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Seja bem-vinde Rodolfo!'),
-                            Text('Turma 701'),
-                          ],
-                        ),
-                      ],
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            MyWalletAppBar(),
             [
               Lobby(),
               TrailsView(),
               Investiments(),
+              TurmasView(),
+              WebViewExample(),
             ][selectedPageIndex],
           ],
         ),
@@ -69,6 +44,8 @@ class _HomePageViewState extends State<HomePageView> {
           NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Investimentos'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'Ar')
         ],
       ),
     );

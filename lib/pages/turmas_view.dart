@@ -9,10 +9,19 @@ class TurmasView extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            child: Container(
-              child: Container(),
+            color: Theme.of(context).primaryColor,
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.08,
+            child: Center(
+              child: Text(
+                "Turma",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.secondary),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
