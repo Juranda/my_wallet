@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_wallet/context-providers/DarkModeContextProvider.dart';
 import 'package:my_wallet/pages/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/app_settings_view.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login_view.dart';
 import 'package:my_wallet/pages/professor_cadastro_view.dart';
-import 'package:my_wallet/styles.dart';
-import 'package:my_wallet/theme_provider.dart';
+import 'package:my_wallet/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
+    create: (context) => SettingsProvider(),
     child: const App(),
   ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -32,7 +29,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My Wallet',
-      theme: Provider.of<ThemeProvider>(context).themeData,
+      theme: Provider.of<SettingsProvider>(context).themeData,
       initialRoute: "/login",
       routes: <String, WidgetBuilder>{
         "/login": (context) => LoginView(),
