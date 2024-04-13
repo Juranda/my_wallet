@@ -77,7 +77,7 @@ class TurmasView extends StatelessWidget {
                   height: 250,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: GridView.count(

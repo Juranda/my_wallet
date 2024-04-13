@@ -44,10 +44,13 @@ class _HomePageViewState extends State<HomePageView> {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.account_circle,
-                          size: 40,
-                          color: Theme.of(context).colorScheme.secondary,
+                        IconButton(
+                          onPressed: ()=>Navigator.pushNamed(context, "/accountSettings"),
+                          icon: Icon(
+                            Icons.account_circle,
+                            size: 40,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
                         SizedBox(
                           width: 10,

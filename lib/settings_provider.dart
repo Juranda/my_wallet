@@ -5,14 +5,22 @@ class SettingsProvider with ChangeNotifier {
   ThemeData _themeData = lightMode;
   bool _isDarkMode = false;
 
+  bool _gameAudio = true;
+  bool get gameAudio => _gameAudio;
+  set gameAudio(bool value) => _gameAudio = value;
+  
+
   bool get isDarkMode => _isDarkMode;
+  
+
   ThemeData get themeData => _themeData;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
-    _isDarkMode = false;
     notifyListeners();
   }
+
+
 
   void toggleDarkMode() {
     if (themeData == lightMode) {

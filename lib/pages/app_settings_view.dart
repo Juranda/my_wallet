@@ -63,16 +63,21 @@ class _AppSettingsViewState extends State<AppSettingsView>
                   style: TextStyle(fontSize: 30),
                 ),
                 Switch(
-                  value: false,
-                  onChanged: (value) => {value = !value},
+                  value: settings.gameAudio,
+                  onChanged: (value) => {setState((){settings.gameAudio = value;}) },
                 ),
               ]),
+              Divider(
+                color: Colors.black,
+              ),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Sobre', textAlign: TextAlign.left, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold), )),
+              SizedBox(height: 50,),
+              Container(child: Text('Versão 1.0.0', style: TextStyle(fontSize: 20),), alignment: Alignment.centerLeft, )
             ],
           ),
         ),
-        Divider(
-          color: Colors.black,
-        )
       ],
     );
   }
