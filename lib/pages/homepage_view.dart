@@ -4,6 +4,8 @@ import 'package:my_wallet/pages/lobby.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trails_view.dart';
 import 'package:my_wallet/pages/turmas_view.dart';
+import 'package:my_wallet/role_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -17,6 +19,8 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
+    RoleProvider _roleProvider =
+        Provider.of<RoleProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
@@ -58,8 +62,11 @@ class _HomePageViewState extends State<HomePageView> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Seja bem-vinde Rodolfo!'),
-                              Text('Turma 701'),
+                              Text('Seja bem-vindo Rodolfo!'),
+                              switch (_roleProvider.role) {
+                                Role.professor => Text('Professor'),
+                                Role.aluno => Text('Turma 701'),
+                              }
                             ],
                           ),
                         ],
@@ -99,7 +106,7 @@ class _HomePageViewState extends State<HomePageView> {
         destinations: [
           NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Investimentos'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Ar'),
         ],
