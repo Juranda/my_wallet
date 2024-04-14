@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_input.dart';
+import 'package:my_wallet/role_provider.dart';
 import 'package:my_wallet/styles.dart';
+import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -13,7 +15,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-
   void _tryLogin() {
     // final username = usernameController.text;
     // final password = passwordController.text;
@@ -29,6 +30,10 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+  final roleProvider = Provider.of<RoleProvider>(context, listen:false);
+
+
+
     return Material(
       color: Theme.of(context).colorScheme.primary,
       child: Padding(
@@ -59,6 +64,9 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(
                     height: 20,
                   ),
+                  Switch(value: roleProvider.role == Role.professor, onChanged: (_){setState(() {
+                    roleProvider.role = roleProvider.role == Role.professor? Role.aluno : Role.professor;
+                  });})
                 ],
               ),
             ),

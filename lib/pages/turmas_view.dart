@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/components/aluno_profile.dart';
+import 'package:my_wallet/pages/turma_adiconar_aluno.dart';
 
-class TurmasView extends StatelessWidget {
-  const TurmasView({super.key});
+class TurmasView extends StatefulWidget {
+  TurmasView({super.key});
+
+  @override
+  State<TurmasView> createState() => _TurmasViewState();
+}
+
+class _TurmasViewState extends State<TurmasView> {
+  List<AlunoProfile> alunos = [];
+
+  _TurmasViewState() {
+    alunos =
+        List.generate(30, (index) => AlunoProfile(alunos, index, removeAluno));
+  }
+
+  void removeAluno(AlunoProfile target) {
+    setState(() {
+      alunos.remove(target);
+      print(alunos.length);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +45,17 @@ class TurmasView extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
-                clipBehavior: Clip.none,
-                width: MediaQuery.of(context).size.width,
-                height: 170,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(25)),
-                child: Text('Professor',
-                    style: TextStyle(fontSize: 30),
-                    textAlign: TextAlign.center),
-                padding: EdgeInsets.all(20)),
+              clipBehavior: Clip.none,
+              width: MediaQuery.of(context).size.width,
+              height: 170,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Text('Professor',
+                  style: TextStyle(fontSize: 30), textAlign: TextAlign.center),
+              padding: EdgeInsets.all(20),
+            ),
             Positioned(
               top: 80,
               child: Container(
@@ -63,16 +85,41 @@ class TurmasView extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
-                clipBehavior: Clip.none,
-                width: MediaQuery.of(context).size.width,
-                height: 280,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(25)),
-                child: Text('Alunos',
+              clipBehavior: Clip.none,
+              width: MediaQuery.of(context).size.width,
+              height: 280,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    'Alunos ${alunos.length}',
                     style: TextStyle(fontSize: 30),
-                    textAlign: TextAlign.center),
-                padding: EdgeInsets.all(20)),
+                    textAlign: TextAlign.center,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Adicionar Aluno'),
+                            content: AdicionarAluno(),
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      Icons.add_circle,
+                      size: 40,
+                    ),
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.all(20),
+            ),
             Positioned(
               top: 80,
               child: Container(
@@ -84,13 +131,19 @@ class TurmasView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: GridView.count(
-                    crossAxisCount: 4,
-                    children: List.generate(30, (index) {
-                      return Column(children: [
-                        Icon(Icons.person_outline_rounded, size: 50),
-                        Text('Nome ${index}')
-                      ]);
-                    })),
+                  crossAxisCount: 4,
+                  children: List.generate(
+                    30,
+                    (index) {
+                      return Column(
+                        children: [
+                          Icon(Icons.person_outline_rounded, size: 50),
+                          Text('Nome ${index}'),
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ),
             )
           ],

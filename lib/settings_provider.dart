@@ -7,7 +7,12 @@ class SettingsProvider with ChangeNotifier {
 
   bool _gameAudio = true;
   bool get gameAudio => _gameAudio;
-  set gameAudio(bool value) => _gameAudio = value;
+
+  set gameAudio(bool value)
+  {
+    _gameAudio = value;
+    notifyListeners();
+  }
   
 
   bool get isDarkMode => _isDarkMode;
@@ -31,4 +36,5 @@ class SettingsProvider with ChangeNotifier {
       _isDarkMode = false;
     }
   }
+
 }

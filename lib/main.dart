@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_wallet/pages/account_settings/account_settings_view.dart';
 import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
 import 'package:my_wallet/pages/aluno_cadastro_view.dart';
@@ -9,14 +10,12 @@ import 'package:my_wallet/pages/login_view.dart';
 import 'package:my_wallet/pages/professor_cadastro_view.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trails_view.dart';
+import 'package:my_wallet/role_provider.dart';
 import 'package:my_wallet/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => SettingsProvider(),
-    child: const App(),
-  ));
+  runApp(const App());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 }
 
@@ -30,24 +29,33 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'My Wallet',
-        theme: Provider.of<SettingsProvider>(context).themeData,
-        initialRoute: "/login",
-        routes: <String, WidgetBuilder>{
-          "/login": (context) => LoginView(),
-          "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
-          "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
-          "/home": (context) => HomePageView(),
-          "/home/trails/trail": (context) => TrailView(),
-          "/appSettings": (context) => AppSettingsView(),
-          "/ar": (context) => ArView(),
-          "/accountSettings": (context) => AccountSettingsView(),
-          "/accountSettingsChangePassword": (context) => AccountChangePassword()
-        },
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
+        ChangeNotifierProvider(create: (context) => RoleProvider())
+      ],
+      builder: (context, child) {
+        return SafeArea(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'My Wallet',
+            theme: Provider.of<SettingsProvider>(context).themeData,
+            initialRoute: "/login",
+            routes: <String, WidgetBuilder>{
+              "/login": (context) => LoginView(),
+              "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
+              "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
+              "/home": (context) => HomePageView(),
+              "/home/trails/trail": (context) => TrailView(),
+              "/appSettings": (context) => AppSettingsView(),
+              "/ar": (context) => ArView(),
+              "/accountSettings": (context) => AccountSettingsView(),
+              "/accountSettingsChangePassword": (context) =>
+                  AccountChangePassword()
+            },
+          ),
+        );
+      },
     );
   }
 }

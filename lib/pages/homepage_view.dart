@@ -20,72 +20,76 @@ class _HomePageViewState extends State<HomePageView> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              decoration: _selectedPageIndex == 0
-                  ? BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Theme.of(context).colorScheme.primary,
-                            Color.fromRGBO(34, 95, 8, 1)
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter),
-                    )
-                  : BoxDecoration(color: Theme.of(context).colorScheme.primary),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: ()=>Navigator.pushNamed(context, "/accountSettings"),
-                          icon: Icon(
-                            Icons.account_circle,
-                            size: 40,
-                            color: Theme.of(context).colorScheme.secondary,
+        child: Stack(children: [
+          Column(
+            children: [
+              Container(
+                decoration: _selectedPageIndex == 0
+                    ? BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              Theme.of(context).colorScheme.primary,
+                              Color.fromRGBO(34, 95, 8, 1)
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter),
+                      )
+                    : BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () => Navigator.pushNamed(
+                                context, "/accountSettings"),
+                            icon: Icon(
+                              Icons.account_circle,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Seja bem-vinde Rodolfo!'),
-                            Text('Turma 701'),
-                          ],
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () => setState(
-                        () {
-                          Navigator.pushNamed(context, '/appSettings');
-                        },
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Seja bem-vinde Rodolfo!'),
+                              Text('Turma 701'),
+                            ],
+                          ),
+                        ],
                       ),
-                      icon: Icon(
-                        Icons.settings,
-                        size: 40,
-                        color: Theme.of(context).colorScheme.secondary,
+                      IconButton(
+                        onPressed: () => setState(
+                          () {
+                            Navigator.pushNamed(context, '/appSettings');
+                          },
+                        ),
+                        icon: Icon(
+                          Icons.settings,
+                          size: 40,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            [
-              Lobby(),
-              TrailsView(),
-              Investiments(),
-              TurmasView(),
-              ArView()
-            ][_selectedPageIndex],
-          ],
-        ),
+              [
+                Lobby(),
+                TrailsView(),
+                Investiments(),
+                TurmasView(),
+                ArView()
+              ][_selectedPageIndex],
+            ],
+          ),
+        ]),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedPageIndex,
@@ -100,6 +104,22 @@ class _HomePageViewState extends State<HomePageView> {
           NavigationDestination(icon: Icon(Icons.abc), label: 'Ar'),
         ],
       ),
+    );
+  }
+
+  Widget _navBar() {
+    return Container(
+      height: 65,
+      margin: EdgeInsets.only(right: 24, left: 24, bottom: 24),
+      decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withAlpha(20),
+                blurRadius: 20,
+                spreadRadius: 10)
+          ]),
     );
   }
 }
