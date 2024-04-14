@@ -103,9 +103,9 @@ class _HomePageViewState extends State<HomePageView> {
         destinations: [
           NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Investimentos'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Ar'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'AR'),
         ],
       ),
     );

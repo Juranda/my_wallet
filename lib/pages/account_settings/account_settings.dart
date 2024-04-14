@@ -22,8 +22,7 @@ class AccountSettings extends StatelessWidget {
           child: Text(
             'Mudar Senha',
             textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary, fontSize: 25),
+            style: Theme.of(context).textTheme.headlineMedium
           ),
         ),
       ),
@@ -40,9 +39,9 @@ class AccountSettings extends StatelessWidget {
             height: 40,
             child: Text(
               'Logout',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary, fontSize: 25),
+              textAlign: TextAlign.center,            
+              style: Theme.of(context).textTheme.headlineMedium
+
             ),
           ))
     ]);

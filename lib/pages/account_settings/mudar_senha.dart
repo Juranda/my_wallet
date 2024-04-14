@@ -32,20 +32,15 @@ class _AccountChangePasswordState extends State<AccountChangePassword> {
                       floatingLabelBehavior: FloatingLabelBehavior.always
                     ),
                   ),
-                  TextButton(onPressed: ()=>print('click'), 
-                  clipBehavior: Clip.hardEdge,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary
-                    ),
+                  SizedBox(height: 20,),
+                  SizedBox(
+                    width: 200,
+                    child: TextButton(onPressed: ()=>print('click'),
+                    style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
                     child: Text(
                       'Redefinir', 
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),),
-                  ),),
+                      style: Theme.of(context).textTheme.labelLarge),),
+                  ),
                   
                 ],
               ),
