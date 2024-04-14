@@ -26,8 +26,8 @@ class AlunoProfile extends StatelessWidget {
           title: Text('Remover aluno da turma?'),
           actionsAlignment: MainAxisAlignment.spaceAround,
           actions: [
-            TextButton(onPressed: (){print('alog');removeFromList(this);Navigator.pop(context);}, child: Text('Confirmar'),),
-            TextButton(onPressed: ()=>Navigator.pop(context), child: Text('Cancelar'))
+            TextButton(onPressed: ()=>Navigator.pop(context), child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)),
+            TextButton(onPressed: (){print('alog');removeFromList(this);Navigator.pop(context);}, child: Text('Confirmar', style: Theme.of(context).textTheme.bodyMedium,),),
           ],
         ));}, icon: Icon(Icons.delete))
       ],

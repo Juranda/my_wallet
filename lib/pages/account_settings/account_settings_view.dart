@@ -23,6 +23,7 @@ class _AccountSettingsViewState extends State<AccountSettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -39,7 +40,7 @@ class _AccountSettingsViewState extends State<AccountSettingsView> {
                     onPressed: () {selectedScreen == 0? Navigator.pop(context): changeScreen(0);}, 
                     icon: Icon(Icons.arrow_back, size: 50,color: Theme.of(context).colorScheme.secondary,)),
                 ),
-                Icon(Icons.account_circle_outlined, size: 150, color: Theme.of(context).colorScheme.secondary,),
+                Icon(Icons.account_circle_outlined, size: 150, color: Theme.of(context).colorScheme.tertiary,),
                 Text('Rodolfo Silva', style: TextStyle(color: Colors.white, fontSize: 40), )
               ],
             ),
