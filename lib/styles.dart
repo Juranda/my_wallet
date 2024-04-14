@@ -9,6 +9,7 @@ class Styles {
         ).copyWith(
           primary: Color.fromARGB(255, 76, 255, 79),
           secondary: Colors.white,
+          tertiary: Colors.white
         ),
       );
 
@@ -20,6 +21,7 @@ class Styles {
         ).copyWith(
           primary: Color.fromARGB(255, 47, 121, 50),
           secondary: Color.fromARGB(255, 27, 63, 27),
+          tertiary: Colors.white
         ),
       );
 

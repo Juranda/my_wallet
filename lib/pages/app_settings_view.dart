@@ -12,8 +12,7 @@ class AppSettingsView extends StatefulWidget {
 class _AppSettingsViewState extends State<AppSettingsView> {
   @override
   Widget build(BuildContext context) {
-    SettingsProvider settings =
-        Provider.of<SettingsProvider>(context, listen: false);
+    SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
     return Scaffold(
       body: Column(
         children: [
@@ -70,8 +69,11 @@ class _AppSettingsViewState extends State<AppSettingsView> {
                         style: TextStyle(fontSize: 30),
                       ),
                       Switch(
-                        value: false,
-                        onChanged: (value) => {value = !value},
+                        value: settings.gameAudio,
+                        onChanged: (value) => setState(
+                          () {
+                            settings.gameAudio = !settings.gameAudio;
+                          }),
                       ),
                     ]),
               ],
