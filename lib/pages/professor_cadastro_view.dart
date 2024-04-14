@@ -58,6 +58,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                           if (value.split(' ').length <= 1) {
                             return 'Insira o nome completo';
                           }
+                          return null;
                         },
                       ),
                       const SizedBox(
@@ -80,6 +81,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                         textInputType: TextInputType.datetime,
                         validator: (valor) {
                           if (valor == null) return;
+                          return null;
                         },
                       ),
                       const SizedBox(

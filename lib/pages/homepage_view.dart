@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:my_wallet/pages/app_settings_view.dart';
 import 'package:my_wallet/pages/investiments.dart';
 import 'package:my_wallet/pages/lobby.dart';
+import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trails_view.dart';
 import 'package:my_wallet/pages/turmas_view.dart';
 
@@ -15,30 +13,29 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  int selectedPageIndex = 0;
-  int _currentPageView = 0;
-  set currentPageView(int value) {
-    _currentPageView = value;
-    if (value < 3) selectedPageIndex = value;
-  }
+  int _selectedPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.secondary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              decoration: selectedPageIndex == 0
+              decoration: _selectedPageIndex == 0
                   ? BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Color.fromRGBO(34, 95, 8, 1)
-                    ], begin: Alignment.bottomCenter, end: Alignment.topCenter))
+                      gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context).colorScheme.primary,
+                            Color.fromRGBO(34, 95, 8, 1)
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter),
+                    )
                   : BoxDecoration(color: Theme.of(context).colorScheme.primary),
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -62,12 +59,17 @@ class _HomePageViewState extends State<HomePageView> {
                       ],
                     ),
                     IconButton(
-                        onPressed: () => setState(() {
-                              currentPageView = 4;
-                            }),
-                        icon: Icon(Icons.settings,
-                            size: 40,
-                            color: Theme.of(context).colorScheme.secondary))
+                      onPressed: () => setState(
+                        () {
+                          Navigator.pushNamed(context, '/appSettings');
+                        },
+                      ),
+                      icon: Icon(
+                        Icons.settings,
+                        size: 40,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -77,21 +79,22 @@ class _HomePageViewState extends State<HomePageView> {
               TrailsView(),
               Investiments(),
               TurmasView(),
-              AppSettingsView()
-            ][_currentPageView],
+              ArView()
+            ][_selectedPageIndex],
           ],
         ),
       ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedPageIndex,
-        onDestinationSelected: (value) => setState(() {
-          currentPageView = value;
-        }),
+        selectedIndex: _selectedPageIndex,
+        onDestinationSelected: (value) => setState(
+          () => _selectedPageIndex = value,
+        ),
         destinations: [
           NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Investimentos'),
           NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
+          NavigationDestination(icon: Icon(Icons.abc), label: 'Ar'),
         ],
       ),
     );

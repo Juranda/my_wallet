@@ -10,7 +10,6 @@ class SettingsProvider with ChangeNotifier {
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
-    _isDarkMode = false;
     notifyListeners();
   }
 

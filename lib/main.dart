@@ -5,6 +5,7 @@ import 'package:my_wallet/pages/app_settings_view.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login_view.dart';
 import 'package:my_wallet/pages/professor_cadastro_view.dart';
+import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/settings_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,18 +27,21 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'My Wallet',
-      theme: Provider.of<SettingsProvider>(context).themeData,
-      initialRoute: "/login",
-      routes: <String, WidgetBuilder>{
-        "/login": (context) => LoginView(),
-        "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
-        "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
-        "/home": (context) => HomePageView(),
-        "/appSettings": (context) => AppSettingsView(),
-      },
+    return SafeArea(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'My Wallet',
+        theme: Provider.of<SettingsProvider>(context).themeData,
+        initialRoute: "/login",
+        routes: <String, WidgetBuilder>{
+          "/login": (context) => LoginView(),
+          "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
+          "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
+          "/home": (context) => HomePageView(),
+          "/appSettings": (context) => AppSettingsView(),
+          "/ar": (context) => ArView()
+        },
+      ),
     );
   }
 }

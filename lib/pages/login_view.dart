@@ -24,7 +24,7 @@ class _LoginViewState extends State<LoginView> {
     //   return;
     // }
 
-    Navigator.of(context).popAndPushNamed("/home");
+    Navigator.pushReplacementNamed(context, "/home");
   }
 
   @override
