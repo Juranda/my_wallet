@@ -70,9 +70,12 @@ class _InvestimentsState extends State<Investiments> {
                 child: Center(
                   child: Text(
                     'R\$ 400,00',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               Container(
                 decoration: BoxDecoration(

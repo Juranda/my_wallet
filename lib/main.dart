@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_wallet/pages/account_settings/account_settings_view.dart';
-import 'package:my_wallet/pages/account_settings/gerenciar_conta.dart';
 import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
 import 'package:my_wallet/pages/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/app_settings_view.dart';
@@ -9,6 +8,7 @@ import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login_view.dart';
 import 'package:my_wallet/pages/professor_cadastro_view.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
+import 'package:my_wallet/pages/trails_view.dart';
 import 'package:my_wallet/settings_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,9 @@ class _AppState extends State<App> {
           "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
           "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
           "/home": (context) => HomePageView(),
+          "/home/trails/trail": (context) => TrailView(),
           "/appSettings": (context) => AppSettingsView(),
+          "/ar": (context) => ArView(),
           "/accountSettings": (context) => AccountSettingsView(),
           "/accountSettingsChangePassword": (context) => AccountChangePassword()
         },
