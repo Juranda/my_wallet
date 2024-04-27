@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_input.dart';
 import 'package:my_wallet/role_provider.dart';
@@ -64,9 +65,12 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Switch(value: roleProvider.role == Role.professor, onChanged: (_){setState(() {
-                    roleProvider.role = roleProvider.role == Role.professor? Role.aluno : Role.professor;
-                  });})
+                  Text("Logar como professor (apenas para testes)"),
+                  Switch(
+                    value: roleProvider.role == Role.professor,
+                    thumbColor: MaterialStatePropertyAll(Colors.black),
+                    trackOutlineColor: MaterialStatePropertyAll(Colors.black),
+                    onChanged: (_){setState(() {roleProvider.role = roleProvider.role == Role.professor? Role.aluno : Role.professor;});})
                 ],
               ),
             ),

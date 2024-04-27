@@ -66,7 +66,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       ),
                       MyWalletFormInput(
                         label: 'CPF (para comprovação de idade)',
-                        textInputType: TextInputType.text,
+                        textInputType: TextInputType.number,
                         validator: (value) {
                           return Validador()
                               .add(Validar.CPF, msg: 'CPF INVÁLIDO')

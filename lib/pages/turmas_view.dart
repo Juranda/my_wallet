@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/aluno_profile.dart';
 import 'package:my_wallet/pages/turma_adiconar_aluno.dart';
+import 'package:my_wallet/role_provider.dart';
+import 'package:provider/provider.dart';
 
 class TurmasView extends StatefulWidget {
   TurmasView({super.key});
@@ -26,6 +28,7 @@ class _TurmasViewState extends State<TurmasView> {
 
   @override
   Widget build(BuildContext context) {
+    final roleProvider = Provider.of<RoleProvider>(context, listen:false);
     return Container(
       color: Theme.of(context).colorScheme.secondary,
       child: Column(
@@ -97,7 +100,8 @@ class _TurmasViewState extends State<TurmasView> {
                     Text('Alunos (${alunos.length})',
                         style: TextStyle(fontSize: 30),
                         textAlign: TextAlign.center),
-                    IconButton(
+                    
+                    if(roleProvider.role == Role.professor)IconButton(
                         onPressed: () {
                           showDialog(
                               context: context,
