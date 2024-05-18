@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   provider:
+  supabase_flutter: 
 
   validadores: ^1.0.1
   gap: ^3.0.1
