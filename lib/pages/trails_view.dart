@@ -16,6 +16,7 @@ class TrailsView extends StatelessWidget {
               'Ensino Fundamental',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.displaySmall,
+
             ),
           ),
         ),
@@ -23,7 +24,7 @@ class TrailsView extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.005,
         ),
         Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height - 244,
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
