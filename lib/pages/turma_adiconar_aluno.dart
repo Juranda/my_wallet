@@ -30,7 +30,6 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
   void removeAluno(AlunoProfile target) {
     setState(() {
       alunos.remove(target);
-      print(alunos.length);
     });
   }
 
