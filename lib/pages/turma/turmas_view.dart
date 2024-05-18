@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/components/aluno_profile.dart';
-import 'package:my_wallet/pages/turma_adiconar_aluno.dart';
+import 'package:my_wallet/components/aluno_perfil.dart';
+import 'package:my_wallet/pages/turma/turma_adiconar_aluno.dart';
 import 'package:my_wallet/role_provider.dart';
 import 'package:provider/provider.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/trail_lobby_card.dart';
 import 'package:my_wallet/components/trail_lobby_news_card.dart';
-import 'package:my_wallet/pages/lobby_adicionar_noticia.dart';
+import 'package:my_wallet/pages/home/lobby_adicionar_noticia.dart';
 import 'package:my_wallet/role_provider.dart';
 import 'package:provider/provider.dart';
 

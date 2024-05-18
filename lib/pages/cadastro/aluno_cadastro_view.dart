@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/pages/login_view.dart';
+import 'package:my_wallet/pages/login/login_view.dart';
 import 'package:my_wallet/styles.dart';
 import 'package:validadores/Validador.dart';
 

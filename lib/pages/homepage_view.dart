@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/pages/investiments.dart';
-import 'package:my_wallet/pages/lobby.dart';
+import 'package:my_wallet/pages/gastos/investiments.dart';
+import 'package:my_wallet/pages/home/home.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
-import 'package:my_wallet/pages/trails_view.dart';
-import 'package:my_wallet/pages/turmas_view.dart';
+import 'package:my_wallet/pages/trilhas/trails_view.dart';
+import 'package:my_wallet/pages/turma/turmas_view.dart';
 import 'package:my_wallet/role_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +84,7 @@ class _HomePageViewState extends State<HomePageView> {
           Container(
             height: MediaQuery.of(context).size.height - 180,
             child: [
-              Lobby(),
+              Home(),
               TrailsView(),
               Investiments(),
               TurmasView(),

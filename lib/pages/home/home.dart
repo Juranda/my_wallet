@@ -3,8 +3,8 @@ import 'package:my_wallet/components/section.dart';
 import 'package:my_wallet/components/news_card.dart';
 import 'package:my_wallet/components/trail_lobby_card.dart';
 
-class Lobby extends StatelessWidget {
-  const Lobby({super.key});
+class Home extends StatelessWidget {
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
