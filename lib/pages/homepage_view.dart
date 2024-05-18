@@ -23,78 +23,76 @@ class _HomePageViewState extends State<HomePageView> {
         Provider.of<RoleProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Stack(children: [
-        Column(
-          children: [
-            Container(
-              decoration: _selectedPageIndex == 0
-                  ? BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Theme.of(context).colorScheme.primary,
-                            Color.fromRGBO(34, 95, 8, 1)
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter),
-                    )
-                  : BoxDecoration(color: Theme.of(context).colorScheme.primary),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, "/accountSettings"),
-                          icon: Icon(
-                            Icons.account_circle,
-                            size: 40,
-                            color: Theme.of(context).colorScheme.tertiary,
-                          ),
+      body: Column(
+        children: [
+          Container(
+            decoration: _selectedPageIndex == 0
+                ? BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Color.fromRGBO(34, 95, 8, 1)
+                    ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+                  )
+                : BoxDecoration(color: Theme.of(context).colorScheme.primary),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, "/accountSettings"),
+                        icon: Icon(
+                          Icons.account_circle,
+                          size: 40,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Seja bem-vindo Rodolfo!'),
-                            switch (_roleProvider.role) {
-                              Role.professor => Text('Professor'),
-                              Role.aluno => Text('Turma 701'),
-                            }
-                          ],
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () => setState(
-                        () {
-                          Navigator.pushNamed(context, '/appSettings');
-                        },
                       ),
-                      icon: Icon(
-                        Icons.settings,
-                        size: 40,
-                        color: Theme.of(context).colorScheme.tertiary,
+                      SizedBox(
+                        width: 10,
                       ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Seja bem-vindo Rodolfo!'),
+                          switch (_roleProvider.role) {
+                            Role.professor => Text('Professor'),
+                            Role.aluno => Text('Turma 701'),
+                          }
+                        ],
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () => setState(
+                      () {
+                        Navigator.pushNamed(context, '/appSettings');
+                      },
                     ),
-                  ],
-                ),
+                    icon: Icon(
+                      Icons.settings,
+                      size: 40,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                  ),
+                ],
               ),
             ),
-            [
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 180,
+            child: [
               Lobby(),
               TrailsView(),
               Investiments(),
               TurmasView(),
               ArView()
             ][_selectedPageIndex],
-          ],
-        ),
-      ]),
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedPageIndex,
         onDestinationSelected: (value) => setState(
