@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_input.dart';
 import 'package:my_wallet/role_provider.dart';
-import 'package:my_wallet/styles.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -14,35 +14,59 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  void _tryLogin(RoleProvider roleProvider) {
-    // final username = usernameController.text;
-    // final password = passwordController.text;
+  Future<void> _tryLogin(UserProvider roleProvider) async {
+    final supabase = Supabase.instance.client;
+    AuthResponse? authResponse;
 
-    // if (username.isEmpty || password.isEmpty) {
-    //   debugPrint('Usuario ou senha vazios');
+    try {
+      authResponse = await supabase.auth.signInWithPassword(
+          email: emailController.text, password: passwordController.text);
+      String id_usuario = authResponse.user!.id;
+      final aluno = await supabase
+          .from('aluno')
+          .select()
+          .eq('id_usuario', id_usuario)
+          .limit(1)
+          .maybeSingle();
 
-    //   return;
-    // }
-    switch(roleProvider.role)
-    {
-      case Role.professor:
+      if (aluno != null && aluno.isNotEmpty) {
         Navigator.pushReplacementNamed(context, "/home");
-      break;
-      case Role.aluno:
+
+        return;
+      }
+
+      final professor = await supabase
+          .from('professor')
+          .select()
+          .eq('id_usuario', id_usuario);
+
+      if (professor != null && professor.isNotEmpty) {
+        roleProvider.role = Role.professor;
+
         Navigator.pushReplacementNamed(context, "/home");
-      break;
-      case Role.moderador:
-        Navigator.pushReplacementNamed(context, "/siginup&pessoa=professor");
-      break;
+        return;
+      }
+
+      Navigator.pushReplacementNamed(context, "/siginup&pessoa=professor");
+    } on AuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Center(
+              child: Text(e.message),
+            ),
+          );
+        },
+      );
     }
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
+    final roleProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Material(
       color: Theme.of(context).colorScheme.primary,
@@ -57,8 +81,8 @@ class _LoginViewState extends State<LoginView> {
                 children: [
                   MyWalletInput(
                     hintText: 'Usuário',
-                    controller: usernameController,
-                    onSubmit: ()=>_tryLogin(roleProvider),
+                    controller: emailController,
+                    onSubmit: () => _tryLogin(roleProvider),
                   ),
                   const SizedBox(
                     height: 30,
@@ -66,7 +90,7 @@ class _LoginViewState extends State<LoginView> {
                   MyWalletInput(
                     hintText: 'Senha',
                     controller: passwordController,
-                    onSubmit: ()=>_tryLogin(roleProvider),
+                    onSubmit: () => _tryLogin(roleProvider),
                   ),
                   const SizedBox(
                     height: 40,
@@ -91,11 +115,11 @@ class _LoginViewState extends State<LoginView> {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: (){
-                      roleProvider.role = Role.moderador;
-                      _tryLogin(roleProvider);
-                    }, 
-                    child: Text('Logar como moderador (testes)'))
+                      onPressed: () {
+                        roleProvider.role = Role.moderador;
+                        _tryLogin(roleProvider);
+                      },
+                      child: Text('Logar como moderador (testes)'))
                 ],
               ),
             ),
@@ -110,7 +134,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                   ),
                   NextLoginButton(
-                    action: ()=>_tryLogin(roleProvider),
+                    action: () => _tryLogin(roleProvider),
                   ),
                 ],
               ),

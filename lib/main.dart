@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Supabase.initialize(
       url: "https://bierpaosxpulmlvgzbht.supabase.co",
@@ -39,7 +40,7 @@ class _AppState extends State<App> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SettingsProvider()),
-        ChangeNotifierProvider(create: (context) => RoleProvider())
+        ChangeNotifierProvider(create: (context) => UserProvider())
       ],
       builder: (context, child) {
         return SafeArea(
@@ -59,7 +60,7 @@ class _AppState extends State<App> {
               "/accountSettings": (context) => AccountSettingsView(),
               "/accountSettingsChangePassword": (context) =>
                   AccountChangePassword(),
-              "/siginup/deletar":(context) => DeletarCadastroView(),
+              "/siginup/deletar": (context) => DeletarCadastroView(),
             },
           ),
         );

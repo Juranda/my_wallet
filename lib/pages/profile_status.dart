@@ -19,7 +19,7 @@ class ProfileStatus extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Seja bem-vinde Rodolfo!'),
+              Text('Seja bem-vinde !'),
               Text('Turma 701'),
             ],
           ),

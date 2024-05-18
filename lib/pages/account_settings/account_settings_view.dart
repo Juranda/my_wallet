@@ -13,8 +13,7 @@ class AccountSettingsView extends StatefulWidget {
 class _AccountSettingsViewState extends State<AccountSettingsView> {
   int selectedScreen = 0;
 
-  changeScreen(int id)
-  {
+  changeScreen(int id) {
     setState(() {
       selectedScreen = id;
     });
@@ -29,29 +28,42 @@ class _AccountSettingsViewState extends State<AccountSettingsView> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 300,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary
-            ),
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.primary),
             child: Column(
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    onPressed: () {selectedScreen == 0? Navigator.pop(context): changeScreen(0);}, 
-                    icon: Icon(Icons.arrow_back, size: 50,color: Theme.of(context).colorScheme.secondary,)),
+                      onPressed: () {
+                        selectedScreen == 0
+                            ? Navigator.pop(context)
+                            : changeScreen(0);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 50,
+                        color: Theme.of(context).colorScheme.secondary,
+                      )),
                 ),
-                Icon(Icons.account_circle_outlined, size: 150, color: Theme.of(context).colorScheme.tertiary,),
-                Text('Rodolfo Silva', style: TextStyle(color: Colors.white, fontSize: 40), )
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: 150,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                Text(
+                  'Rodolfo Silva',
+                  style: TextStyle(color: Colors.white, fontSize: 40),
+                )
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(20),
-            child: [
-              AccountSettings(changeScreen),
-              AccountChangePassword(),
-            ][selectedScreen]
-            ),
+              padding: EdgeInsets.all(20),
+              child: [
+                AccountSettings(changeScreen),
+                AccountChangePassword(),
+              ][selectedScreen]),
         ],
       ),
     );

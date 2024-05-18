@@ -10,7 +10,7 @@ class AlunoProfile extends StatelessWidget {
   final int id;
   @override
   Widget build(BuildContext context) {
-    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
+    final roleProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -7,17 +7,15 @@ class TrailLobbyNewsCard extends StatelessWidget {
   final String trailDescription;
   final void Function(TrailLobbyNewsCard) removeCard;
 
-  const TrailLobbyNewsCard({
-    super.key,
-    required this.trailName,
-    required this.trailDescription,
-    required this.removeCard
-  });
-
+  const TrailLobbyNewsCard(
+      {super.key,
+      required this.trailName,
+      required this.trailDescription,
+      required this.removeCard});
 
   @override
   Widget build(BuildContext context) {
-    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
+    final roleProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -52,27 +50,36 @@ class TrailLobbyNewsCard extends StatelessWidget {
                         trailName,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
-                      if(roleProvider.role == Role.professor)IconButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: Text('Remover Notícia?'),
-                                    content: Row(children: [
-                                      TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.secondary),
-                  child: Text('Ok'))
-                                    ],),
-                                  ));
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          size: 40,
-                        ))
-                      
+                      if (roleProvider.role == Role.professor)
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: Text('Remover Notícia?'),
+                                        content: Row(
+                                          children: [
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                    foregroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary),
+                                                child: Text('Ok'))
+                                          ],
+                                        ),
+                                      ));
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              size: 40,
+                            ))
                     ],
                   ),
                   Text(

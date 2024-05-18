@@ -23,14 +23,13 @@ class NewsSection extends StatefulWidget {
 }
 
 class _NewsSectionState extends State<NewsSection> {
-
-
   adicionarNoticia(TrailLobbyNewsCard newCard) {
     setState(() {
       widget.items!.clear();
     });
     print(widget.items);
   }
+
   void removerNoticia(TrailLobbyNewsCard newCard) {
     setState(() {
       widget.items!.add(newCard);
@@ -39,9 +38,7 @@ class _NewsSectionState extends State<NewsSection> {
 
   @override
   Widget build(BuildContext context) {
-    final roleProvider = Provider.of<RoleProvider>(context, listen:false);
-    
-    
+    final roleProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,33 +54,35 @@ class _NewsSectionState extends State<NewsSection> {
         if (widget.items != null)
           Container(
             height: widget.sectionHeight,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                ...widget.items!,
-                ...widget.addedItems,  
-                if(roleProvider.role == Role.professor)Container(
+            child: ListView(scrollDirection: Axis.horizontal, children: [
+              ...widget.items!,
+              ...widget.addedItems,
+              if (roleProvider.role == Role.professor)
+                Container(
                   height: 100,
                   width: 100,
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: Text('Adicionar Notícia'),
-                                        content: AdicionarNoticia(adicionarNoticia: adicionarNoticia,removerNoticia: removerNoticia,),
-                                      ));
-                            },
-                            icon: Icon(
-                              Icons.add_circle,
-                              size: 40,
-                            )),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: Text('Adicionar Notícia'),
+                                    content: AdicionarNoticia(
+                                      adicionarNoticia: adicionarNoticia,
+                                      removerNoticia: removerNoticia,
+                                    ),
+                                  ));
+                        },
+                        icon: Icon(
+                          Icons.add_circle,
+                          size: 40,
+                        )),
                   ),
                 )
-      ]),
+            ]),
           )
       ],
     );

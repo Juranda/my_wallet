@@ -28,8 +28,8 @@ class _TurmasViewState extends State<TurmasView> {
 
   @override
   Widget build(BuildContext context) {
-    RoleProvider _roleProvider =
-        Provider.of<RoleProvider>(context, listen: true);
+    UserProvider _roleProvider =
+        Provider.of<UserProvider>(context, listen: true);
     return Container(
       color: Theme.of(context).colorScheme.secondary,
       child: Column(

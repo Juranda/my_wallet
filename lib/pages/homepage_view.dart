@@ -19,8 +19,8 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    RoleProvider _roleProvider =
-        Provider.of<RoleProvider>(context, listen: false);
+    UserProvider _roleProvider =
+        Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Column(
