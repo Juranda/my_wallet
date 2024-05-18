@@ -5,6 +5,7 @@ import 'package:my_wallet/pages/account_settings/account_settings_view.dart';
 import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
 import 'package:my_wallet/pages/cadastro/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/app_settings_view.dart';
+import 'package:my_wallet/pages/cadastro/deletar_cadastro_view.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login/login_view.dart';
 import 'package:my_wallet/pages/cadastro/professor_cadastro_view.dart';
@@ -51,7 +52,8 @@ class _AppState extends State<App> {
               "/ar": (context) => ArView(),
               "/accountSettings": (context) => AccountSettingsView(),
               "/accountSettingsChangePassword": (context) =>
-                  AccountChangePassword()
+                  AccountChangePassword(),
+              "/siginup/deletar":(context) => DeletarCadastroView(),
             },
           ),
         );

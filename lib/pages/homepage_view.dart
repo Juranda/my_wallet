@@ -60,6 +60,8 @@ class _HomePageViewState extends State<HomePageView> {
                           switch (_roleProvider.role) {
                             Role.professor => Text('Professor'),
                             Role.aluno => Text('Turma 701'),
+                            // TODO: Handle this case.
+                            Role.moderador => throw UnimplementedError(),
                           }
                         ],
                       ),

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/trail_lobby_card.dart';
 import 'package:my_wallet/components/trail_lobby_news_card.dart';
-import 'package:my_wallet/pages/home/lobby_adicionar_noticia.dart';
+import 'package:my_wallet/pages/home/home_adicionar_noticia.dart';
 import 'package:my_wallet/role_provider.dart';
 import 'package:provider/provider.dart';
 
 class NewsSection extends StatefulWidget {
   final String sectionTitle;
   final List<Widget>? items;
+  final List<Widget> addedItems = [];
   final double sectionHeight;
 
-  const NewsSection({
+  NewsSection({
     super.key,
     this.items,
     required this.sectionTitle,
@@ -26,8 +27,9 @@ class _NewsSectionState extends State<NewsSection> {
 
   adicionarNoticia(TrailLobbyNewsCard newCard) {
     setState(() {
-      widget.items!.add(newCard);
+      widget.items!.clear();
     });
+    print(widget.items);
   }
   void removerNoticia(TrailLobbyNewsCard newCard) {
     setState(() {
@@ -58,7 +60,8 @@ class _NewsSectionState extends State<NewsSection> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                ...widget.items!,  
+                ...widget.items!,
+                ...widget.addedItems,  
                 if(roleProvider.role == Role.professor)Container(
                   height: 100,
                   width: 100,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/components/news_section.dart';
 import 'package:my_wallet/components/section.dart';
 import 'package:my_wallet/components/news_card.dart';
 import 'package:my_wallet/components/trail_lobby_card.dart';
@@ -43,7 +44,7 @@ class Home extends StatelessWidget {
             ),
             Column(
               children: [
-                Section(
+                NewsSection(
                   sectionTitle: 'Notícias',
                   sectionHeight: 150,
                   items: ['FIIs', 'Cartão de Credito', 'Renda Fixa']

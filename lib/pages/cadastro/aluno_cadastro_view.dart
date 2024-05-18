@@ -29,6 +29,13 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: (){
+                Navigator.popAndPushNamed(context, '/login');
+              }, 
+              icon: Icon(Icons.logout)),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -159,25 +166,27 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        'É professor(a)?',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
+                      
+                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.popAndPushNamed(
+                                context, "/siginup&pessoa=professor"),
+                            child: Text(
+                              'Cadastrar Professor',
+                              style: Styles.linkTextStyle,
                             ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(
-                            context, "/siginup&pessoa=professor"),
-                        child: Text(
-                          'Cadastre-se aqui!',
-                          style: Styles.linkTextStyle,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: NextLoginButton(
-                          action: () => Navigator.pushNamed(context, "/home"),
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.pushNamed(
+                                context, "/siginup/deletar"),
+                            child: Text(
+                              'Deletar Cadastro',
+                              style: Styles.linkTextStyle,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

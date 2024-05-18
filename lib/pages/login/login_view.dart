@@ -16,7 +16,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  void _tryLogin() {
+  void _tryLogin(RoleProvider roleProvider) {
     // final username = usernameController.text;
     // final password = passwordController.text;
 
@@ -25,8 +25,19 @@ class _LoginViewState extends State<LoginView> {
 
     //   return;
     // }
-
-    Navigator.pushReplacementNamed(context, "/home");
+    switch(roleProvider.role)
+    {
+      case Role.professor:
+        Navigator.pushReplacementNamed(context, "/home");
+      break;
+      case Role.aluno:
+        Navigator.pushReplacementNamed(context, "/home");
+      break;
+      case Role.moderador:
+        Navigator.pushReplacementNamed(context, "/siginup&pessoa=professor");
+      break;
+    }
+    
   }
 
   @override
@@ -47,7 +58,7 @@ class _LoginViewState extends State<LoginView> {
                   MyWalletInput(
                     hintText: 'Usuário',
                     controller: usernameController,
-                    onSubmit: _tryLogin,
+                    onSubmit: ()=>_tryLogin(roleProvider),
                   ),
                   const SizedBox(
                     height: 30,
@@ -55,7 +66,7 @@ class _LoginViewState extends State<LoginView> {
                   MyWalletInput(
                     hintText: 'Senha',
                     controller: passwordController,
-                    onSubmit: _tryLogin,
+                    onSubmit: ()=>_tryLogin(roleProvider),
                   ),
                   const SizedBox(
                     height: 40,
@@ -79,30 +90,14 @@ class _LoginViewState extends State<LoginView> {
                       );
                     },
                   ),
+                  ElevatedButton(
+                    onPressed: (){
+                      roleProvider.role = Role.moderador;
+                      _tryLogin(roleProvider);
+                    }, 
+                    child: Text('Logar como moderador (testes)'))
                 ],
               ),
-            ),
-            Row(
-              children: [
-                Text(
-                  'Não possui uma conta?',
-                  style: Styles.linkTextStyle.copyWith(
-                    fontWeight: FontWeight.normal,
-                    decoration: TextDecoration.none,
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                GestureDetector(
-                  onTap: () =>
-                      Navigator.pushNamed(context, "/siginup&pessoa=aluno"),
-                  child: Text(
-                    'Cadastre-se!',
-                    style: Styles.linkTextStyle,
-                  ),
-                )
-              ],
             ),
             Align(
               alignment: Alignment.centerRight,
@@ -115,7 +110,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                   ),
                   NextLoginButton(
-                    action: _tryLogin,
+                    action: ()=>_tryLogin(roleProvider),
                   ),
                 ],
               ),

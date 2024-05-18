@@ -85,8 +85,9 @@ class _AdicionarNoticiaState extends State<AdicionarNoticia> {
                         trailDescription: _newsDescriptionController.text,
                         removeCard: widget.removerNoticia,
                       ),);
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
+                    
                   },
                   child: Text('Adicionar'),
                   style: TextButton.styleFrom(

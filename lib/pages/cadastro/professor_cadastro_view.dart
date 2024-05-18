@@ -29,6 +29,13 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: (){
+                Navigator.popAndPushNamed(context, '/login');
+              }, 
+              icon: Icon(Icons.logout)),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -129,26 +136,29 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        'É aluno(a)?',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
+                      
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.popAndPushNamed(
+                                context, "/siginup&pessoa=aluno"),
+                            child: Text(
+                              'Cadastrar Aluno',
+                              style: Styles.linkTextStyle,
                             ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.pushNamed(
+                                context, "/siginup/deletar"),
+                            child: Text(
+                              'Deletar Cadastro',
+                              style: Styles.linkTextStyle,
+                            ),
+                          ),
+                        ],
                       ),
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(
-                            context, "/siginup&pessoa=aluno"),
-                        child: Text(
-                          'Cadastre-se aqui!',
-                          style: Styles.linkTextStyle,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: NextLoginButton(
-                          action: () => Navigator.pushNamed(context, "/home"),
-                        ),
-                      ),
+                     
                     ],
                   ),
                 ),

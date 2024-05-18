@@ -10,4 +10,4 @@ class RoleProvider with ChangeNotifier{
     notifyListeners();
   }
 }
-enum Role {professor, aluno}
+enum Role {professor, aluno, moderador}
