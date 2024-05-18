@@ -46,33 +46,43 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
       children: [
         Form(
           key: _formKey,
-          child: Column(children: [
-            TextFormField(
-              controller: _emailController,
-              validator: validateEmail,
-              decoration: InputDecoration(
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                validator: validateEmail,
+                decoration: InputDecoration(
+                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.grey,
+                      ),
+                  labelStyle: Theme.of(context).textTheme.bodyMedium,
                   hintText: 'aluno@dominio.com',
                   labelText: 'email',
-                  floatingLabelBehavior: FloatingLabelBehavior.always),
-            ),
-            SizedBox(height: 10),
-            Container(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    adicionaAluno(
-                        AlunoProfile(alunos, alunos.length, removeAluno));
-                    _emailController.clear();
-                  }
-                },
-                child: Text('Adicionar'),
-                style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.secondary),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                ),
               ),
-            )
-          ]),
+              SizedBox(height: 10),
+              Container(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      adicionaAluno(
+                          AlunoProfile(alunos, alunos.length, removeAluno));
+                      _emailController.clear();
+                    }
+                  },
+                  child: Text(
+                    'Adicionar',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.secondary),
+                ),
+              )
+            ],
+          ),
         ),
         Divider(),
         Text(
@@ -88,13 +98,18 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
         ),
         Expanded(
           child: Container(
-              alignment: Alignment.bottomRight,
-              child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.secondary),
-                  child: Text('Ok'))),
+            alignment: Alignment.bottomRight,
+            child: TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.secondary),
+              child: Text(
+                'Ok',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+          ),
         )
       ],
     );

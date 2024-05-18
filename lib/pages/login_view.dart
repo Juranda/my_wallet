@@ -30,9 +30,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-  final roleProvider = Provider.of<RoleProvider>(context, listen:false);
-
-
+    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
 
     return Material(
       color: Theme.of(context).colorScheme.primary,
@@ -64,9 +62,19 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Switch(value: roleProvider.role == Role.professor, onChanged: (_){setState(() {
-                    roleProvider.role = roleProvider.role == Role.professor? Role.aluno : Role.professor;
-                  });})
+                  Switch(
+                    value: roleProvider.role == Role.professor,
+                    onChanged: (_) {
+                      setState(
+                        () {
+                          roleProvider.role =
+                              roleProvider.role == Role.professor
+                                  ? Role.aluno
+                                  : Role.professor;
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

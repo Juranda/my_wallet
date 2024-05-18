@@ -3,14 +3,14 @@ import 'package:my_wallet/role_provider.dart';
 import 'package:provider/provider.dart';
 
 class AlunoProfile extends StatelessWidget {
-  AlunoProfile(this.myList,this.id,this.removeFromList);
+  AlunoProfile(this.myList, this.id, this.removeFromList);
 
   final List<AlunoProfile> myList;
   final void Function(AlunoProfile) removeFromList;
   final int id;
   @override
   Widget build(BuildContext context) {
-    final roleProvider = Provider.of<RoleProvider>(context, listen:false);
+    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -18,18 +18,41 @@ class AlunoProfile extends StatelessWidget {
         Row(
           children: [
             Icon(Icons.account_circle_outlined, size: 50),
-            Text('Nome do Aluno ${id}',
-            style: Theme.of(context).textTheme.headlineSmall,),
+            Text(
+              'Nome do Aluno ${id}',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ],
         ),
-        if (roleProvider.role == Role.professor) IconButton(onPressed: (){showDialog(context: context, builder: (context)=>AlertDialog(
-          title: Text('Remover aluno da turma?'),
-          actionsAlignment: MainAxisAlignment.spaceAround,
-          actions: [
-            TextButton(onPressed: ()=>Navigator.pop(context), child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)),
-            TextButton(onPressed: (){print('alog');removeFromList(this);Navigator.pop(context);}, child: Text('Confirmar', style: Theme.of(context).textTheme.bodyMedium,),),
-          ],
-        ));}, icon: Icon(Icons.delete))
+        if (roleProvider.role == Role.professor)
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Remover aluno da turma?'),
+                    actionsAlignment: MainAxisAlignment.spaceAround,
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Cancelar',
+                              style: Theme.of(context).textTheme.bodyMedium)),
+                      TextButton(
+                        onPressed: () {
+                          print('alog');
+                          removeFromList(this);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Confirmar',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: Icon(Icons.delete))
       ],
     );
   }
