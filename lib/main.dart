@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_wallet/pages/account_settings/account_settings_view.dart';
 import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
-import 'package:my_wallet/pages/aluno_cadastro_view.dart';
+import 'package:my_wallet/pages/cadastro/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/app_settings_view.dart';
+import 'package:my_wallet/pages/cadastro/deletar_cadastro_view.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
-import 'package:my_wallet/pages/login_view.dart';
-import 'package:my_wallet/pages/professor_cadastro_view.dart';
+import 'package:my_wallet/pages/login/login_view.dart';
+import 'package:my_wallet/pages/cadastro/professor_cadastro_view.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
-import 'package:my_wallet/pages/trails_view.dart';
+import 'package:my_wallet/pages/trilhas/trails_view.dart';
 import 'package:my_wallet/role_provider.dart';
 import 'package:my_wallet/settings_provider.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +58,8 @@ class _AppState extends State<App> {
               "/ar": (context) => ArView(),
               "/accountSettings": (context) => AccountSettingsView(),
               "/accountSettingsChangePassword": (context) =>
-                  AccountChangePassword()
+                  AccountChangePassword(),
+              "/siginup/deletar":(context) => DeletarCadastroView(),
             },
           ),
         );

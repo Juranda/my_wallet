@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/pages/login_view.dart';
+import 'package:my_wallet/pages/login/login_view.dart';
 import 'package:my_wallet/styles.dart';
 import 'package:validadores/Validador.dart';
 
-class AlunoCadastroView extends StatefulWidget {
-  const AlunoCadastroView({super.key});
+class ProfessorCadastroView extends StatefulWidget {
+  const ProfessorCadastroView({super.key});
 
   @override
-  State<AlunoCadastroView> createState() => _AlunoCadastroViewState();
+  State<ProfessorCadastroView> createState() => _ProfessorCadastroViewState();
 }
 
-class _AlunoCadastroViewState extends State<AlunoCadastroView> {
+class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   final _formKey = GlobalKey<FormState>();
   int escolaridade = 0;
   List<(String nome, int id)> escolaridades = [
@@ -29,6 +29,13 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: (){
+                Navigator.popAndPushNamed(context, '/login');
+              }, 
+              icon: Icon(Icons.logout)),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -66,7 +73,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       ),
                       MyWalletFormInput(
                         label: 'CPF (para comprovação de idade)',
-                        textInputType: TextInputType.number,
+                        textInputType: TextInputType.text,
                         validator: (value) {
                           return Validador()
                               .add(Validar.CPF, msg: 'CPF INVÁLIDO')
@@ -118,36 +125,6 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                              flex: 2,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                child: DropdownButton(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  value: escolaridades[escolaridade].$2,
-                                  items: escolaridades
-                                      .map(
-                                        (tuple) => DropdownMenuItem(
-                                          value: tuple.$2,
-                                          child: Text(
-                                            tuple.$1,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: (novaEscolaridade) {
-                                    setState(() {
-                                      escolaridade = novaEscolaridade!;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
                               child: MyWalletFormInput(
                                 label: 'Turma (opcional)',
                                 isRequired: false,
@@ -159,26 +136,29 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        'É professor(a)?',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
+                      
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.popAndPushNamed(
+                                context, "/siginup&pessoa=aluno"),
+                            child: Text(
+                              'Cadastrar Aluno',
+                              style: Styles.linkTextStyle,
                             ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.pushNamed(
+                                context, "/siginup/deletar"),
+                            child: Text(
+                              'Deletar Cadastro',
+                              style: Styles.linkTextStyle,
+                            ),
+                          ),
+                        ],
                       ),
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(
-                            context, "/siginup&pessoa=professor"),
-                        child: Text(
-                          'Cadastre-se aqui!',
-                          style: Styles.linkTextStyle,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: NextLoginButton(
-                          action: () => Navigator.pushNamed(context, "/home"),
-                        ),
-                      ),
+                     
                     ],
                   ),
                 ),
