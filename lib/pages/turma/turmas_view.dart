@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/components/aluno_list_tile.dart';
 import 'package:my_wallet/components/aluno_perfil.dart';
 import 'package:my_wallet/pages/turma/turma_adiconar_aluno.dart';
 import 'package:my_wallet/user_provider.dart';
@@ -15,60 +16,32 @@ class TurmasView extends StatefulWidget {
 }
 
 class _TurmasViewState extends State<TurmasView> {
-  List<AlunoProfile> alunos = [];
-  int turmaID = 0;
+  List<AlunoListTile> alunos = [];
 
   late Stream<List<Map<String, dynamic>>> _alunoStream;
-  bool isLoading = true;
-  late int _turmaID;
+
   late UserProvider _roleProvider;
-  _TurmasViewState() {
-    //alunos = List.generate(30, (index) => AlunoProfile(alunos, index, removeAluno));
-    turmaID = 1;
-  }
 
   @override
   void initState() {
     super.initState();
     _roleProvider = Provider.of<UserProvider>(context, listen: false);
-    fetchInitialData();
-  }
-
-  Future<void> fetchInitialData() async {
-    final response = await Supabase.instance.client
-        .from('turma')
-        .select('id')
-        .eq('idprofessor', _roleProvider.professor!.id)
-        .single();
-
-    setState(() {
-      isLoading = false;
-      _turmaID = response['id'];
-      _alunoStream = Supabase.instance.client
-          .from('aluno')
-          .stream(primaryKey: ['id']).eq('id_turma', _turmaID);
-    });
-  }
-
-  void removeAluno(AlunoProfile target) {
-    setState(() {
-      alunos.remove(target);
-      print(alunos.length);
-    });
+    _alunoStream = Supabase.instance.client
+        .from('aluno')
+        .stream(primaryKey: ['id']).eq('id_turma', _roleProvider.id_turma);
   }
 
   Future<void> removerAlunoDaTurma(int id) async {
     await Supabase.instance.client
         .from('aluno')
         .update({'id_turma': null}).eq('id', 1);
+
     setState(() {
-      fetchInitialData();
+      _alunoStream = Supabase.instance.client
+          .from('aluno')
+          .stream(primaryKey: ['id']).eq('id_turma', _roleProvider.id_turma);
     });
   }
-
-  final _alunosStream = Supabase.instance.client
-      .from('aluno')
-      .stream(primaryKey: ['id']).eq('id_turma', 1);
 
   @override
   Widget build(BuildContext context) {
@@ -126,55 +99,59 @@ class _TurmasViewState extends State<TurmasView> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             ),
-            child: isLoading
-                ? const Center(
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: _alunoStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
                     child: CircularProgressIndicator(),
-                  )
-                : StreamBuilder<List<Map<String, dynamic>>>(
-                    stream: _alunoStream,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      final alunosData = snapshot.data!;
-                      return ListView.builder(
-                          itemCount: alunosData.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(alunosData[index]['nome']),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            title:
-                                                Text("Remover Aluno da turma?"),
-                                            actionsAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text("Cancelar")),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    removerAlunoDaTurma(
-                                                        alunosData[index]
-                                                            ['id']);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text("Confirmar")),
-                                            ],
-                                          ));
-                                },
-                              ),
-                            );
-                          });
-                    }),
+                  );
+                }
+                final alunosData = snapshot.data!;
+                return ListView.builder(
+                  itemCount: alunosData.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                        alunosData[index]['nome'],
+                      ),
+                      trailing: _roleProvider.role == Role.professor
+                          ? IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text("Remover Aluno da turma?"),
+                                    actionsAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Cancelar"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          removerAlunoDaTurma(
+                                            alunosData[index]['id'],
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Confirmar"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            )
+                          : null,
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ],

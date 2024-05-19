@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/components/aluno_list_tile.dart';
 import 'package:my_wallet/components/aluno_perfil.dart';
 import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class AdicionarAluno extends StatefulWidget {
 
 class _AdicionarAlunoState extends State<AdicionarAluno> {
   final _emailController = TextEditingController();
-  late UserProvider _userProvider;
+  late final UserProvider _user_provider;
   final adicionados = [];
 
   String? validateEmail(String? email) {
@@ -28,35 +29,88 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     return null;
   }
 
-  List<AlunoProfile> alunos = [];
+  List<AlunoListTile> alunos = [];
 
   // _AdicionarAlunoState() {
   //   alunos = List.generate(5, (index) => AlunoProfile(alunos,index, removeAluno));
   // }
 
-  void removeAluno(AlunoProfile target) {
+  @override
+  void initState() {
+    super.initState();
+    _user_provider = Provider.of<UserProvider>(context, listen: false);
+  }
+  // void removeAluno(AlunoProfile target) {
+  //   setState(() {
+  //     alunos.remove(target);
+  //   });
+  // }
+
+  // void adicionaAluno(AlunoProfile novoAluno) {
+  //   setState(() {
+  //     alunos.add(novoAluno);
+  //   });
+  // }
+
+  Future<void> adicionarAlunos() async {
+    for (var alunoTile in alunos) {
+      await Supabase.instance.client
+          .from('aluno')
+          .update({'id_turma': _user_provider.professor!.id_turma}).eq(
+              'id', alunoTile.tileID);
+    }
+  }
+
+  void removerAluno(int id) {
     setState(() {
-      alunos.remove(target);
+      alunos.removeWhere((x) => x.tileID == id);
     });
   }
 
-  void adicionaAluno(AlunoProfile novoAluno) {
-    setState(() {
-      alunos.add(novoAluno);
-    });
-  }
-
-  Future<void> fetchAluno() async {
+  Future<void> fetchAluno(String email) async {
     final response = await Supabase.instance.client
-        .from('aluno')
-        .select('*')
-        .eq("email", _emailController.text);
+        .from('view_aluno')
+        .select()
+        .eq('email', email)
+        .maybeSingle();
+    if (response != null && !response.isEmpty) {
+      if (alunos.any((x) => x.tileID == response['id'])) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text('Aluno já está na lista'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Ok'),
+                    )
+                  ],
+                ));
+        return;
+      }
+      setState(() {
+        alunos.add(AlunoListTile(
+            nome: response['nome'],
+            tileID: response['id'],
+            removerAluno: removerAluno));
+      });
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Aluno não encontrado'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Ok'),
+                  )
+                ],
+              ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of<UserProvider>(context);
-
     return Column(
       children: [
         Form(
@@ -65,8 +119,9 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
             children: [
               TextFormField(
                 controller: _emailController,
-                validator: (email) =>
-                    EmailValidator.validate(email) ? email : null,
+                validator: (email) => EmailValidator.validate(email)
+                    ? null
+                    : 'Please provide an valid email',
                 decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.grey,
@@ -83,9 +138,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
                 child: TextButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      adicionaAluno(
-                          AlunoProfile(alunos, alunos.length, removeAluno));
-                      _emailController.clear();
+                      fetchAluno(_emailController.text);
                     }
                   },
                   child: Text(
@@ -116,7 +169,10 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
           child: Container(
             alignment: Alignment.bottomRight,
             child: TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                adicionarAlunos();
+                Navigator.pop(context);
+              },
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Theme.of(context).colorScheme.secondary),

@@ -26,6 +26,14 @@ class UserProvider with ChangeNotifier {
     };
   }
 
+  int get id_turma {
+    return switch (role) {
+      Role.professor => professor!.id_turma,
+      Role.aluno => aluno!.id_turma,
+      Role.moderador => 0,
+    };
+  }
+
   String get turma {
     return switch (role) {
       Role.professor => professor!.nome_turma,
@@ -43,6 +51,7 @@ class UserProvider with ChangeNotifier {
       sobrenome: aluno['sobrenome'],
       email: aluno['email'],
       nome_turma: aluno['nome_turma'],
+      id_turma: aluno['id_turma'],
       instituicaoensino: aluno['instituicaoensino'],
       created_at: DateTime.parse(aluno['created_at']),
       escolaridade: aluno['escolaridade_turma'],

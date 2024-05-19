@@ -9,6 +9,7 @@ class Aluno {
   final String id_usuario;
   final String email;
   final String nome_turma;
+  final int id_turma;
 
   Aluno({
     required this.id,
@@ -18,6 +19,7 @@ class Aluno {
     required this.nome,
     required this.sobrenome,
     required this.escolaridade,
+    required this.id_turma,
     required this.nome_turma,
     required this.id_usuario,
     required this.email,
