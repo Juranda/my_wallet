@@ -3,6 +3,7 @@ import 'package:my_wallet/components/aluno_perfil.dart';
 import 'package:my_wallet/pages/turma/turma_adiconar_aluno.dart';
 import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../account_settings/models/role.dart';
 
@@ -15,10 +16,38 @@ class TurmasView extends StatefulWidget {
 
 class _TurmasViewState extends State<TurmasView> {
   List<AlunoProfile> alunos = [];
+  int turmaID = 0;
 
+  late Stream<List<Map<String, dynamic>>> _alunoStream;
+  bool isLoading = true;
+  late int _turmaID;
+  late UserProvider _roleProvider;
   _TurmasViewState() {
-    alunos =
-        List.generate(30, (index) => AlunoProfile(alunos, index, removeAluno));
+    //alunos = List.generate(30, (index) => AlunoProfile(alunos, index, removeAluno));
+    turmaID = 1;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _roleProvider = Provider.of<UserProvider>(context, listen: false);
+    fetchInitialData();
+  }
+
+  Future<void> fetchInitialData() async {
+    final response = await Supabase.instance.client
+        .from('turma')
+        .select('id')
+        .eq('idprofessor', _roleProvider.professor!.id)
+        .single();
+
+    setState(() {
+      isLoading = false;
+      _turmaID = response['id'];
+      _alunoStream = Supabase.instance.client
+          .from('aluno')
+          .stream(primaryKey: ['id']).eq('id_turma', _turmaID);
+    });
   }
 
   void removeAluno(AlunoProfile target) {
@@ -28,82 +57,127 @@ class _TurmasViewState extends State<TurmasView> {
     });
   }
 
+  Future<void> removerAlunoDaTurma(int id) async {
+    await Supabase.instance.client
+        .from('aluno')
+        .update({'id_turma': null}).eq('id', 1);
+    setState(() {
+      fetchInitialData();
+    });
+  }
+
+  final _alunosStream = Supabase.instance.client
+      .from('aluno')
+      .stream(primaryKey: ['id']).eq('id_turma', 1);
+
   @override
   Widget build(BuildContext context) {
-    UserProvider _roleProvider =
-        Provider.of<UserProvider>(context, listen: true);
-    return Container(
-      color: Theme.of(context).colorScheme.secondary,
-      child: Column(
-        children: [
-          Container(
-            height: 60,
-            width: double.infinity,
-            color: Theme.of(context).colorScheme.primary,
-            child: Center(
-              child: Text(
-                'Turmas',
-                style: TextStyle(fontSize: 40),
-              ),
+    return Column(
+      children: [
+        Container(
+          height: 60,
+          color: Theme.of(context).colorScheme.primary,
+          child: Center(
+            child: Text(
+              'Turmas',
+              style: TextStyle(fontSize: 40),
             ),
           ),
-          Column(
+        ),
+        Container(
+          width: double.infinity,
+          height: 70,
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                clipBehavior: Clip.none,
-                width: MediaQuery.of(context).size.width,
-                height: 70,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-                alignment: Alignment.topCenter,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Alunos (${alunos.length})',
-                        style: TextStyle(fontSize: 30),
-                        textAlign: TextAlign.center),
-                    if (_roleProvider.role == Role.professor)
-                      IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Adicionar Aluno'),
-                              content: AdicionarAluno(),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.add_circle,
-                          size: 40,
-                        ),
+              Text('Alunos (${alunos.length})',
+                  style: TextStyle(fontSize: 30), textAlign: TextAlign.center),
+              if (_roleProvider.role == Role.professor)
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Adicionar Aluno'),
+                        content: AdicionarAluno(),
                       ),
-                  ],
-                ),
-                padding: EdgeInsets.all(20),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                clipBehavior: Clip.none,
-                height: 500,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ListView(
-                    children: [...alunos],
+                    );
+                  },
+                  icon: Icon(
+                    Icons.add_circle,
+                    size: 40,
                   ),
                 ),
-              ),
             ],
-          )
-        ],
-      ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            ),
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : StreamBuilder<List<Map<String, dynamic>>>(
+                    stream: _alunoStream,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final alunosData = snapshot.data!;
+                      return ListView.builder(
+                          itemCount: alunosData.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(alunosData[index]['nome']),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title:
+                                                Text("Remover Aluno da turma?"),
+                                            actionsAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("Cancelar")),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    removerAlunoDaTurma(
+                                                        alunosData[index]
+                                                            ['id']);
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("Confirmar")),
+                                            ],
+                                          ));
+                                },
+                              ),
+                            );
+                          });
+                    }),
+          ),
+        ),
+      ],
     );
   }
 }

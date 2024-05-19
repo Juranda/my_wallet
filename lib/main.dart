@@ -18,11 +18,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Supabase.initialize(
       url: "https://bierpaosxpulmlvgzbht.supabase.co",
       anonKey:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpZXJwYW9zeHB1bG1sdmd6Ymh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU5ODI1NTIsImV4cCI6MjAzMTU1ODU1Mn0.uxVn2A0Eo6lLAMt6o8i8RiodilGLKirfbrvK-clYhzI");
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   runApp(const App());
 }

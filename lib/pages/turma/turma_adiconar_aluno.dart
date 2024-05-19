@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/aluno_perfil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -12,6 +13,9 @@ class AdicionarAluno extends StatefulWidget {
 
 class _AdicionarAlunoState extends State<AdicionarAluno> {
   final _emailController = TextEditingController();
+
+  final adicionados = [];
+
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
     final isEmailValid = emailRegex.hasMatch(email ?? '');
@@ -37,6 +41,11 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     setState(() {
       alunos.add(novoAluno);
     });
+  }
+
+  Future<void> fetchAluno() async
+  {
+    final response = await Supabase.instance.client.from('aluno').select('*').eq(column, value)
   }
 
   @override

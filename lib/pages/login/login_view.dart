@@ -50,7 +50,6 @@ class _LoginViewState extends State<LoginView> {
 
       if (professor != null && professor.isNotEmpty) {
         userProvider.setProfessor(professor);
-
         Navigator.pushReplacementNamed(context, "/home");
         return;
       }
