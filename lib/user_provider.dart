@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/pages/account_settings/models/aluno.dart';
-import 'package:my_wallet/pages/account_settings/models/escolaridade.dart';
 import 'package:my_wallet/pages/account_settings/models/professor.dart';
 import 'package:my_wallet/pages/account_settings/models/role.dart';
-import 'package:provider/provider.dart';
+
+import 'pages/account_settings/models/instituicao_ensino.dart';
 
 class UserProvider with ChangeNotifier {
   InstituicaoEnsino? instituicaoEnsino;
@@ -18,18 +18,34 @@ class UserProvider with ChangeNotifier {
             : Role.moderador;
   }
 
+  String get nome {
+    return switch (role) {
+      Role.professor => professor!.nome,
+      Role.aluno => aluno!.nome,
+      Role.moderador => instituicaoEnsino!.nome
+    };
+  }
+
+  String get turma {
+    return switch (role) {
+      Role.professor => professor!.nome_turma,
+      Role.aluno => aluno!.nome_turma,
+      Role.moderador => "SEM TURMA",
+    };
+  }
+
   void setAluno(Map<String, dynamic> aluno) {
     this.aluno = Aluno(
       id: aluno['id'],
-      instituicaoensino: aluno['instituicaoensino'],
+      id_usuario: aluno['id_usuario'],
       cpf: aluno['cpf'],
-      created_at: DateTime.parse(aluno['created_at']),
       nome: aluno['nome'],
       sobrenome: aluno['sobrenome'],
-      escolaridade: Escolaridade.values
-          .firstWhere((element) => element.index == aluno['escolaridade']),
-      turma: aluno['id_turma'],
-      id_usuario: aluno['id_usuario'],
+      email: aluno['email'],
+      nome_turma: aluno['nome_turma'],
+      instituicaoensino: aluno['instituicaoensino'],
+      created_at: DateTime.parse(aluno['created_at']),
+      escolaridade: aluno['escolaridade_turma'],
     );
 
     professor = null;
@@ -39,12 +55,17 @@ class UserProvider with ChangeNotifier {
   void setProfessor(Map<String, dynamic> professor) {
     this.professor = Professor(
       id: professor['id'],
-      instituicaoensino: professor['instituicaoensino'],
-      cpfcnpj: professor['cnpjcpf'],
+      id_usuario: professor['id_usuario'],
       created_at: DateTime.parse(professor['created_at']),
+      cpfcnpj: professor['cnpjcpf'],
       nome: professor['nome'],
       sobrenome: professor['sobrenome'],
-      id_usuario: professor['id_usuario'],
+      email: professor['email'],
+      nome_turma: professor['nome_turma'],
+      escolaridade_turma: professor['escolaridade_turma'],
+      id_turma: professor['id_turma'],
+      id_escolaridade: professor['id_escolaridade'],
+      instituicaoensino: professor['instituicaoensino'],
     );
 
     aluno = null;
@@ -61,18 +82,4 @@ class UserProvider with ChangeNotifier {
     aluno = null;
     professor = null;
   }
-}
-
-class InstituicaoEnsino {
-  final int id;
-  final DateTime created_at;
-  final String nome;
-  final String codigoinep;
-
-  InstituicaoEnsino({
-    required this.id,
-    required this.created_at,
-    required this.nome,
-    required this.codigoinep,
-  });
 }

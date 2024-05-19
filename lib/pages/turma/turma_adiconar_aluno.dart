@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/aluno_perfil.dart';
+import 'package:my_wallet/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:validadores/ValidarEmail.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -13,7 +16,7 @@ class AdicionarAluno extends StatefulWidget {
 
 class _AdicionarAlunoState extends State<AdicionarAluno> {
   final _emailController = TextEditingController();
-
+  late UserProvider _userProvider;
   final adicionados = [];
 
   String? validateEmail(String? email) {
@@ -27,9 +30,9 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
 
   List<AlunoProfile> alunos = [];
 
-  _AdicionarAlunoState() {
-    //alunos = List.generate(5, (index) => AlunoProfile(alunos,index, removeAluno));
-  }
+  // _AdicionarAlunoState() {
+  //   alunos = List.generate(5, (index) => AlunoProfile(alunos,index, removeAluno));
+  // }
 
   void removeAluno(AlunoProfile target) {
     setState(() {
@@ -43,13 +46,17 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     });
   }
 
-  Future<void> fetchAluno() async
-  {
-    final response = await Supabase.instance.client.from('aluno').select('*').eq(column, value)
+  Future<void> fetchAluno() async {
+    final response = await Supabase.instance.client
+        .from('aluno')
+        .select('*')
+        .eq("email", _emailController.text);
   }
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
+
     return Column(
       children: [
         Form(
@@ -58,7 +65,8 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
             children: [
               TextFormField(
                 controller: _emailController,
-                validator: validateEmail,
+                validator: (email) =>
+                    EmailValidator.validate(email) ? email : null,
                 decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.grey,

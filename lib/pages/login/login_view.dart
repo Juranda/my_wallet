@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_input.dart';
 import 'package:my_wallet/user_provider.dart';
@@ -28,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
       );
       String id_usuario = authResponse.user!.id;
       final aluno = await supabase
-          .from('aluno')
+          .from('view_aluno')
           .select()
           .eq('id_usuario', id_usuario)
           .limit(1)
@@ -36,13 +35,14 @@ class _LoginViewState extends State<LoginView> {
 
       if (aluno != null && aluno.isNotEmpty) {
         userProvider.setAluno(aluno);
+
         Navigator.pushReplacementNamed(context, "/home");
 
         return;
       }
 
       final professor = await supabase
-          .from('professor')
+          .from('view_professor')
           .select()
           .eq('id_usuario', id_usuario)
           .limit(1)

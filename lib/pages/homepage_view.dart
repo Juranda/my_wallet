@@ -21,7 +21,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider _roleProvider =
+    UserProvider _userProvider =
         Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -58,11 +58,11 @@ class _HomePageViewState extends State<HomePageView> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Seja bem-vindo Rodolfo!'),
-                          switch (_roleProvider.role) {
+                          Text('Seja bem-vindo ${_userProvider.nome}!'),
+                          switch (_userProvider.role) {
                             Role.professor => Text('Professor'),
-                            Role.aluno => Text('Turma 701'),
-                            Role.moderador => throw UnimplementedError(),
+                            Role.aluno => Text('Turma ' + _userProvider.turma),
+                            Role.moderador => Text('ADMINISTRADOR'),
                           }
                         ],
                       ),
