@@ -1,5 +1,3 @@
-import 'package:my_wallet/pages/account_settings/models/escolaridade.dart';
-
 class Aluno {
   final int id;
   final int instituicaoensino;
@@ -7,9 +5,10 @@ class Aluno {
   final DateTime created_at;
   final String nome;
   final String sobrenome;
-  final Escolaridade escolaridade;
-  final int turma;
+  final String escolaridade;
   final String id_usuario;
+  final String email;
+  final String nome_turma;
 
   Aluno({
     required this.id,
@@ -19,7 +18,8 @@ class Aluno {
     required this.nome,
     required this.sobrenome,
     required this.escolaridade,
-    required this.turma,
+    required this.nome_turma,
     required this.id_usuario,
+    required this.email,
   });
 }
