@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/components/trail_lobby_card.dart';
 import 'package:my_wallet/components/trail_lobby_news_card.dart';
 import 'package:my_wallet/pages/home/home_adicionar_noticia.dart';
-import 'package:my_wallet/role_provider.dart';
+import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../pages/account_settings/models/role.dart';
 
 class NewsSection extends StatefulWidget {
   final String sectionTitle;

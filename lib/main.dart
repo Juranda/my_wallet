@@ -11,7 +11,7 @@ import 'package:my_wallet/pages/login/login_view.dart';
 import 'package:my_wallet/pages/cadastro/professor_cadastro_view.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trilhas/trails_view.dart';
-import 'package:my_wallet/role_provider.dart';
+import 'package:my_wallet/user_provider.dart';
 import 'package:my_wallet/settings_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

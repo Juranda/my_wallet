@@ -4,8 +4,10 @@ import 'package:my_wallet/pages/home/home.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trilhas/trails_view.dart';
 import 'package:my_wallet/pages/turma/turmas_view.dart';
-import 'package:my_wallet/role_provider.dart';
+import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'account_settings/models/role.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -60,7 +62,6 @@ class _HomePageViewState extends State<HomePageView> {
                           switch (_roleProvider.role) {
                             Role.professor => Text('Professor'),
                             Role.aluno => Text('Turma 701'),
-                            // TODO: Handle this case.
                             Role.moderador => throw UnimplementedError(),
                           }
                         ],

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_input.dart';
-import 'package:my_wallet/role_provider.dart';
+import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../account_settings/models/role.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -16,13 +18,14 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  Future<void> _tryLogin(UserProvider roleProvider) async {
+  Future<void> _tryLogin(UserProvider userProvider) async {
     final supabase = Supabase.instance.client;
-    AuthResponse? authResponse;
 
     try {
-      authResponse = await supabase.auth.signInWithPassword(
-          email: emailController.text, password: passwordController.text);
+      AuthResponse authResponse = await supabase.auth.signInWithPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
       String id_usuario = authResponse.user!.id;
       final aluno = await supabase
           .from('aluno')
@@ -32,6 +35,7 @@ class _LoginViewState extends State<LoginView> {
           .maybeSingle();
 
       if (aluno != null && aluno.isNotEmpty) {
+        userProvider.setAluno(aluno);
         Navigator.pushReplacementNamed(context, "/home");
 
         return;
@@ -40,10 +44,12 @@ class _LoginViewState extends State<LoginView> {
       final professor = await supabase
           .from('professor')
           .select()
-          .eq('id_usuario', id_usuario);
+          .eq('id_usuario', id_usuario)
+          .limit(1)
+          .maybeSingle();
 
       if (professor != null && professor.isNotEmpty) {
-        roleProvider.role = Role.professor;
+        userProvider.setProfessor(professor);
 
         Navigator.pushReplacementNamed(context, "/home");
         return;
@@ -66,7 +72,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final roleProvider = Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Material(
       color: Theme.of(context).colorScheme.primary,
@@ -82,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
                   MyWalletInput(
                     hintText: 'Usuário',
                     controller: emailController,
-                    onSubmit: () => _tryLogin(roleProvider),
+                    onSubmit: () => _tryLogin(userProvider),
                   ),
                   const SizedBox(
                     height: 30,
@@ -90,7 +96,7 @@ class _LoginViewState extends State<LoginView> {
                   MyWalletInput(
                     hintText: 'Senha',
                     controller: passwordController,
-                    onSubmit: () => _tryLogin(roleProvider),
+                    onSubmit: () => _tryLogin(userProvider),
                   ),
                   const SizedBox(
                     height: 40,
@@ -100,24 +106,23 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   Text("Logar como professor (apenas para testes)"),
                   Switch(
-                    value: roleProvider.role == Role.professor,
+                    value: userProvider.role == Role.professor,
                     thumbColor: MaterialStatePropertyAll(Colors.black),
                     trackOutlineColor: MaterialStatePropertyAll(Colors.black),
                     onChanged: (_) {
                       setState(
                         () {
-                          roleProvider.role =
-                              roleProvider.role == Role.professor
-                                  ? Role.aluno
-                                  : Role.professor;
+                          // userProvider.role =
+                          //     userProvider.role == Role.professor
+                          //         ? Role.aluno
+                          //         : Role.professor;
                         },
                       );
                     },
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        roleProvider.role = Role.moderador;
-                        _tryLogin(roleProvider);
+                        _tryLogin(userProvider);
                       },
                       child: Text('Logar como moderador (testes)'))
                 ],
@@ -134,7 +139,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                   ),
                   NextLoginButton(
-                    action: () => _tryLogin(roleProvider),
+                    action: () => _tryLogin(userProvider),
                   ),
                 ],
               ),

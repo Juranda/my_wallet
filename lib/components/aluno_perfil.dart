@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/role_provider.dart';
+import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../pages/account_settings/models/role.dart';
 
 class AlunoProfile extends StatelessWidget {
   AlunoProfile(this.myList, this.id, this.removeFromList);
