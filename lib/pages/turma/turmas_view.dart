@@ -47,72 +47,19 @@ class _TurmasViewState extends State<TurmasView> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text('Gerenciar notícias'),
-                TextButton(onPressed: () {}, child: Text('Recomendar notícia'))
-              ],
-            ),
-          ),
-          Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
+          Column(
             children: [
               Container(
                 clipBehavior: Clip.none,
                 width: MediaQuery.of(context).size.width,
-                height: 170,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Text(
-                  'Professor',
-                  style: TextStyle(fontSize: 30),
-                  textAlign: TextAlign.center,
-                ),
-                padding: EdgeInsets.all(20),
-              ),
-              Positioned(
-                top: 80,
-                child: Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.person_outline_rounded,
-                        size: 50,
-                      ),
-                      Text('Nome')
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-          Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                clipBehavior: Clip.none,
-                width: MediaQuery.of(context).size.width,
-                height: 300,
+                height: 70,
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(25)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
                 alignment: Alignment.topCenter,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text('Alunos (${alunos.length})',
                         style: TextStyle(fontSize: 30),
@@ -137,24 +84,22 @@ class _TurmasViewState extends State<TurmasView> {
                 ),
                 padding: EdgeInsets.all(20),
               ),
-              Positioned(
-                  top: 80,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    clipBehavior: Clip.none,
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: ListView(
-                        children: [...alunos],
-                      ),
-                    ),
-                  )),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                clipBehavior: Clip.none,
+                height: 500,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: ListView(
+                    children: [...alunos],
+                  ),
+                ),
+              ),
             ],
           )
         ],
