@@ -4,7 +4,10 @@ import 'package:intl/intl.dart';
 class TransactionForm extends StatefulWidget {
   TransactionForm({required this.onSubmit});
 
-  final void Function(String, double) onSubmit;
+  final Future<void> Function(
+      {required String title,
+      required double value,
+      required String data}) onSubmit;
 
   @override
   State<TransactionForm> createState() => _TransactionFormState();
@@ -23,7 +26,9 @@ class _TransactionFormState extends State<TransactionForm> {
       return;
     }
 
-    widget.onSubmit(title, value);
+    Navigator.pop(context);
+    widget.onSubmit(
+        title: title, value: value, data: _selectedDate.toIso8601String());
   }
 
   void _showDatePicker() {
@@ -94,7 +99,7 @@ class _TransactionFormState extends State<TransactionForm> {
                       (states) => Theme.of(context).primaryColor,
                     ),
                   ),
-                  onPressed: _submitForm,
+                  onPressed: () => _submitForm(),
                   child: Text(
                     'Nova transação',
                     style: TextStyle(

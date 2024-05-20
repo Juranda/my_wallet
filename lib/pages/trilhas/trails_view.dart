@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TrailsView extends StatelessWidget {
+class TrailsView extends StatefulWidget {
   const TrailsView({super.key});
 
   @override
+  State<TrailsView> createState() => _TrailsViewState();
+}
+
+class _TrailsViewState extends State<TrailsView> {
+  Future<List<Map<String, dynamic>>> fetchTrilhas() async {
+    return await Supabase.instance.client.from('trilha').select();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    UserProvider _user_provider =
+        Provider.of<UserProvider>(context, listen: false);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Container(
           color: Colors.white,
@@ -16,7 +32,6 @@ class TrailsView extends StatelessWidget {
               'Ensino Fundamental',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.displaySmall,
-
             ),
           ),
         ),
@@ -25,22 +40,25 @@ class TrailsView extends StatelessWidget {
         ),
         Container(
           height: MediaQuery.of(context).size.height - 244,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              TrailItem(
-                Trail(0, 'Cartao de Crédito', 'Uma trilha muito emocionan...',
-                    false),
-              ),
-              TrailItem(
-                Trail(0, 'Cartao de Crédito', 'Uma trilha muito emocionan...',
-                    false),
-              ),
-              TrailItem(
-                Trail(0, 'Cartao de Crédito', 'Uma trilha muito emocionan...',
-                    true),
-              ),
-            ],
+          width: MediaQuery.of(context).size.width,
+          child: FutureBuilder(
+            future: Supabase.instance.client.from('trilha').select('*'),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              } else {
+                final trilhas = snapshot.data!;
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) => TrailItem(Trail(
+                      index,
+                      trilhas[index]['nome'],
+                      trilhas[index]['descricao'],
+                      false)),
+                );
+              }
+            },
           ),
         ),
       ],
@@ -60,59 +78,69 @@ class TrailItem extends StatelessWidget {
       color = color.withOpacity(0.5);
     }
 
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, '/home/trails/trail', arguments: trail);
-      },
-      child: Container(
-        color: color,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    height: 70,
-                    width: 70,
-                    child: Image.asset(
-                      'assets/images/cartao_credito.png',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          trail.name,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          textAlign: TextAlign.left,
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/home/trails/trail',
+                arguments: trail);
+          },
+          child: Container(
+            color: color,
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 70,
+                        width: 70,
+                        child: Image.asset(
+                          'assets/images/cartao_credito.png',
+                          fit: BoxFit.contain,
                         ),
-                        Text(
-                          trail.description,
-                          textAlign: TextAlign.left,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              trail.name,
+                              style: Theme.of(context).textTheme.headlineMedium,
+                              textAlign: TextAlign.left,
+                            ),
+                            Text(
+                              trail.description,
+                              textAlign: TextAlign.left,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        height: 70,
+                        width: 70,
+                        child: Icon(
+                          trail.completed
+                              ? Icons.check_rounded
+                              : Icons.arrow_forward,
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    height: 70,
-                    width: 70,
-                    child: Icon(
-                      trail.completed
-                          ? Icons.check_rounded
-                          : Icons.arrow_forward,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.delete),
+        ),
+      ],
     );
   }
 }
