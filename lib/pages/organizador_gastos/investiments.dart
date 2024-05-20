@@ -73,7 +73,6 @@ class _InvestimentsState extends State<Investiments> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        IconButton(onPressed: () => sumMoney(20), icon: Icon(Icons.delete)),
         Container(
           padding: EdgeInsets.all(8),
           child: Column(

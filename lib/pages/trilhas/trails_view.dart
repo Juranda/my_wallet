@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/pages/account_settings/models/role.dart';
 import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,14 +13,33 @@ class TrailsView extends StatefulWidget {
 
 class _TrailsViewState extends State<TrailsView> {
   Future<List<Map<String, dynamic>>> fetchTrilhas() async {
-    return await Supabase.instance.client.from('trilha').select();
+    if (_user_provider.role == Role.professor) {
+      return await Supabase.instance.client.from('trilha').select();
+    } else {
+      return await Supabase.instance.client
+          .from('trilha_turma')
+          .select()
+          .eq('id_turma', _user_provider.id_turma);
+    }
+  }
+
+  late final UserProvider _user_provider;
+
+  @override
+  void initState() {
+    super.initState();
+    _user_provider = Provider.of<UserProvider>(context, listen: false);
+  }
+
+  Future<void> liberarTrilha(int trilhaID) async {
+    await Supabase.instance.client.from('trilha_turma').insert({
+      'id_turma': _user_provider.professor!.id_turma,
+      'id_trilha': trilhaID
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    UserProvider _user_provider =
-        Provider.of<UserProvider>(context, listen: false);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.max,
@@ -51,11 +71,10 @@ class _TrailsViewState extends State<TrailsView> {
                 return ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) => TrailItem(Trail(
-                      index,
-                      trilhas[index]['nome'],
-                      trilhas[index]['descricao'],
-                      false)),
+                  itemBuilder: (context, index) => TrailItem(
+                      Trail(trilhas[index]['id'], trilhas[index]['nome'],
+                          trilhas[index]['descricao'], false),
+                      liberarTrilha),
                 );
               }
             },
@@ -68,79 +87,72 @@ class _TrailsViewState extends State<TrailsView> {
 
 class TrailItem extends StatelessWidget {
   final Trail trail;
-
-  const TrailItem(this.trail, {super.key});
+  final Future<void> Function(int) liberarTrilha;
+  const TrailItem(this.trail, this.liberarTrilha, {super.key});
 
   @override
   Widget build(BuildContext context) {
     Color color = Theme.of(context).colorScheme.secondary;
+    UserProvider _user_provider =
+        Provider.of<UserProvider>(context, listen: true);
+
     if (trail.completed) {
       color = color.withOpacity(0.5);
     }
 
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        InkWell(
+    return Container(
+      color: color,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InkWell(
           onTap: () {
             Navigator.pushNamed(context, '/home/trails/trail',
                 arguments: trail);
           },
-          child: Container(
-            color: color,
-            child: Stack(
-              children: [
-                Padding(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 70,
+                width: 70,
+                child: Image.asset(
+                  'assets/images/cartao_credito.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Expanded(
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Container(
-                        height: 70,
-                        width: 70,
-                        child: Image.asset(
-                          'assets/images/cartao_credito.png',
-                          fit: BoxFit.contain,
-                        ),
+                      Text(
+                        trail.name,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                        textAlign: TextAlign.left,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              trail.name,
-                              style: Theme.of(context).textTheme.headlineMedium,
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              trail.description,
-                              textAlign: TextAlign.left,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 70,
-                        width: 70,
-                        child: Icon(
-                          trail.completed
-                              ? Icons.check_rounded
-                              : Icons.arrow_forward,
-                        ),
+                      Text(
+                        trail.description,
+                        textAlign: TextAlign.left,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              if (_user_provider.role == Role.professor)
+                IconButton(
+                  onPressed: () {
+                    liberarTrilha(trail.id);
+                  },
+                  icon: Icon(
+                    trail.completed ? Icons.check_rounded : Icons.lock,
+                  ),
+                )
+            ],
           ),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.delete),
-        ),
-      ],
+      ),
     );
   }
 }

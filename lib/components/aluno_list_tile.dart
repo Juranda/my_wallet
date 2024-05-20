@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/user_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../pages/account_settings/models/role.dart';
 
 class AlunoListTile extends StatelessWidget {
   final String nome;
@@ -13,6 +17,8 @@ class AlunoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider _user_provider = Provider.of<UserProvider>(context);
+
     return ListTile(
       title: Row(
         mainAxisSize: MainAxisSize.min,
@@ -21,10 +27,12 @@ class AlunoListTile extends StatelessWidget {
           Text(nome),
         ],
       ),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () => removerAluno(tileID),
-      ),
+      trailing: _user_provider.role == Role.professor
+          ? IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => removerAluno(tileID),
+            )
+          : null,
     );
   }
 }
