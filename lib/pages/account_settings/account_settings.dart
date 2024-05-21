@@ -28,7 +28,8 @@ class AccountSettings extends StatelessWidget {
       TextButton(
           onPressed: () async {
             await Supabase.instance.client.auth.signOut();
-            Navigator.pushNamed(context, '/login');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/login', (route) => false);
           },
           child: Container(
             decoration: BoxDecoration(

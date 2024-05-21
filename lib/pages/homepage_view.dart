@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/pages/gastos/investiments.dart';
+import 'package:my_wallet/pages/organizador_gastos/investiments.dart';
 import 'package:my_wallet/pages/home/home.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trilhas/trails_view.dart';
@@ -23,6 +23,26 @@ class _HomePageViewState extends State<HomePageView> {
   Widget build(BuildContext context) {
     UserProvider _userProvider =
         Provider.of<UserProvider>(context, listen: false);
+
+    final List<Widget> navigationBarDestinations = [
+      NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
+      NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
+      NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
+      NavigationDestination(icon: Icon(Icons.abc), label: 'AR'),
+    ];
+    final List<Widget> destinations = [
+      Home(),
+      TrailsView(),
+      TurmasView(),
+      ArView()
+    ];
+
+    if (_userProvider.role == Role.aluno) {
+      navigationBarDestinations.insert(
+          2, NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'));
+      destinations.insert(2, Investiments());
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Column(
@@ -86,13 +106,7 @@ class _HomePageViewState extends State<HomePageView> {
           ),
           Container(
             height: MediaQuery.of(context).size.height - 180,
-            child: [
-              Home(),
-              TrailsView(),
-              Investiments(),
-              TurmasView(),
-              ArView()
-            ][_selectedPageIndex],
+            child: destinations[_selectedPageIndex],
           ),
         ],
       ),
@@ -101,13 +115,7 @@ class _HomePageViewState extends State<HomePageView> {
         onDestinationSelected: (value) => setState(
           () => _selectedPageIndex = value,
         ),
-        destinations: [
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Trilhas'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'Turma'),
-          NavigationDestination(icon: Icon(Icons.abc), label: 'AR'),
-        ],
+        destinations: navigationBarDestinations,
       ),
     );
   }

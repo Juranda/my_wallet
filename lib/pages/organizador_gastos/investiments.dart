@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_wallet/pages/organizador_gastos/components/transaction_form.dart';
 import 'package:my_wallet/pages/organizador_gastos/components/transactions_list.dart';
 import 'package:my_wallet/pages/organizador_gastos/models/transaction.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class Investiments extends StatefulWidget {
@@ -23,32 +24,46 @@ class _InvestimentsState extends State<Investiments> {
     initializeDateFormatting('pt-br');
   }
 
+  Future<void> sumMoney(double money) async {
+    final dinheiro = await Supabase.instance.client
+        .from('aluno')
+        .select('dinheiro')
+        .eq('id_usuario', Supabase.instance.client.auth.currentUser!.id)
+        .single();
+    await Supabase.instance.client
+        .from('aluno')
+        .update({'dinheiro': (dinheiro['dinheiro'] + money)}).eq(
+            'id_usuario', Supabase.instance.client.auth.currentUser!.id);
+  }
+
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
       return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
     }).toList();
   }
 
-  void _addTransaction(String title, double value) {
-    final newTransaction = Transaction(
-      id: uuid.v8(),
-      title: title,
-      value: value,
-      date: DateTime.now(),
-    );
-
-    setState(() {
-      _transactions.add(newTransaction);
+  Future<void> insertTransaction(
+      {required String title,
+      required double value,
+      required String data}) async {
+    await Supabase.instance.client.from('gasto').insert({
+      'valor': value,
+      'titulo': title,
+      'data': data,
+      'id_usuario': Supabase.instance.client.auth.currentUser!.id
     });
-
-    Navigator.of(context).pop();
+    print('summed moneey ${value}');
+    print('summed moneey ${value}');
+    print('summed moneey ${value}');
+    print('summed moneey ${value}');
+    sumMoney(-value);
   }
 
   void _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return TransactionForm(onSubmit: _addTransaction);
+        return TransactionForm(onSubmit: insertTransaction);
       },
     );
   }
@@ -68,11 +83,22 @@ class _InvestimentsState extends State<Investiments> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
-                  child: Text(
-                    'R\$ 400,00',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                ),
+                    child: StreamBuilder<List<Map<String, dynamic>>>(
+                  stream: Supabase.instance.client
+                      .from('aluno')
+                      .stream(primaryKey: ['id'])
+                      .eq('id_usuario',
+                          Supabase.instance.client.auth.currentUser!.id)
+                      .limit(1),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                    if (!snapshot.hasData ||
+                        snapshot.hasError ||
+                        snapshot.data!.isEmpty)
+                      return CircularProgressIndicator();
+                    return Text(snapshot.data![0]['dinheiro'].toString());
+                  },
+                )),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,

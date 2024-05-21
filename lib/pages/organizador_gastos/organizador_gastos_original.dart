@@ -43,14 +43,14 @@ class _OrganizadorGastos extends State<OrganizadorGastosOriginal> {
     Navigator.of(context).pop();
   }
 
-  void _openTransactionFormModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        return TransactionForm(onSubmit: _addTransaction);
-      },
-    );
-  }
+  // void _openTransactionFormModal(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (_) {
+  //       return TransactionForm(onSubmit: _addTransaction);
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
