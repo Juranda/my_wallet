@@ -36,7 +36,7 @@ class UserProvider with ChangeNotifier {
 
   String get turma {
     return switch (role) {
-      Role.professor => professor!.nome_turma,
+      Role.professor => professor!.nome_turma ?? "SEM TURMA",
       Role.aluno => aluno!.nome_turma,
       Role.moderador => "SEM TURMA",
     };
@@ -70,10 +70,10 @@ class UserProvider with ChangeNotifier {
       nome: professor['nome'],
       sobrenome: professor['sobrenome'],
       email: professor['email'],
-      nome_turma: professor['nome_turma'],
-      escolaridade_turma: professor['escolaridade_turma'],
-      id_turma: professor['id_turma'],
-      id_escolaridade: professor['id_escolaridade'],
+      nome_turma: professor['nome_turma'] ?? "SEM TURMA",
+      escolaridade_turma: professor['escolaridade_turma'] ?? "",
+      id_turma: professor['id_turma'] ?? 0,
+      id_escolaridade: professor['id_escolaridade'] ?? 0,
       instituicaoensino: professor['instituicaoensino'],
     );
 

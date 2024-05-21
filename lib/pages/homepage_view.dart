@@ -81,7 +81,8 @@ class _HomePageViewState extends State<HomePageView> {
                           Text('Seja bem-vindo ${_userProvider.nome}!'),
                           switch (_userProvider.role) {
                             Role.professor => Text('Professor'),
-                            Role.aluno => Text('Turma ' + _userProvider.turma),
+                            Role.aluno =>
+                              Text('Turma ' + (_userProvider.turma ?? "")),
                             Role.moderador => Text('ADMINISTRADOR'),
                           }
                         ],

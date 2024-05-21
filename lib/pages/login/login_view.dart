@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
       if (aluno != null && aluno.isNotEmpty) {
         userProvider.setAluno(aluno);
 
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushNamed(context, "/home");
 
         return;
       }
@@ -52,7 +52,7 @@ class _LoginViewState extends State<LoginView> {
 
       if (professor != null && professor.isNotEmpty) {
         userProvider.setProfessor(professor);
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushNamed(context, "/home");
         return;
       }
 
@@ -65,12 +65,11 @@ class _LoginViewState extends State<LoginView> {
 
       if (instituicao_ensino != null && instituicao_ensino.isNotEmpty) {
         userProvider.setInstituicaoEnsino(instituicao_ensino);
-        Navigator.pushReplacementNamed(context, "/adm");
+        Navigator.pushNamed(context, "/adm");
         return;
       }
 
-      Navigator.pushReplacementNamed(context, "/siginup",
-          arguments: "professor");
+      Navigator.pushNamed(context, "/siginup", arguments: "professor");
     } on AuthException catch (e) {
       showDialog(
         context: context,
@@ -127,7 +126,6 @@ class _LoginViewState extends State<LoginView> {
                     controller: passwordController,
                     onFieldSubmitted: (value) => _tryLogin(userProvider),
                     validator: (password) {
-                      return null;
                       if (password == null || password.isEmpty) {
                         return "Senha vazia!";
                       }

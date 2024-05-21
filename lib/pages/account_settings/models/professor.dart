@@ -7,7 +7,7 @@ class Professor {
   final String nome;
   final String sobrenome;
   final String email;
-  final String nome_turma;
+  final String? nome_turma;
   final String escolaridade_turma;
   final int id_turma;
   final int id_escolaridade;

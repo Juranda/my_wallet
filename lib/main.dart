@@ -64,7 +64,9 @@ class _AppState extends State<App> {
               "/adm": (context) => CadastroModerador(),
               '/adm/cadastro-aluno': (context) => AlunoCadastroView(
                   id_instituicao_ensino: userProvider.instituicaoEnsino!.id),
-              '/adm/cadastro-professor': (context) => ProfessorCadastroView()
+              '/adm/cadastro-professor': (context) => ProfessorCadastroView(
+                    id_instituicao_ensino: userProvider.instituicaoEnsino!.id,
+                  )
             },
           ),
         );

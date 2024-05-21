@@ -1,12 +1,17 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:my_wallet/components/logo.dart';
+import 'package:flutter/services.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/pages/login/login_view.dart';
-import 'package:my_wallet/styles.dart';
-import 'package:validadores/Validador.dart';
+import 'package:my_wallet/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:validadores/ValidarCNPJ.dart';
+import 'package:validadores/ValidarCPF.dart';
+import 'package:validadores/ValidarEmail.dart';
 
 class ProfessorCadastroView extends StatefulWidget {
-  const ProfessorCadastroView({super.key});
+  final int id_instituicao_ensino;
+  const ProfessorCadastroView({super.key, required this.id_instituicao_ensino});
 
   @override
   State<ProfessorCadastroView> createState() => _ProfessorCadastroViewState();
@@ -14,28 +19,24 @@ class ProfessorCadastroView extends StatefulWidget {
 
 class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   final _formKey = GlobalKey<FormState>();
-  int escolaridade = 0;
+  List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
-    ('Escolaridade (opcional)', 0),
     ('Ensino Fundamental', 1),
     ('Ensino Médio', 2),
     ('Ensino Superior', 3),
   ];
-  void _trySignIn() {
-    debugPrint("hey");
-  }
+
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController cpfController = TextEditingController();
+  TextEditingController dataNascimentoController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of(context);
     return Material(
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.logout)),
-        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -43,7 +44,12 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
             padding: const EdgeInsets.all(14),
             child: Column(
               children: [
-                Logo(),
+                Center(
+                  child: Text(
+                    'Cadastrar novo Professor',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -55,6 +61,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                     children: [
                       MyWalletFormInput(
                         label: 'Nome completo',
+                        controller: nomeController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Campo obrigatório';
@@ -72,12 +79,17 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                         height: 20,
                       ),
                       MyWalletFormInput(
-                        label: 'CPF (para comprovação de idade)',
-                        textInputType: TextInputType.text,
+                        label: 'CNPJ/CPF',
+                        controller: cpfController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          CpfOuCnpjFormatter()
+                        ],
+                        textInputType: TextInputType.number,
                         validator: (value) {
-                          return Validador()
-                              .add(Validar.CPF, msg: 'CPF INVÁLIDO')
-                              .valido(value, clearNoNumber: true);
+                          return CPF.isValid(value) || CNPJ.isValid(value)
+                              ? null
+                              : "CPF Inválido";
                         },
                       ),
                       const SizedBox(
@@ -85,78 +97,110 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                       ),
                       MyWalletFormInput(
                         label: 'Data de nascimento',
+                        controller: dataNascimentoController,
                         textInputType: TextInputType.datetime,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          DataInputFormatter(),
+                        ],
                         validator: (valor) {
-                          if (valor == null) return;
+                          if (valor != null) {}
+
                           return null;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const MyWalletFormInput(
+                      MyWalletFormInput(
                         label: 'E-mail',
+                        controller: emailController,
                         textInputType: TextInputType.emailAddress,
+                        validator: (value) => EmailValidator.validate(value)
+                            ? null
+                            : "Email inválido",
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const MyWalletFormInput(
-                        label: 'Usuário',
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const MyWalletFormInput(
+                      MyWalletFormInput(
                         label: 'Senha',
                         showText: false,
+                        controller: passwordController,
+                        validator: (password) {
+                          if (password == null || password.isEmpty) {
+                            return "Senha vazia!";
+                          }
+
+                          if (password.length < 8) {
+                            return "Senha muito pequena";
+                          }
+
+                          // Contains at least one uppercase letter
+                          if (!password.contains(RegExp(r'[A-Z]'))) {
+                            return '• Pelomenos 1 letra maiúscula';
+                          }
+                          // Contains at least one lowercase letter
+                          if (!password.contains(RegExp(r'[a-z]'))) {
+                            return '• Pelomenos 1 letra minúscula';
+                          }
+                          // Contains at least one digit
+                          if (!password.contains(RegExp(r'[0-9]'))) {
+                            return '• Pelomenos 1 numero.';
+                          }
+                          // Contains at least one special character
+                          if (!password
+                              .contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
+                            return '• Pelomenos 1 caracter especial.';
+                          }
+                          // If there are no error messages, the password is valid
+                          return null;
+                        },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const MyWalletFormInput(
-                        label: 'Instituição de ensino',
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: MyWalletFormInput(
-                                label: 'Turma (opcional)',
-                                isRequired: false,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.popAndPushNamed(
-                                context, "/siginup&pessoa=aluno"),
-                            child: Text(
-                              'Cadastrar Aluno',
-                              style: Styles.linkTextStyle,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => Navigator.pushNamed(
-                                context, "/siginup/deletar"),
-                            child: Text(
-                              'Deletar Cadastro',
-                              style: Styles.linkTextStyle,
-                            ),
-                          ),
-                        ],
-                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            final AuthResponse response =
+                                await Supabase.instance.client.auth.signUp(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+
+                            final User user = response.user!;
+
+                            await Supabase.instance.client
+                                .from('professor')
+                                .insert({
+                              'instituicaoensino':
+                                  userProvider.instituicaoEnsino!.id,
+                              'cnpjcpf': cpfController.text,
+                              'nome': nomeController.text.substring(
+                                  0, nomeController.text.indexOf(" ")),
+                              'sobrenome': nomeController.text
+                                  .substring(nomeController.text.indexOf(" ")),
+                              'papel': 2,
+                              'id_usuario': user.id
+                            });
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const Text(
+                                      'Professor cadastrado com sucesso!');
+                                });
+                          } catch (e) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Text(e.toString());
+                              },
+                            );
+                          }
+                        },
+                        child: const Text('Cadastrar'),
+                      )
                     ],
                   ),
                 ),
