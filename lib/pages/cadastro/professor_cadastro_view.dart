@@ -31,9 +31,9 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              onPressed: (){
-                Navigator.popAndPushNamed(context, '/login');
-              }, 
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: Icon(Icons.logout)),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -136,7 +136,6 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -158,7 +157,6 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                           ),
                         ],
                       ),
-                     
                     ],
                   ),
                 ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/aluno_list_tile.dart';
-import 'package:my_wallet/components/aluno_perfil.dart';
 import 'package:my_wallet/pages/turma/turma_adiconar_aluno.dart';
 import 'package:my_wallet/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +17,7 @@ class TurmasView extends StatefulWidget {
 class _TurmasViewState extends State<TurmasView> {
   List<AlunoListTile> alunos = [];
 
-  late Stream<List<Map<String, dynamic>>> _alunoStream;
+  late final Stream<List<Map<String, dynamic>>> _alunoStream;
 
   late UserProvider _roleProvider;
 
@@ -35,12 +34,6 @@ class _TurmasViewState extends State<TurmasView> {
     await Supabase.instance.client
         .from('aluno')
         .update({'id_turma': null}).eq('id', 1);
-
-    setState(() {
-      _alunoStream = Supabase.instance.client
-          .from('aluno')
-          .stream(primaryKey: ['id']).eq('id_turma', _roleProvider.id_turma);
-    });
   }
 
   @override
@@ -52,7 +45,7 @@ class _TurmasViewState extends State<TurmasView> {
           color: Theme.of(context).colorScheme.primary,
           child: Center(
             child: Text(
-              'Turmas',
+              'Turma ' + _roleProvider.turma,
               style: TextStyle(fontSize: 40),
             ),
           ),
@@ -107,13 +100,21 @@ class _TurmasViewState extends State<TurmasView> {
                     child: CircularProgressIndicator(),
                   );
                 }
+
                 final alunosData = snapshot.data!;
+
+                if (alunosData.isEmpty) {
+                  return ListView();
+                }
+
                 return ListView.builder(
                   itemCount: alunosData.length,
                   itemBuilder: (context, index) {
+                    final aluno = alunosData[index];
                     return ListTile(
+                      key: Key(aluno['id_usuario']),
                       title: Text(
-                        alunosData[index]['nome'],
+                        aluno['nome'],
                       ),
                       trailing: _roleProvider.role == Role.professor
                           ? IconButton(
@@ -135,7 +136,7 @@ class _TurmasViewState extends State<TurmasView> {
                                       TextButton(
                                         onPressed: () {
                                           removerAlunoDaTurma(
-                                            alunosData[index]['id'],
+                                            aluno['id'],
                                           );
                                           Navigator.pop(context);
                                         },

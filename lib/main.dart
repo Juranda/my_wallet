@@ -5,6 +5,7 @@ import 'package:my_wallet/pages/account_settings/account_settings_view.dart';
 import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
 import 'package:my_wallet/pages/cadastro/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/app_settings_view.dart';
+import 'package:my_wallet/pages/cadastro/cadastro_moderador.dart';
 import 'package:my_wallet/pages/cadastro/deletar_cadastro_view.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login/login_view.dart';
@@ -43,6 +44,7 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(create: (context) => UserProvider())
       ],
       builder: (context, child) {
+        final userProvider = Provider.of<UserProvider>(context);
         return SafeArea(
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -51,8 +53,6 @@ class _AppState extends State<App> {
             initialRoute: "/login",
             routes: <String, WidgetBuilder>{
               "/login": (context) => LoginView(),
-              "/siginup&pessoa=aluno": (context) => AlunoCadastroView(),
-              "/siginup&pessoa=professor": (context) => ProfessorCadastroView(),
               "/home": (context) => HomePageView(),
               "/home/trails/trail": (context) => TrailView(),
               "/appSettings": (context) => AppSettingsView(),
@@ -60,7 +60,11 @@ class _AppState extends State<App> {
               "/accountSettings": (context) => AccountSettingsView(),
               "/accountSettingsChangePassword": (context) =>
                   AccountChangePassword(),
-              "/siginup/deletar": (context) => DeletarCadastroView(),
+              "/signup/deletar": (context) => DeletarCadastroView(),
+              "/adm": (context) => CadastroModerador(),
+              '/adm/cadastro-aluno': (context) => AlunoCadastroView(
+                  id_instituicao_ensino: userProvider.instituicaoEnsino!.id),
+              '/adm/cadastro-professor': (context) => ProfessorCadastroView()
             },
           ),
         );

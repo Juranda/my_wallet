@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class MyWalletInput extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final bool password;
 
   final void Function() onSubmit;
 
@@ -10,6 +11,7 @@ class MyWalletInput extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.controller,
+    required this.password,
     required this.onSubmit,
   });
 
@@ -21,6 +23,9 @@ class MyWalletInput extends StatelessWidget {
         onSubmitted: (_) => onSubmit(),
         controller: controller,
         cursorColor: Theme.of(context).primaryColor,
+        obscureText: password,
+        enableSuggestions: !password,
+        autocorrect: !password,
         decoration: InputDecoration(
           hintText: hintText,
           contentPadding: const EdgeInsets.symmetric(horizontal: 15),

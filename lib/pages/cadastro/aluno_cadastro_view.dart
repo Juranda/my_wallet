@@ -1,12 +1,18 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:my_wallet/components/logo.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/pages/login/login_view.dart';
-import 'package:my_wallet/styles.dart';
-import 'package:validadores/Validador.dart';
+import 'package:my_wallet/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:validadores/ValidarCPF.dart';
+import 'package:validadores/ValidarEmail.dart';
 
 class AlunoCadastroView extends StatefulWidget {
-  const AlunoCadastroView({super.key});
+  const AlunoCadastroView({super.key, required this.id_instituicao_ensino});
+
+  final int id_instituicao_ensino;
 
   @override
   State<AlunoCadastroView> createState() => _AlunoCadastroViewState();
@@ -14,28 +20,50 @@ class AlunoCadastroView extends StatefulWidget {
 
 class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   final _formKey = GlobalKey<FormState>();
-  int escolaridade = 0;
+  int escolaridade = 1;
+  int turmaSelecionada = 0;
+  List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
-    ('Escolaridade (opcional)', 0),
     ('Ensino Fundamental', 1),
     ('Ensino Médio', 2),
     ('Ensino Superior', 3),
   ];
-  void _trySignIn() {
-    debugPrint("hey");
+
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController cpfController = TextEditingController();
+  TextEditingController dataNascimentoController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void _selecionaNivelEscolar(int? nivel) async {
+    if (nivel == null) return;
+
+    final turmasNovas = await Supabase.instance.client
+        .from('turma')
+        .select('id, nome')
+        .eq('id_instituicao_ensino', this.widget.id_instituicao_ensino)
+        .eq('nivel_escolaridade', nivel);
+
+    setState(() {
+      escolaridade = nivel;
+
+      if (turmasNovas.isNotEmpty) {
+        turmas = turmasNovas
+            .map((t) => (t['id'] as int, t['nome'] as String))
+            .toList();
+        turmaSelecionada = turmasNovas.first['id'];
+        return;
+      }
+
+      turmas = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of(context);
     return Material(
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: (){
-                Navigator.popAndPushNamed(context, '/login');
-              }, 
-              icon: Icon(Icons.logout)),
-        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -43,7 +71,12 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
             padding: const EdgeInsets.all(14),
             child: Column(
               children: [
-                Logo(),
+                Center(
+                  child: Text(
+                    'Cadastrar novo Aluno',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -55,6 +88,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                     children: [
                       MyWalletFormInput(
                         label: 'Nome completo',
+                        controller: nomeController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Campo obrigatório';
@@ -72,12 +106,15 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                         height: 20,
                       ),
                       MyWalletFormInput(
-                        label: 'CPF (para comprovação de idade)',
+                        label: 'CPF',
+                        controller: cpfController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          CpfInputFormatter()
+                        ],
                         textInputType: TextInputType.number,
                         validator: (value) {
-                          return Validador()
-                              .add(Validar.CPF, msg: 'CPF INVÁLIDO')
-                              .valido(value, clearNoNumber: true);
+                          return CPF.isValid(value) ? null : "CPF Inválido";
                         },
                       ),
                       const SizedBox(
@@ -85,109 +122,171 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       ),
                       MyWalletFormInput(
                         label: 'Data de nascimento',
+                        controller: dataNascimentoController,
                         textInputType: TextInputType.datetime,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          DataInputFormatter(),
+                        ],
                         validator: (valor) {
-                          if (valor == null) return;
+                          if (valor != null) {}
+
                           return null;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const MyWalletFormInput(
+                      MyWalletFormInput(
                         label: 'E-mail',
+                        controller: emailController,
                         textInputType: TextInputType.emailAddress,
+                        validator: (value) => EmailValidator.validate(value)
+                            ? null
+                            : "Email inválido",
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const MyWalletFormInput(
-                        label: 'Usuário',
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const MyWalletFormInput(
+                      MyWalletFormInput(
                         label: 'Senha',
                         showText: false,
+                        controller: passwordController,
+                        validator: (password) {
+                          if (password == null || password.isEmpty) {
+                            return "Senha vazia!";
+                          }
+
+                          if (password.length < 8) {
+                            return "Senha muito pequena";
+                          }
+
+                          // Contains at least one uppercase letter
+                          if (!password.contains(RegExp(r'[A-Z]'))) {
+                            return '• Pelomenos 1 letra maiúscula';
+                          }
+                          // Contains at least one lowercase letter
+                          if (!password.contains(RegExp(r'[a-z]'))) {
+                            return '• Pelomenos 1 letra minúscula';
+                          }
+                          // Contains at least one digit
+                          if (!password.contains(RegExp(r'[0-9]'))) {
+                            return '• Pelomenos 1 numero.';
+                          }
+                          // Contains at least one special character
+                          if (!password
+                              .contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
+                            return '• Pelomenos 1 caracter especial.';
+                          }
+                          // If there are no error messages, the password is valid
+                          return null;
+                        },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const MyWalletFormInput(
-                        label: 'Instituição de ensino',
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                child: DropdownButton(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  value: escolaridades[escolaridade].$2,
-                                  items: escolaridades
-                                      .map(
-                                        (tuple) => DropdownMenuItem(
-                                          value: tuple.$2,
-                                          child: Text(
-                                            tuple.$1,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: (novaEscolaridade) {
-                                    setState(() {
-                                      escolaridade = novaEscolaridade!;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: MyWalletFormInput(
-                                label: 'Turma (opcional)',
-                                isRequired: false,
-                              ),
-                            ),
-                          ],
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: escolaridades[escolaridade - 1].$2,
+                            items: escolaridades
+                                .map(
+                                  (tuple) => DropdownMenuItem(
+                                    value: tuple.$2,
+                                    child: Text(
+                                      tuple.$1,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: _selecionaNivelEscolar,
+                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      
-                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.popAndPushNamed(
-                                context, "/siginup&pessoa=professor"),
-                            child: Text(
-                              'Cadastrar Professor',
-                              style: Styles.linkTextStyle,
-                            ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: turmaSelecionada,
+                            items: turmas
+                                ?.map(
+                                  (e) => DropdownMenuItem(
+                                    child: Text(
+                                      'Turma ' + e.$2,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    value: e.$1,
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              if (value == null) return;
+                              setState(() {
+                                turmaSelecionada = value;
+                              });
+                            },
                           ),
-                          GestureDetector(
-                            onTap: () => Navigator.pushNamed(
-                                context, "/siginup/deletar"),
-                            child: Text(
-                              'Deletar Cadastro',
-                              style: Styles.linkTextStyle,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            final AuthResponse response =
+                                await Supabase.instance.client.auth.signUp(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+
+                            final User user = response.user!;
+
+                            await Supabase.instance.client
+                                .from('aluno')
+                                .insert({
+                              'instituicaoensino':
+                                  userProvider.instituicaoEnsino!.id,
+                              'cpf': cpfController.text,
+                              'nome': nomeController.text.substring(
+                                  0, nomeController.text.indexOf(" ")),
+                              'sobrenome': nomeController.text
+                                  .substring(nomeController.text.indexOf(" ")),
+                              'escolaridade': escolaridade,
+                              'papel': 1,
+                              'dinheiro': 1000.0,
+                              'id_usuario': user.id,
+                              'id_turma': turmaSelecionada
+                            });
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const Text(
+                                      'Aluno cadastrado com sucesso!');
+                                });
+                          } catch (e) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Text(e.toString());
+                              },
+                            );
+                          }
+                        },
+                        child: const Text('Cadastrar'),
+                      )
                     ],
                   ),
                 ),
