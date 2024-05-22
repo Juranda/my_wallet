@@ -52,10 +52,6 @@ class _InvestimentsState extends State<Investiments> {
       'data': data,
       'id_usuario': Supabase.instance.client.auth.currentUser!.id
     });
-    print('summed moneey ${value}');
-    print('summed moneey ${value}');
-    print('summed moneey ${value}');
-    print('summed moneey ${value}');
     sumMoney(-value);
   }
 
@@ -95,8 +91,13 @@ class _InvestimentsState extends State<Investiments> {
                     if (!snapshot.hasData ||
                         snapshot.hasError ||
                         snapshot.data!.isEmpty)
-                      return CircularProgressIndicator();
-                    return Text(snapshot.data![0]['dinheiro'].toString());
+                      return CircularProgressIndicator(
+                        color: Colors.white,
+                      );
+                    return Text(
+                      snapshot.data![0]['dinheiro'].toString(),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    );
                   },
                 )),
               ),

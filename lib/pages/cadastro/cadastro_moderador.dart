@@ -14,12 +14,14 @@ class CadastroModerador extends StatelessWidget {
       'Cadastrar Professor',
       '/adm/cadastro-professor',
     ),
+    ('Cadastrar Turma', '/adm/cadastro-turma')
   ];
 
   @override
   Widget build(BuildContext context) {
     UserProvider _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Padding(
@@ -27,6 +29,10 @@ class CadastroModerador extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                'Gerenciador de Cadastros',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               Row(
                 children: [
                   Text(

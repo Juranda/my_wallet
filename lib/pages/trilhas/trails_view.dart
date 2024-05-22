@@ -13,6 +13,8 @@ class TrailsView extends StatefulWidget {
 }
 
 class _TrailsViewState extends State<TrailsView> {
+  late Future<List<Map<String, dynamic>>> getTrilhas;
+
   Future<List<Map<String, dynamic>>> fetchTrilhas() async {
     if (_user_provider.role == Role.professor) {
       return await Supabase.instance.client.from('trilha').select();
@@ -36,6 +38,7 @@ class _TrailsViewState extends State<TrailsView> {
   void initState() {
     super.initState();
     _user_provider = Provider.of<UserProvider>(context, listen: false);
+    getTrilhas = fetchTrilhas();
   }
 
   Future<bool> trilhaJaLiberada(int trilhaID) async {
@@ -105,7 +108,7 @@ class _TrailsViewState extends State<TrailsView> {
           child: FutureBuilder(
             //se é professor, mostre todas as trilhas
             //se for aluno, mostre só as da turma (fetch trilhas)
-            future: fetchTrilhas(),
+            future: getTrilhas,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();

@@ -35,7 +35,7 @@ class TransactionsList extends StatelessWidget {
                       child: ListTile(
                         title: Text(
                           gastos[index]['titulo'],
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         subtitle: Text(gastos[index]['data']),
                         leading: CircleAvatar(
@@ -44,7 +44,8 @@ class TransactionsList extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(6),
                             child: FittedBox(
-                              child: Text('R\$${gastos[index]['valor']}'),
+                              child: Text('R\$${gastos[index]['valor']}',
+                                  style: TextStyle(color: Colors.black)),
                             ),
                           ),
                         ),

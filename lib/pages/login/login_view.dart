@@ -125,35 +125,6 @@ class _LoginViewState extends State<LoginView> {
                     showText: false,
                     controller: passwordController,
                     onFieldSubmitted: (value) => _tryLogin(userProvider),
-                    validator: (password) {
-                      if (password == null || password.isEmpty) {
-                        return "Senha vazia!";
-                      }
-
-                      if (password.length < 8) {
-                        return "Senha muito pequena";
-                      }
-
-                      // Contains at least one uppercase letter
-                      if (!password.contains(RegExp(r'[A-Z]'))) {
-                        return '• Pelomenos 1 letra maiúscula';
-                      }
-                      // Contains at least one lowercase letter
-                      if (!password.contains(RegExp(r'[a-z]'))) {
-                        return '• Pelomenos 1 letra minúscula';
-                      }
-                      // Contains at least one digit
-                      if (!password.contains(RegExp(r'[0-9]'))) {
-                        return '• Pelomenos 1 numero.';
-                      }
-                      // Contains at least one special character
-                      if (!password
-                          .contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
-                        return '• Pelomenos 1 caracter especial.';
-                      }
-                      // If there are no error messages, the password is valid
-                      return null;
-                    },
                   ),
                 ],
               ),

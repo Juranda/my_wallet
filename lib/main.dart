@@ -7,6 +7,7 @@ import 'package:my_wallet/pages/cadastro/aluno_cadastro_view.dart';
 import 'package:my_wallet/pages/app_settings_view.dart';
 import 'package:my_wallet/pages/cadastro/cadastro_moderador.dart';
 import 'package:my_wallet/pages/cadastro/deletar_cadastro_view.dart';
+import 'package:my_wallet/pages/cadastro/turma_cadastro_view.dart';
 import 'package:my_wallet/pages/homepage_view.dart';
 import 'package:my_wallet/pages/login/login_view.dart';
 import 'package:my_wallet/pages/cadastro/professor_cadastro_view.dart';
@@ -65,8 +66,9 @@ class _AppState extends State<App> {
               '/adm/cadastro-aluno': (context) => AlunoCadastroView(
                   id_instituicao_ensino: userProvider.instituicaoEnsino!.id),
               '/adm/cadastro-professor': (context) => ProfessorCadastroView(
-                    id_instituicao_ensino: userProvider.instituicaoEnsino!.id,
-                  )
+                  id_instituicao_ensino: userProvider.instituicaoEnsino!.id),
+              '/adm/cadastro-turma': (context) => TurmaCadastroView(
+                  id_instituicao_ensino: userProvider.instituicaoEnsino!.id)
             },
           ),
         );
