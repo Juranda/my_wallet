@@ -1,19 +1,16 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/services/supabase.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:validadores/ValidarCPF.dart';
 import 'package:validadores/ValidarEmail.dart';
 
 class AlunoCadastroView extends StatefulWidget {
-  const AlunoCadastroView({super.key, required this.id_instituicao_ensino});
-
-  final int id_instituicao_ensino;
-
+  const AlunoCadastroView({super.key});
   @override
   State<AlunoCadastroView> createState() => _AlunoCadastroViewState();
 }
@@ -22,12 +19,15 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   final _formKey = GlobalKey<FormState>();
   int escolaridade = 1;
   int turmaSelecionada = 0;
+  int id_instituicao_ensino = 0;
   List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
     ('Ensino Fundamental', 1),
     ('Ensino Médio', 2),
     ('Ensino Superior', 3),
   ];
+
+  MyWallet myWallet = MyWallet.instance;
 
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
@@ -41,7 +41,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
     final turmasNovas = await Supabase.instance.client
         .from('turma')
         .select('id, nome')
-        .eq('id_instituicao_ensino', this.widget.id_instituicao_ensino)
+        .eq('id_instituicao_ensino', id_instituicao_ensino)
         .eq('nivel_escolaridade', nivel);
 
     setState(() {
@@ -60,8 +60,14 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    UserProvider userProvider = Provider.of(context, listen: false);
+    id_instituicao_ensino = userProvider.instituicaoEnsino!.id;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of(context);
     return Material(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -246,36 +252,34 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       ElevatedButton(
                         onPressed: () async {
                           try {
-                            final AuthResponse response =
-                                await Supabase.instance.client.auth.signUp(
+                            myWallet.cadastrarAluno(
+                              idInstituicaoEnsino: id_instituicao_ensino,
+                              nome: nomeController.text.substring(
+                                  0, nomeController.text.indexOf(" ")),
+                              sobrenome: nomeController.text
+                                  .substring(nomeController.text.indexOf(" ")),
+                              cpf: cpfController.text,
                               email: emailController.text,
-                              password: passwordController.text,
+                              senha: passwordController.text,
+                              escolaridade: escolaridade,
+                              idTurma: turmaSelecionada,
+                              dinheiro: 1000,
                             );
 
-                            final User user = response.user!;
-
-                            await Supabase.instance.client
-                                .from('aluno')
-                                .insert({
-                              'instituicaoensino':
-                                  userProvider.instituicaoEnsino!.id,
-                              'cpf': cpfController.text,
-                              'nome': nomeController.text.substring(
-                                  0, nomeController.text.indexOf(" ")),
-                              'sobrenome': nomeController.text
-                                  .substring(nomeController.text.indexOf(" ")),
-                              'escolaridade': escolaridade,
-                              'papel': 1,
-                              'dinheiro': 1000.0,
-                              'id_usuario': user.id,
-                              'id_turma': turmaSelecionada
-                            });
                             showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const Text(
-                                      'Aluno cadastrado com sucesso!');
-                                });
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                content:
+                                    const Text('Aluno cadastrado com sucesso!'),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: const Text('Ok'),
+                                  )
+                                ],
+                              ),
+                            );
                           } catch (e) {
                             showDialog(
                               context: context,

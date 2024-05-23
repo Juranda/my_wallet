@@ -1,19 +1,13 @@
 import 'dart:async';
 
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:validadores/ValidarCNPJ.dart';
-import 'package:validadores/ValidarCPF.dart';
-import 'package:validadores/ValidarEmail.dart';
 
 class TurmaCadastroView extends StatefulWidget {
-  final int id_instituicao_ensino;
-  const TurmaCadastroView({super.key, required this.id_instituicao_ensino});
+  const TurmaCadastroView({super.key});
 
   @override
   State<TurmaCadastroView> createState() => _TurmaCadastroViewState();
@@ -23,6 +17,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
   final _formKey = GlobalKey<FormState>();
   Map<String, dynamic>? professorSelecionado;
   int escolaridade = 1;
+  int id_instituicao_ensino = 0;
   late Future<List<Map<String, dynamic>>> fetchProfessores;
 
   List<(String nome, int id)> escolaridades = [
@@ -40,7 +35,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
       'nome': nomeController.text,
       'nivel_escolaridade': escolaridade,
       'id_professor': professorSelecionado!['id'],
-      'id_instituicao_ensino': widget.id_instituicao_ensino
+      'id_instituicao_ensino': id_instituicao_ensino
     });
 
     try {
@@ -66,12 +61,12 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
   @override
   initState() {
     super.initState();
+    UserProvider _userProvider = Provider.of(context, listen: false);
     fetchProfessores = getProfessores();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of(context);
     return Material(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,

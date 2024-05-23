@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/routes.dart';
 
 import 'profile_status.dart';
 
@@ -22,7 +23,10 @@ class MyWalletAppBar extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.secondary,
               ),
               onTap: () {
-                Navigator.pushNamed(context, "/settings");
+                Navigator.pushNamed(
+                  context,
+                  Routes.APP_SETTINGS,
+                );
               },
             ),
           ],

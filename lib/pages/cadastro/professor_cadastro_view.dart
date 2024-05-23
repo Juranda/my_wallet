@@ -2,7 +2,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:validadores/ValidarCNPJ.dart';
@@ -10,15 +10,14 @@ import 'package:validadores/ValidarCPF.dart';
 import 'package:validadores/ValidarEmail.dart';
 
 class ProfessorCadastroView extends StatefulWidget {
-  final int id_instituicao_ensino;
-  const ProfessorCadastroView({super.key, required this.id_instituicao_ensino});
+  const ProfessorCadastroView({super.key});
 
   @override
   State<ProfessorCadastroView> createState() => _ProfessorCadastroViewState();
 }
 
 class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
-  final _formKey = GlobalKey<FormState>();
+  int id_instituicao_ensino = 0;
   List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
     ('Ensino Fundamental', 1),
@@ -26,6 +25,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
     ('Ensino Superior', 3),
   ];
 
+  final _formKey = GlobalKey<FormState>();
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
   TextEditingController dataNascimentoController = TextEditingController();
@@ -33,8 +33,14 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   TextEditingController passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     UserProvider userProvider = Provider.of(context);
+    id_instituicao_ensino = userProvider.instituicaoEnsino!.id;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -174,8 +180,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                             await Supabase.instance.client
                                 .from('professor')
                                 .insert({
-                              'instituicaoensino':
-                                  userProvider.instituicaoEnsino!.id,
+                              'instituicaoensino': id_instituicao_ensino,
                               'cnpjcpf': cpfController.text,
                               'nome': nomeController.text.substring(
                                   0, nomeController.text.indexOf(" ")),

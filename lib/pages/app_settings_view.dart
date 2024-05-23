@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/settings_provider.dart';
+import 'package:my_wallet/providers/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsView extends StatefulWidget {
@@ -12,7 +12,8 @@ class AppSettingsView extends StatefulWidget {
 class _AppSettingsViewState extends State<AppSettingsView> {
   @override
   Widget build(BuildContext context) {
-    SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
+    SettingsProvider settings =
+        Provider.of<SettingsProvider>(context, listen: false);
     return Scaffold(
       body: Column(
         children: [
@@ -70,10 +71,9 @@ class _AppSettingsViewState extends State<AppSettingsView> {
                       ),
                       Switch(
                         value: settings.gameAudio,
-                        onChanged: (value) => setState(
-                          () {
-                            settings.gameAudio = !settings.gameAudio;
-                          }),
+                        onChanged: (value) => setState(() {
+                          settings.gameAudio = !settings.gameAudio;
+                        }),
                       ),
                     ]),
               ],

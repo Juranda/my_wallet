@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/aluno_list_tile.dart';
 import 'package:my_wallet/pages/turma/turma_adiconar_aluno.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

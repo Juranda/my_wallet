@@ -3,7 +3,7 @@ import 'package:my_wallet/pages/account_settings/models/aluno.dart';
 import 'package:my_wallet/pages/account_settings/models/professor.dart';
 import 'package:my_wallet/pages/account_settings/models/role.dart';
 
-import 'pages/account_settings/models/instituicao_ensino.dart';
+import '../pages/account_settings/models/instituicao_ensino.dart';
 
 class UserProvider with ChangeNotifier {
   InstituicaoEnsino? instituicaoEnsino;

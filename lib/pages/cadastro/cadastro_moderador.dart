@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/routes.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class CadastroModerador extends StatelessWidget {
@@ -8,13 +9,16 @@ class CadastroModerador extends StatelessWidget {
   final cadastros = [
     (
       'Cadastrar aluno',
-      '/adm/cadastro-aluno',
+      Routes.ADM_CADASTRO_ALUNO,
     ),
     (
       'Cadastrar Professor',
-      '/adm/cadastro-professor',
+      Routes.ADM_CADASTRO_PROFESSOR,
     ),
-    ('Cadastrar Turma', '/adm/cadastro-turma')
+    (
+      'Cadastrar Turma',
+      Routes.ADM_CADASTRO_TURMA,
+    )
   ];
 
   @override
@@ -47,9 +51,14 @@ class CadastroModerador extends StatelessWidget {
                     .map(
                       (e) => ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, e.$2);
+                          Navigator.pushNamed(
+                            context,
+                            e.$2,
+                          );
                         },
-                        child: Text(e.$1),
+                        child: Text(
+                          e.$1,
+                        ),
                       ),
                     )
                     .toList(),

@@ -3,29 +3,23 @@ import 'package:my_wallet/theme.dart';
 
 class SettingsProvider with ChangeNotifier {
   ThemeData _themeData = lightMode;
+  ThemeData get themeData => _themeData;
+
   bool _isDarkMode = false;
+  bool get isDarkMode => _isDarkMode;
 
   bool _gameAudio = true;
   bool get gameAudio => _gameAudio;
 
-  set gameAudio(bool value)
-  {
+  set gameAudio(bool value) {
     _gameAudio = value;
     notifyListeners();
   }
-  
-
-  bool get isDarkMode => _isDarkMode;
-  
-
-  ThemeData get themeData => _themeData;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
     notifyListeners();
   }
-
-
 
   void toggleDarkMode() {
     if (themeData == lightMode) {
@@ -36,5 +30,4 @@ class SettingsProvider with ChangeNotifier {
       _isDarkMode = false;
     }
   }
-
 }

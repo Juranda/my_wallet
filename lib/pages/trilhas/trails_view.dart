@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/pages/account_settings/models/professor.dart';
 import 'package:my_wallet/pages/account_settings/models/role.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,15 +13,16 @@ class TrailsView extends StatefulWidget {
 
 class _TrailsViewState extends State<TrailsView> {
   late Future<List<Map<String, dynamic>>> getTrilhas;
+  late final UserProvider _userProvider;
 
   Future<List<Map<String, dynamic>>> fetchTrilhas() async {
-    if (_user_provider.role == Role.professor) {
+    if (_userProvider.role == Role.professor) {
       return await Supabase.instance.client.from('trilha').select();
     } else {
       final response = await Supabase.instance.client
           .from('trilha_turma')
           .select('id_trilha')
-          .eq('id_turma', _user_provider.id_turma);
+          .eq('id_turma', _userProvider.id_turma);
       final List<int> ids = response.map((e) => e['id_trilha'] as int).toList();
       final newResponse = await Supabase.instance.client
           .from('trilha')
@@ -32,12 +32,10 @@ class _TrailsViewState extends State<TrailsView> {
     }
   }
 
-  late final UserProvider _user_provider;
-
   @override
   void initState() {
     super.initState();
-    _user_provider = Provider.of<UserProvider>(context, listen: false);
+    _userProvider = Provider.of<UserProvider>(context);
     getTrilhas = fetchTrilhas();
   }
 
@@ -46,7 +44,7 @@ class _TrailsViewState extends State<TrailsView> {
         .from('trilha_turma')
         .select()
         .eq('id_trilha', trilhaID)
-        .eq('id_turma', _user_provider.professor!.id_turma);
+        .eq('id_turma', _userProvider.professor!.id_turma);
 
     return response.isNotEmpty;
   }
@@ -54,16 +52,14 @@ class _TrailsViewState extends State<TrailsView> {
   Future<void> liberarTrilha(int trilhaID) async {
     if (await trilhaJaLiberada(trilhaID)) return;
 
-    await Supabase.instance.client.from('trilha_turma').insert({
-      'id_turma': _user_provider.professor!.id_turma,
-      'id_trilha': trilhaID
-    });
+    await Supabase.instance.client.from('trilha_turma').insert(
+        {'id_turma': _userProvider.professor!.id_turma, 'id_trilha': trilhaID});
 
     //pra cada aluno da turma, criar a relação atividade-aluno de todas as atividades dessa trilha
     final alunos = await Supabase.instance.client
         .from('aluno')
         .select()
-        .eq('id_turma', _user_provider.professor!.id_turma);
+        .eq('id_turma', _userProvider.professor!.id_turma);
     final atividades = await Supabase.instance.client
         .from('atividade')
         .select()
@@ -118,10 +114,11 @@ class _TrailsViewState extends State<TrailsView> {
                   scrollDirection: Axis.vertical,
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) => TrailItem(
-                      Trail(trilhas[index]['id'], trilhas[index]['nome'],
-                          trilhas[index]['descricao'], false),
-                      liberarTrilha,
-                      trilhaJaLiberada),
+                    Trail(trilhas[index]['id'], trilhas[index]['nome'],
+                        trilhas[index]['descricao'], false),
+                    liberarTrilha,
+                    trilhaJaLiberada,
+                  ),
                 );
               }
             },

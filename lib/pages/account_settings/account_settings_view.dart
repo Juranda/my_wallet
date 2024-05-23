@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_wallet/pages/account_settings/account_settings.dart';
 import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class AccountSettingsView extends StatefulWidget {

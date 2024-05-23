@@ -3,7 +3,6 @@ import 'package:my_wallet/pages/organizador_gastos/models/transaction.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'components/transaction_form.dart';
 import 'components/transactions_list.dart';
 
 class OrganizadorGastosOriginal extends StatefulWidget {

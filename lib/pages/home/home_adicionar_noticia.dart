@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/components/aluno_perfil.dart';
 import 'package:my_wallet/components/trail_lobby_news_card.dart';
 
 final _formKey = GlobalKey<FormState>();

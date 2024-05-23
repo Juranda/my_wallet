@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/components/logo.dart';
 import 'package:my_wallet/components/mw_form_input.dart';
-import 'package:my_wallet/components/mw_input.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/routes.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:validadores/ValidarEmail.dart';
@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
       if (aluno != null && aluno.isNotEmpty) {
         userProvider.setAluno(aluno);
 
-        Navigator.pushNamed(context, "/home");
+        Navigator.pushNamed(context, Routes.HOME);
 
         return;
       }
@@ -52,7 +52,7 @@ class _LoginViewState extends State<LoginView> {
 
       if (professor != null && professor.isNotEmpty) {
         userProvider.setProfessor(professor);
-        Navigator.pushNamed(context, "/home");
+        Navigator.pushNamed(context, Routes.HOME);
         return;
       }
 
@@ -65,11 +65,15 @@ class _LoginViewState extends State<LoginView> {
 
       if (instituicao_ensino != null && instituicao_ensino.isNotEmpty) {
         userProvider.setInstituicaoEnsino(instituicao_ensino);
-        Navigator.pushNamed(context, "/adm");
+        Navigator.pushNamed(context, Routes.ADM);
         return;
       }
 
-      Navigator.pushNamed(context, "/siginup", arguments: "professor");
+      Navigator.pushNamed(
+        context,
+        Routes.SIGNUP_DELETAR,
+        arguments: "professor",
+      );
     } on AuthException catch (e) {
       showDialog(
         context: context,

@@ -4,7 +4,8 @@ import 'package:my_wallet/pages/home/home.dart';
 import 'package:my_wallet/pages/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/pages/trilhas/trails_view.dart';
 import 'package:my_wallet/pages/turma/turmas_view.dart';
-import 'package:my_wallet/user_provider.dart';
+import 'package:my_wallet/routes.dart';
+import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'account_settings/models/role.dart';
@@ -64,8 +65,10 @@ class _HomePageViewState extends State<HomePageView> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, "/accountSettings"),
+                        onPressed: () => Navigator.pushNamed(
+                          context,
+                          Routes.ACCOUNT_SETTINGS,
+                        ),
                         icon: Icon(
                           Icons.account_circle,
                           size: 40,
@@ -82,7 +85,7 @@ class _HomePageViewState extends State<HomePageView> {
                           switch (_userProvider.role) {
                             Role.professor => Text('Professor'),
                             Role.aluno =>
-                              Text('Turma ' + (_userProvider.turma ?? "")),
+                              Text('Turma ' + (_userProvider.turma)),
                             Role.moderador => Text('ADMINISTRADOR'),
                           }
                         ],
@@ -92,7 +95,10 @@ class _HomePageViewState extends State<HomePageView> {
                   IconButton(
                     onPressed: () => setState(
                       () {
-                        Navigator.pushNamed(context, '/appSettings');
+                        Navigator.pushNamed(
+                          context,
+                          Routes.APP_SETTINGS,
+                        );
                       },
                     ),
                     icon: Icon(
