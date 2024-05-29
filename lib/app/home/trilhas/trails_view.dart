@@ -165,7 +165,8 @@ class _TrailItemState extends State<TrailItem> {
   late UserProvider _user_provider;
 
   void abrirTrilha(context) async {
-    Navigator.pushNamed(context, Routes.LOGIN, arguments: widget.trail);
+    Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE,
+        arguments: widget.trail);
   }
 
   @override

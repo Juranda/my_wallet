@@ -110,72 +110,92 @@ class _LoginViewState extends State<LoginView> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Material(
-      color: Theme.of(context).colorScheme.primary,
+      color: Theme.of(context).colorScheme.background,
       child: Padding(
-        padding: const EdgeInsets.all(45),
+        padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Logo(),
-            isLoading
-                ? CircularProgressIndicator(
-                    color: Colors.white,
-                  )
-                : Column(
-                    children: [
-                      Form(
-                        key: _formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        child: Column(
-                          children: [
-                            MyWalletFormInput(
-                              label: 'Email',
-                              onFieldSubmitted: (value) =>
-                                  _tryLogin(userProvider),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Campo obrigatório';
-                                }
-
-                                return EmailValidator.validate(value)
-                                    ? null
-                                    : "Email invalido";
-                              },
-                              controller: emailController,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            MyWalletFormInput(
-                              label: 'Senha',
-                              showText: false,
-                              controller: passwordController,
-                              onFieldSubmitted: (value) =>
-                                  _tryLogin(userProvider),
-                            ),
-                          ],
-                        ),
+            Expanded(
+              child: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
                       ),
-                    ],
-                  ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Column(
-                children: [
-                  Text(
-                    'Próx.',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                  ),
-                  NextLoginButton(
-                    action: () => {
-                      if (_formKey.currentState!.validate())
-                        _tryLogin(userProvider)
-                    },
-                  ),
-                ],
-              ),
+                    )
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        debugPrint("Altura maxima ${constraints.maxHeight}");
+                        return Container(
+                          height: constraints.maxHeight,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Form(
+                                key: _formKey,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                child: Column(
+                                  children: [
+                                    MyWalletFormInput(
+                                      label: 'Email',
+                                      onFieldSubmitted: (value) =>
+                                          _tryLogin(userProvider),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Campo obrigatório';
+                                        }
+
+                                        return EmailValidator.validate(value)
+                                            ? null
+                                            : "Email invalido";
+                                      },
+                                      controller: emailController,
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    MyWalletFormInput(
+                                      label: 'Senha',
+                                      showText: false,
+                                      controller: passwordController,
+                                      onFieldSubmitted: (value) =>
+                                          _tryLogin(userProvider),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Próx.',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                    ),
+                                    NextLoginButton(
+                                      action: () => {
+                                        if (_formKey.currentState!.validate())
+                                          _tryLogin(userProvider)
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
             ),
           ],
         ),

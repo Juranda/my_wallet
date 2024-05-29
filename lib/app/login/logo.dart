@@ -8,20 +8,9 @@ class Logo extends StatelessWidget {
     return Container(
       height: 216,
       width: 344,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-          style: BorderStyle.solid,
-          width: 4,
-        ),
-      ),
       child: Center(
-        child: Text(
-          'LOGO',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Colors.white,
-              ),
+        child: Image.asset(
+          'assets/images/logo.png',
         ),
       ),
     );

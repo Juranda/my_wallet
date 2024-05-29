@@ -6,7 +6,7 @@ class MyWallet {
   MyWallet._();
   bool _initialized = false;
 
-  void initialize() async {
+  Future<void> initialize() async {
     assert(
       !instance._initialized,
       'This instance is already initialized',

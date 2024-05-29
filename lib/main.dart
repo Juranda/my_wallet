@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'routes.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MyWallet.instance.initialize();
   SystemChrome.setPreferredOrientations([

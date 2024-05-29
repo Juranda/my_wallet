@@ -46,11 +46,21 @@ class MyWalletFormInput extends StatelessWidget {
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         label: Text(label),
-        isDense: true,
         filled: true,
         fillColor: Theme.of(context).colorScheme.secondary,
-        contentPadding: const EdgeInsets.all(8),
-        border: InputBorder.none,
+        hintText: label,
+        contentPadding: const EdgeInsets.only(
+          top: 10,
+          left: 10,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
       ),
     );
   }
