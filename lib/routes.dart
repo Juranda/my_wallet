@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/pages/account_settings/account_settings_view.dart';
-import 'package:my_wallet/pages/account_settings/mudar_senha.dart';
-import 'package:my_wallet/pages/app_settings_view.dart';
-import 'package:my_wallet/pages/cadastro/aluno_cadastro_view.dart';
-import 'package:my_wallet/pages/cadastro/cadastro_moderador.dart';
-import 'package:my_wallet/pages/cadastro/deletar_cadastro_view.dart';
-import 'package:my_wallet/pages/cadastro/professor_cadastro_view.dart';
-import 'package:my_wallet/pages/cadastro/turma_cadastro_view.dart';
-import 'package:my_wallet/pages/homepage_view.dart';
-import 'package:my_wallet/pages/login/login_view.dart';
+import 'package:my_wallet/app/home/account_settings/account_settings_view.dart';
+import 'package:my_wallet/app/home/account_settings/mudar_senha.dart';
+import 'package:my_wallet/app/home/account_settings/app_settings_view.dart';
+import 'package:my_wallet/app/cadastro/aluno_cadastro_view.dart';
+import 'package:my_wallet/app/cadastro/cadastro_moderador.dart';
+import 'package:my_wallet/app/cadastro/deletar_cadastro_view.dart';
+import 'package:my_wallet/app/cadastro/professor_cadastro_view.dart';
+import 'package:my_wallet/app/cadastro/turma_cadastro_view.dart';
+import 'package:my_wallet/app/home/homepage_view.dart';
+import 'package:my_wallet/app/login/login_view.dart';
+import 'package:my_wallet/app/home/trilhas/trails_view.dart';
 
 class Routes {
   static const String LOGIN = '/login';
@@ -23,6 +24,7 @@ class Routes {
   static const String ADM_CADASTRO_ALUNO = '/adm/cadastro-aluno';
   static const String ADM_CADASTRO_PROFESSOR = '/adm/cadastro-professor';
   static const String ADM_CADASTRO_TURMA = '/adm/cadastro-turma';
+  static const String TRAILS_TRAIL_DETALHE = '/trails/trail';
 
   static final Map<String, WidgetBuilder> routes = {
     LOGIN: (context) => LoginView(),
@@ -34,6 +36,7 @@ class Routes {
     ADM: (context) => CadastroModerador(),
     ADM_CADASTRO_ALUNO: (context) => AlunoCadastroView(),
     ADM_CADASTRO_PROFESSOR: (context) => ProfessorCadastroView(),
-    ADM_CADASTRO_TURMA: (context) => TurmaCadastroView()
+    ADM_CADASTRO_TURMA: (context) => TurmaCadastroView(),
+    TRAILS_TRAIL_DETALHE: (context) => TrailView()
   };
 }

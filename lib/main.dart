@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/providers/settings_provider.dart';
-import 'package:my_wallet/services/supabase.dart';
+import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 
 import 'routes.dart';
