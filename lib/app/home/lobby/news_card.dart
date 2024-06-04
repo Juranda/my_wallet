@@ -23,10 +23,10 @@ class NewsCard extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white,
-              width: 5,)
-          ),
+              border: Border.all(
+            color: Colors.white,
+            width: 5,
+          )),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

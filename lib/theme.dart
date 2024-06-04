@@ -1,70 +1,69 @@
 import 'package:flutter/material.dart';
 
 ThemeData lightMode = ThemeData(
-  brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-    background: Color.fromRGBO(2, 115, 234, 1),
-    primary: Color.fromRGBO(25, 27, 52, 1),
-    secondary: Colors.white,
-    tertiary: Colors.white,
+    background: Color.fromRGBO(55, 152, 255, 1),
+    primary: Color.fromRGBO(2, 115, 234, 1),
+    secondary: Color.fromRGBO(25, 27, 52, 1),
+    tertiary: Color.fromRGBO(6, 8, 34, 1),
+    onBackground: Colors.black,
+    onTertiary: Colors.white,
   ),
-  textTheme: TextTheme(
-    bodyLarge: TextStyle(
-      color: Colors.black,
-    ),
-    bodyMedium: TextStyle(
-      color: Colors.black,
-    ),
-    bodySmall: TextStyle(
-      color: Colors.black,
-    ),
-    titleLarge: TextStyle(
-      color: Colors.black,
-      fontSize: 50,
-    ),
-    titleMedium: TextStyle(
-      color: Colors.black,
-      fontSize: 30,
-    ),
-    titleSmall: TextStyle(
-      color: Colors.black,
-      fontSize: 20,
-    ),
-  ),
+  // textTheme: TextTheme(
+  //   bodyLarge: TextStyle(
+  //     color: lightTextColor,
+  //   ),
+  //   bodyMedium: TextStyle(
+  //     color: lightTextColor,
+  //   ),
+  //   bodySmall: TextStyle(
+  //     color: lightTextColor,
+  //   ),
+  //   titleLarge: TextStyle(
+  //     color: lightTextColor,
+  //     fontSize: 50,
+  //   ),
+  //   titleMedium: TextStyle(
+  //     color: lightTextColor,
+  //     fontSize: 30,
+  //   ),
+  //   titleSmall: TextStyle(
+  //     color: lightTextColor,
+  //     fontSize: 20,
+  //   ),
+  // ),
 );
 
 ThemeData darkMode = ThemeData(
-  brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: Color.fromRGBO(25, 27, 52, 1),
-    primary: Color.fromRGBO(2, 115, 234, 1),
-    secondary: Colors.white,
-    tertiary: Colors.white,
+    background: Color.fromRGBO(6, 8, 34, 1),
+    primary: Color.fromRGBO(25, 27, 52, 1),
+    secondary: Color.fromRGBO(2, 115, 234, 1),
+    tertiary: Color.fromRGBO(55, 152, 255, 1),
+    onBackground: Colors.white,
+    onTertiary: Colors.white,
   ),
-  textTheme: TextTheme(
-    bodyLarge: TextStyle(
-      color: Colors.white,
-    ),
-    bodyMedium: TextStyle(
-      color: Colors.white,
-    ),
-    bodySmall: TextStyle(
-      color: Colors.white,
-    ),
-    titleLarge: TextStyle(
-      color: Colors.white,
-      fontSize: 50,
-    ),
-    titleMedium: TextStyle(
-      color: Colors.white,
-      fontSize: 30,
-    ),
-    titleSmall: TextStyle(
-      color: Colors.white,
-      fontSize: 20,
-    ),
-  ),
+  // textTheme: TextTheme(
+  //   bodyLarge: TextStyle(
+  //     color: darkTextColor,
+  //   ),
+  //   bodyMedium: TextStyle(
+  //     color: darkTextColor,
+  //   ),
+  //   bodySmall: TextStyle(
+  //     color: darkTextColor,
+  //   ),
+  //   titleLarge: TextStyle(
+  //     color: darkTextColor,
+  //     fontSize: 50,
+  //   ),
+  //   titleMedium: TextStyle(
+  //     color: darkTextColor,
+  //     fontSize: 30,
+  //   ),
+  //   titleSmall: TextStyle(
+  //     color: darkTextColor,
+  //     fontSize: 20,
+  //   ),
+  // ),
 );
-
-Color get lightTextColor => Color.fromRGBO(25, 27, 52, 1);
-Color get darkTextColor => Colors.white;

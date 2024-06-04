@@ -95,7 +95,11 @@ class _InvestimentsState extends State<Investiments> {
                         color: Colors.white,
                       );
                     return Text(
-                      snapshot.data![0]['dinheiro'].toString(),
+                      "R\$" +
+                          (snapshot.data![0]['dinheiro'] as int)
+                              .toDouble()
+                              .toStringAsFixed(2)
+                              .toString(),
                       style: Theme.of(context).textTheme.titleMedium,
                     );
                   },

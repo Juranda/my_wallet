@@ -44,10 +44,18 @@ class MyWalletFormInput extends StatelessWidget {
       obscureText: !showText,
       controller: controller,
       inputFormatters: inputFormatters,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.background,
+      ),
       decoration: InputDecoration(
-        label: Text(label),
+        label: Text(
+          label,
+        ),
+        labelStyle: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+        ),
         filled: true,
-        fillColor: Theme.of(context).colorScheme.secondary,
+        fillColor: Colors.white,
         hintText: label,
         contentPadding: const EdgeInsets.only(
           top: 10,

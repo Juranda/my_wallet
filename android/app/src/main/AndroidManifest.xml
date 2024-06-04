@@ -8,7 +8,9 @@
     <application
         android:label="my_wallet"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:roundIcon="@mipmap/round_launcher"
+        android:icon="@mipmap/ic_launcher"
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true"

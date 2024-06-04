@@ -37,8 +37,8 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
-
     _userProvider = Provider.of<UserProvider>(context, listen: false);
+
     if (_userProvider.role == Role.aluno) {
       navigationBarDestinations.insert(
         2,
@@ -51,7 +51,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: LayoutBuilder(
         builder: (context, constraints) => Column(
           children: [
@@ -62,7 +62,7 @@ class _HomePageViewState extends State<HomePageView> {
                       gradient: LinearGradient(
                         colors: [
                           Theme.of(context).colorScheme.primary,
-                          Color.fromRGBO(34, 95, 8, 1)
+                          Theme.of(context).colorScheme.background,
                         ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
@@ -95,11 +95,16 @@ class _HomePageViewState extends State<HomePageView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Seja bem-vindo ${_userProvider.nome}!'),
+                            Text(
+                              'Seja bem-vindo ${_userProvider.nome}!',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                             switch (_userProvider.role) {
                               Role.professor => Text('Professor'),
-                              Role.aluno =>
-                                Text('Turma ' + (_userProvider.turma)),
+                              Role.aluno => Text(
+                                  'Turma ' + (_userProvider.turma),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               Role.moderador => Text('ADMINISTRADOR'),
                             }
                           ],
@@ -138,46 +143,9 @@ class _HomePageViewState extends State<HomePageView> {
           () => _selectedPageIndex = value,
         ),
         destinations: navigationBarDestinations,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        indicatorColor: Theme.of(context).colorScheme.background,
       ),
     );
-  }
-
-  Widget _navBar() {
-    return Container(
-      height: 65,
-      margin: EdgeInsets.only(right: 24, left: 24, bottom: 24),
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(20),
-            blurRadius: 20,
-            spreadRadius: 10,
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class BottomNavigationBar extends StatefulWidget {
-  final List<int> destinations;
-
-  const BottomNavigationBar({
-    super.key,
-    required this.destinations,
-  });
-
-  @override
-  State<BottomNavigationBar> createState() => _BottomNavigationBarState();
-}
-
-class _BottomNavigationBarState extends State<BottomNavigationBar> {
-  int selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

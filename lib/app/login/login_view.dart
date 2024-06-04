@@ -110,94 +110,128 @@ class _LoginViewState extends State<LoginView> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Material(
-      color: Theme.of(context).colorScheme.background,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Logo(),
-            Expanded(
-              child: isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : LayoutBuilder(
-                      builder: (context, constraints) {
-                        debugPrint("Altura maxima ${constraints.maxHeight}");
-                        return Container(
-                          height: constraints.maxHeight,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Form(
-                                key: _formKey,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                child: Column(
-                                  children: [
-                                    MyWalletFormInput(
-                                      label: 'Email',
-                                      onFieldSubmitted: (value) =>
-                                          _tryLogin(userProvider),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Campo obrigatório';
-                                        }
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            colors: [
+              Theme.of(context).colorScheme.secondary,
+              Theme.of(context).colorScheme.tertiary,
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Logo(),
+              Expanded(
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          debugPrint("Altura maxima ${constraints.maxHeight}");
+                          return Container(
+                            height: constraints.maxHeight,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Form(
+                                  key: _formKey,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  child: Column(
+                                    children: [
+                                      MyWalletFormInput(
+                                        label: 'Email',
+                                        onFieldSubmitted: (value) =>
+                                            _tryLogin(userProvider),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Campo obrigatório';
+                                          }
 
-                                        return EmailValidator.validate(value)
-                                            ? null
-                                            : "Email invalido";
-                                      },
-                                      controller: emailController,
-                                    ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    MyWalletFormInput(
-                                      label: 'Senha',
-                                      showText: false,
-                                      controller: passwordController,
-                                      onFieldSubmitted: (value) =>
-                                          _tryLogin(userProvider),
-                                    ),
-                                  ],
+                                          return EmailValidator.validate(value)
+                                              ? null
+                                              : "Email invalido";
+                                        },
+                                        controller: emailController,
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      MyWalletFormInput(
+                                        label: 'Senha',
+                                        showText: false,
+                                        controller: passwordController,
+                                        onFieldSubmitted: (value) =>
+                                            _tryLogin(userProvider),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'Próx.',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                          ),
-                                    ),
-                                    NextLoginButton(
-                                      action: () => {
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    child: InkWell(
+                                      onTap: () {
                                         if (_formKey.currentState!.validate())
-                                          _tryLogin(userProvider)
+                                          _tryLogin(userProvider);
                                       },
+                                      child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        height: constraints.maxHeight / 12,
+                                        width: constraints.maxWidth / 3,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ],
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          textDirection: TextDirection.rtl,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/seta.png',
+                                              width: 30,
+                                              color: Colors.white,
+                                            ),
+                                            const Text(
+                                              'Próximo',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),
-          ],
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

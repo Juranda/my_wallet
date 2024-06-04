@@ -9,7 +9,8 @@ import 'package:my_wallet/app/cadastro/professor_cadastro_view.dart';
 import 'package:my_wallet/app/cadastro/turma_cadastro_view.dart';
 import 'package:my_wallet/app/home/homepage_view.dart';
 import 'package:my_wallet/app/login/login_view.dart';
-import 'package:my_wallet/app/home/trilhas/trails_view.dart';
+
+import 'app/home/trilhas/trail_view.dart';
 
 class Routes {
   static const String LOGIN = '/login';

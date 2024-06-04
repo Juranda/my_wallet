@@ -24,7 +24,7 @@ class Lobby extends StatelessWidget {
                       child: Container(
                         height: 200,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Theme.of(context).colorScheme.background,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(

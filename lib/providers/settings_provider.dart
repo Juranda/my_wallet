@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/theme.dart';
 
 class SettingsProvider with ChangeNotifier {
-  ThemeData _themeData = darkMode;
+  ThemeData _themeData = lightMode;
   ThemeData get themeData => _themeData;
 
   bool _isDarkMode = false;

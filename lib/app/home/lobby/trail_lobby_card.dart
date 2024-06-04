@@ -47,11 +47,6 @@ class TrailLobbyCard extends StatelessWidget {
                     trailDescription,
                   )
                 ],
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: CircleAvatar(),
               )
             ],
           ),
