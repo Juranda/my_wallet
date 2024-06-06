@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_wallet/app/cadastro/mw_dropdown_input.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
@@ -191,63 +192,46 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: escolaridades[escolaridade - 1].$2,
-                            items: escolaridades
-                                .map(
-                                  (tuple) => DropdownMenuItem(
-                                    value: tuple.$2,
-                                    child: Text(
-                                      tuple.$1,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: _selecionaNivelEscolar,
-                          ),
-                        ),
+                      MyWalletDropdownInput(
+                        value: escolaridades[escolaridade - 1].$2,
+                        items: escolaridades
+                            .map(
+                              (tuple) => DropdownMenuItem(
+                                value: tuple.$2,
+                                child: Text(
+                                  tuple.$1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (e) => _selecionaNivelEscolar(e as int),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: turmaSelecionada,
-                            items: turmas
-                                ?.map(
-                                  (e) => DropdownMenuItem(
-                                    child: Text(
-                                      'Turma ' + e.$2,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    value: e.$1,
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              if (value == null) return;
-                              setState(() {
-                                turmaSelecionada = value;
-                              });
-                            },
-                          ),
-                        ),
+                      MyWalletDropdownInput(
+                        value: turmaSelecionada,
+                        items: turmas?.map(
+                          (e) {
+                            return DropdownMenuItem(
+                              child: Text(
+                                'Turma ' + e.$2,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              value: e.$1,
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (value) {
+                          if (value == null) return;
+                          setState(() {
+                            turmaSelecionada = value as int;
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       ElevatedButton(
                         onPressed: () async {

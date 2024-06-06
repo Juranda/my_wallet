@@ -13,6 +13,8 @@ class TrailView extends StatefulWidget {
 }
 
 class _TrailViewState extends State<TrailView> {
+  List<Map<String, dynamic>> alunoAtividades = [];
+
   @override
   Widget build(BuildContext context) {
     Trail trail = ModalRoute.of(context)!.settings.arguments as Trail;
@@ -23,15 +25,14 @@ class _TrailViewState extends State<TrailView> {
       if (_user_provider.role == Role.professor) return [];
 
       //pega o id de todas as atividades de aluno_atividade desse aluno
-      final response = await Supabase.instance.client
+      final atividades = await Supabase.instance.client
           .from('aluno_atividade')
           .select('id_atividade')
           .eq('id_aluno', _user_provider.aluno!.id);
 
       //transforma todos esses ids em uma lista
       final List<int> ids =
-          response.map((e) => e['id_atividade'] as int).toList();
-
+          atividades.map((e) => e['id_atividade'] as int).toList();
       //retorna todas as atividades que tem um desses ids e que fazem parte da trilha atual
       return await Supabase.instance.client
           .from('atividade')
@@ -56,46 +57,63 @@ class _TrailViewState extends State<TrailView> {
     }
 
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            trail.name,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height - 244,
-            width: MediaQuery.of(context).size.width,
-            child: FutureBuilder(
-                future: fetchAtividades(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return CircularProgressIndicator(
-                      color: Colors.white,
-                    );
-                  } else {
-                    final atividades = snapshot.data!;
-                    return ListView.builder(
-                        itemCount: atividades.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(atividades[index]['descricao']),
-                            trailing: Text(atividades[index]['id'].toString()),
-                          );
-                        });
-                  }
-                }),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              //só para testes
-              completarAtividade(1, completarTudo: true);
+      appBar: AppBar(
+        title: Text(trail.name),
+        centerTitle: true,
+      ),
+      body: FutureBuilder(
+        future: fetchAtividades(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasData && snapshot.data!.isEmpty) {
+            return Center(
+              child: const Text(
+                'Nenhuma atividade nessa trilha',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: const Text('Algum erro aconteceu'),
+            );
+          }
+
+          final atividades = snapshot.data!;
+          return ListView.builder(
+            itemCount: atividades.length,
+            itemBuilder: (context, index) {
+              final Map<String, dynamic> atividade = atividades[index];
+
+              return ListTile(
+                title: Text(atividade['nome']),
+                trailing: Text(atividade['completada'].toString()),
+              );
             },
-            child: const Text(
-              'completar todas as atividades!!! (muito facil)',
-            ),
-          )
-        ],
+          );
+        },
+      ),
+      floatingActionButton: TextButton(
+        onPressed: () {
+          //só para testes
+          completarAtividade(1, completarTudo: true);
+        },
+        child: const Text(
+          'Completar Todas',
+        ),
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateColor.resolveWith((states) => Colors.white),
+        ),
       ),
     );
   }

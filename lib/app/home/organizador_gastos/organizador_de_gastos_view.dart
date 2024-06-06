@@ -6,14 +6,15 @@ import 'package:my_wallet/app/home/organizador_gastos/models/transaction.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-class Investiments extends StatefulWidget {
-  const Investiments({super.key});
+class OrganizadorDeGastosView extends StatefulWidget {
+  const OrganizadorDeGastosView({super.key});
 
   @override
-  State<Investiments> createState() => _InvestimentsState();
+  State<OrganizadorDeGastosView> createState() =>
+      _OrganizadorDeGastosViewState();
 }
 
-class _InvestimentsState extends State<Investiments> {
+class _OrganizadorDeGastosViewState extends State<OrganizadorDeGastosView> {
   final uuid = Uuid();
 
   final _transactions = <Transaction>[];
@@ -96,8 +97,7 @@ class _InvestimentsState extends State<Investiments> {
                       );
                     return Text(
                       "R\$" +
-                          (snapshot.data![0]['dinheiro'] as int)
-                              .toDouble()
+                          (snapshot.data![0]['dinheiro'] as double)
                               .toStringAsFixed(2)
                               .toString(),
                       style: Theme.of(context).textTheme.titleMedium,

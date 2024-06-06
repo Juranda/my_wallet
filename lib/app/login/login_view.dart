@@ -29,13 +29,12 @@ class _LoginViewState extends State<LoginView> {
     try {
       late AuthResponse authResponse;
 
-      await supabase.auth
-          .signInWithPassword(
-            email: emailController.text,
-            password: passwordController.text,
-          )
-          .then((value) => authResponse = value)
-          .catchError((error) => throw error);
+      AuthResponse response = await supabase.auth.signInWithPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      authResponse = await response;
 
       String id_usuario = authResponse.user!.id;
       final aluno = await supabase
@@ -91,9 +90,14 @@ class _LoginViewState extends State<LoginView> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Erro ao logar'),
-            content: Text(e.message),
+            content: Text('Suas credências são inválidas'),
             actions: [
-              const Text('Ok'),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ok'),
+              ),
             ],
           );
         },
