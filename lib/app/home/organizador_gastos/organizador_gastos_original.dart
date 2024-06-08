@@ -62,7 +62,7 @@ class _OrganizadorGastos extends State<OrganizadorGastosOriginal> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TransactionsList(_transactions),
+                TransactionsList(),
               ],
             ),
           ),

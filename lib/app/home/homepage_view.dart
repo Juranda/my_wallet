@@ -44,7 +44,7 @@ class _HomePageViewState extends State<HomePageView> {
         2,
         NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'),
       );
-      destinations.insert(2, OrganizadorDeGastosView());
+      destinations.insert(2, Investiments());
     }
   }
 

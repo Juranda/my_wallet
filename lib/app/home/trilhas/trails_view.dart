@@ -119,7 +119,7 @@ class _TrailsViewState extends State<TrailsView> {
                 return Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(

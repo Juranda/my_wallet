@@ -27,9 +27,9 @@ class _TrailViewState extends State<TrailView> {
       //pega o id de todas as atividades de aluno_atividade desse aluno
       final atividades = await Supabase.instance.client
           .from('aluno_atividade')
-          .select('id_atividade')
+          .select('*')
           .eq('id_aluno', _user_provider.aluno!.id);
-
+      alunoAtividades = atividades;
       //transforma todos esses ids em uma lista
       final List<int> ids =
           atividades.map((e) => e['id_atividade'] as int).toList();
@@ -96,7 +96,7 @@ class _TrailViewState extends State<TrailView> {
 
               return ListTile(
                 title: Text(atividade['nome']),
-                trailing: Text(atividade['completada'].toString()),
+                trailing: Text(alunoAtividades[index]['completada'].toString()),
               );
             },
           );

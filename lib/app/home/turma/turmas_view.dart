@@ -54,9 +54,8 @@ class _TurmasViewState extends State<TurmasView> {
           width: double.infinity,
           height: 70,
           decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+            color: Theme.of(context).colorScheme.background,
+          ),
           alignment: Alignment.center,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -88,9 +87,7 @@ class _TurmasViewState extends State<TurmasView> {
             width: MediaQuery.of(context).size.width,
             height: 200,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: StreamBuilder<List<Map<String, dynamic>>>(
               stream: _alunoStream,

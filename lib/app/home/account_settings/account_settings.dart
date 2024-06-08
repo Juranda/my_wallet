@@ -9,22 +9,22 @@ class AccountSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      TextButton(
-        onPressed: () {
-          changeScreen(1);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: 40,
-          child: Text('Mudar Senha',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineMedium),
-        ),
-      ),
+      // TextButton(
+      //   onPressed: () {
+      //     changeScreen(1);
+      //   },
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: Theme.of(context).colorScheme.primary,
+      //       borderRadius: BorderRadius.circular(5),
+      //     ),
+      //     width: MediaQuery.of(context).size.width,
+      //     height: 40,
+      //     child: Text('Mudar Senha',
+      //         textAlign: TextAlign.center,
+      //         style: Theme.of(context).textTheme.headlineMedium),
+      //   ),
+      // ),
       TextButton(
           onPressed: () async {
             await Supabase.instance.client.auth.signOut();
