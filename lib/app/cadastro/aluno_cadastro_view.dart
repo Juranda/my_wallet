@@ -68,8 +68,9 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -194,6 +195,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -204,11 +206,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                                 .map(
                                   (tuple) => DropdownMenuItem(
                                     value: tuple.$2,
-                                    child: Text(
-                                      tuple.$1,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
+                                    child: Text(tuple.$1),
                                   ),
                                 )
                                 .toList(),
@@ -222,6 +220,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -233,8 +232,6 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                                   (e) => DropdownMenuItem(
                                     child: Text(
                                       'Turma ' + e.$2,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
                                     ),
                                     value: e.$1,
                                   ),
@@ -249,6 +246,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 30),
                       ElevatedButton(
                         onPressed: () async {
                           try {

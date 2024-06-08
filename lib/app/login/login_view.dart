@@ -93,7 +93,12 @@ class _LoginViewState extends State<LoginView> {
             title: const Text('Erro ao logar'),
             content: Text(e.message),
             actions: [
-              const Text('Ok'),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ok'),
+              ),
             ],
           );
         },

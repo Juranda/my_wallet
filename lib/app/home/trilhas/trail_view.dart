@@ -67,33 +67,53 @@ class _TrailViewState extends State<TrailView> {
             height: MediaQuery.of(context).size.height - 244,
             width: MediaQuery.of(context).size.width,
             child: FutureBuilder(
-                future: fetchAtividades(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return CircularProgressIndicator(
+              future: fetchAtividades(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: const Text('Um erro aconteceu'),
+                  );
+                }
+
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(
                       color: Colors.white,
-                    );
-                  } else {
-                    final atividades = snapshot.data!;
-                    return ListView.builder(
-                        itemCount: atividades.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(atividades[index]['descricao']),
-                            trailing: Text(atividades[index]['id'].toString()),
-                          );
-                        });
-                  }
-                }),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              //só para testes
-              completarAtividade(1, completarTudo: true);
-            },
-            child: const Text(
-              'completar todas as atividades!!! (muito facil)',
+                    ),
+                  );
+                }
+
+                if (snapshot.hasData && snapshot.data!.isEmpty) {
+                  return Center(
+                    child: const Text('Nenhuma trilha encontrada'),
+                  );
+                }
+
+                final atividades = snapshot.data!;
+                return ListView.builder(
+                    itemCount: atividades.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(atividades[index]['nome']),
+                        trailing: Text(atividades[index]['id'].toString()),
+                      );
+                    });
+              },
             ),
+          ),
+          Column(
+            children: [
+              const Text('Para questoes de teste'),
+              ElevatedButton(
+                onPressed: () {
+                  completarAtividade(1, completarTudo: true);
+                },
+                child: const Text(
+                  'Completar todas as trilhas',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
           )
         ],
       ),

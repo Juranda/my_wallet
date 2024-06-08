@@ -25,7 +25,7 @@ class CadastroModerador extends StatelessWidget {
   Widget build(BuildContext context) {
     UserProvider _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Padding(
@@ -58,6 +58,9 @@ class CadastroModerador extends StatelessWidget {
                         },
                         child: Text(
                           e.$1,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     )

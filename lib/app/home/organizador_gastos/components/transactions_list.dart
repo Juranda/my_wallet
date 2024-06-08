@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/organizador_gastos/models/transaction.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TransactionsList extends StatelessWidget {
-  const TransactionsList(this._transactions);
-
-  final List<Transaction> _transactions;
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 300,
-        child: StreamBuilder<List<Map<String, dynamic>>>(
-            stream: Supabase.instance.client.from('gasto').stream(primaryKey: [
-              'id'
-            ]).eq('id_usuario', Supabase.instance.client.auth.currentUser!.id),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-              if (!snapshot.hasData ||
-                  snapshot.hasError ||
-                  snapshot.data!.isEmpty) return Container();
+    return Expanded(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            height: 300,
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: Supabase.instance.client
+                  .from('gasto')
+                  .stream(primaryKey: ['id']).eq('id_usuario',
+                      Supabase.instance.client.auth.currentUser!.id),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData ||
+                    snapshot.hasError ||
+                    snapshot.data!.isEmpty) return Container();
 
-              final gastos = snapshot.data!;
-              return ListView.builder(
+                final gastos = snapshot.data!;
+                return ListView.builder(
                   itemCount: gastos.length,
                   itemBuilder: (context, index) {
                     return Card(
@@ -50,8 +48,14 @@ class TransactionsList extends StatelessWidget {
                         ),
                       ),
                     );
-                  });
-            }));
+                  },
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 

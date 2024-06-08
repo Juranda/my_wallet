@@ -146,8 +146,12 @@ class _TrailsViewState extends State<TrailsView> {
                         scrollDirection: Axis.vertical,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) => TrailItem(
-                          Trail(trilhas[index]['id'], trilhas[index]['nome'],
-                              trilhas[index]['descricao'], false),
+                          Trail(
+                            trilhas[index]['id'],
+                            trilhas[index]['nome'],
+                            trilhas[index]['descricao'],
+                            false,
+                          ),
                           liberarTrilha,
                           trilhaJaLiberada,
                         ),

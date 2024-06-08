@@ -47,7 +47,9 @@ class _TrailItemState extends State<TrailItem> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: () => abrirTrilha(context),
+          onTap: _user_provider.professor == null
+              ? () => abrirTrilha(context)
+              : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

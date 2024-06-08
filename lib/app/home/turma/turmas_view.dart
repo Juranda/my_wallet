@@ -54,7 +54,7 @@ class _TurmasViewState extends State<TurmasView> {
           width: double.infinity,
           height: 70,
           decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.background,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25), topRight: Radius.circular(25))),
           alignment: Alignment.center,
@@ -88,7 +88,7 @@ class _TurmasViewState extends State<TurmasView> {
             width: MediaQuery.of(context).size.width,
             height: 200,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             ),

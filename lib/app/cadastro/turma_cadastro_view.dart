@@ -61,15 +61,14 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
   @override
   initState() {
     super.initState();
-    UserProvider _userProvider = Provider.of(context, listen: false);
     fetchProfessores = getProfessores();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
@@ -106,30 +105,10 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: escolaridades[escolaridade - 1].$2,
-                            items: escolaridades
-                                .map(
-                                  (tuple) => DropdownMenuItem(
-                                    value: tuple.$2,
-                                    child: Text(
-                                      tuple.$1,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: _selecionaNivelEscolar,
-                          ),
-                        ),
+                      MyWalletDropdown(
+                        escolaridades: escolaridades,
+                        escolaridade: escolaridade,
+                        onChange: _selecionaNivelEscolar,
                       ),
                       const SizedBox(
                         height: 20,
@@ -137,6 +116,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -166,9 +146,6 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
                                             value: e,
                                             child: Text(
                                               e['nome'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
                                             ),
                                           ),
                                         )
@@ -233,6 +210,48 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyWalletDropdown extends StatelessWidget {
+  const MyWalletDropdown({
+    super.key,
+    required this.escolaridades,
+    required this.escolaridade,
+    required this.onChange,
+  });
+
+  final void Function(int?) onChange;
+
+  final List<(String, int)> escolaridades;
+  final int escolaridade;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: DropdownButton(
+          isExpanded: true,
+          value: escolaridades[escolaridade - 1].$2,
+          items: escolaridades
+              .map(
+                (tuple) => DropdownMenuItem(
+                  value: tuple.$2,
+                  child: Text(
+                    tuple.$1,
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: onChange,
         ),
       ),
     );

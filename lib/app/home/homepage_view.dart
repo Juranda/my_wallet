@@ -94,6 +94,7 @@ class _HomePageViewState extends State<HomePageView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
                               'Seja bem-vindo ${_userProvider.nome}!',

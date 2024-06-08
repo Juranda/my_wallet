@@ -35,14 +35,15 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   @override
   void initState() {
     super.initState();
-    UserProvider userProvider = Provider.of(context);
+    UserProvider userProvider = Provider.of(context, listen: false);
     id_instituicao_ensino = userProvider.instituicaoEnsino!.id;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
