@@ -13,6 +13,8 @@ class TrailView extends StatefulWidget {
 }
 
 class _TrailViewState extends State<TrailView> {
+  List<Map<String, dynamic>> alunoAtividades = [];
+
   @override
   Widget build(BuildContext context) {
     Trail trail = ModalRoute.of(context)!.settings.arguments as Trail;
@@ -23,15 +25,14 @@ class _TrailViewState extends State<TrailView> {
       if (_user_provider.role == Role.professor) return [];
 
       //pega o id de todas as atividades de aluno_atividade desse aluno
-      final response = await Supabase.instance.client
+      final atividades = await Supabase.instance.client
           .from('aluno_atividade')
-          .select('id_atividade')
+          .select('*')
           .eq('id_aluno', _user_provider.aluno!.id);
-
+      alunoAtividades = atividades;
       //transforma todos esses ids em uma lista
       final List<int> ids =
-          response.map((e) => e['id_atividade'] as int).toList();
-
+          atividades.map((e) => e['id_atividade'] as int).toList();
       //retorna todas as atividades que tem um desses ids e que fazem parte da trilha atual
       return await Supabase.instance.client
           .from('atividade')
@@ -56,66 +57,63 @@ class _TrailViewState extends State<TrailView> {
     }
 
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            trail.name,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height - 244,
-            width: MediaQuery.of(context).size.width,
-            child: FutureBuilder(
-              future: fetchAtividades(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: const Text('Um erro aconteceu'),
-                  );
-                }
+      appBar: AppBar(
+        title: Text(trail.name),
+        centerTitle: true,
+      ),
+      body: FutureBuilder(
+        future: fetchAtividades(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  );
-                }
-
-                if (snapshot.hasData && snapshot.data!.isEmpty) {
-                  return Center(
-                    child: const Text('Nenhuma trilha encontrada'),
-                  );
-                }
-
-                final atividades = snapshot.data!;
-                return ListView.builder(
-                    itemCount: atividades.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(atividades[index]['nome']),
-                        trailing: Text(atividades[index]['id'].toString()),
-                      );
-                    });
-              },
-            ),
-          ),
-          Column(
-            children: [
-              const Text('Para questoes de teste'),
-              ElevatedButton(
-                onPressed: () {
-                  completarAtividade(1, completarTudo: true);
-                },
-                child: const Text(
-                  'Completar todas as trilhas',
-                  style: TextStyle(color: Colors.white),
+          if (snapshot.hasData && snapshot.data!.isEmpty) {
+            return Center(
+              child: const Text(
+                'Nenhuma atividade nessa trilha',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
                 ),
               ),
-            ],
-          )
-        ],
+            );
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: const Text('Algum erro aconteceu'),
+            );
+          }
+
+          final atividades = snapshot.data!;
+          return ListView.builder(
+            itemCount: atividades.length,
+            itemBuilder: (context, index) {
+              final Map<String, dynamic> atividade = atividades[index];
+
+              return ListTile(
+                title: Text(atividade['nome']),
+                trailing: Text(alunoAtividades[index]['completada'].toString()),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: TextButton(
+        onPressed: () {
+          //só para testes
+          completarAtividade(1, completarTudo: true);
+        },
+        child: const Text(
+          'Completar Todas',
+        ),
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateColor.resolveWith((states) => Colors.white),
+        ),
       ),
     );
   }

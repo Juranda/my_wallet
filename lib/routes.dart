@@ -8,6 +8,7 @@ import 'package:my_wallet/app/cadastro/deletar_cadastro_view.dart';
 import 'package:my_wallet/app/cadastro/professor_cadastro_view.dart';
 import 'package:my_wallet/app/cadastro/turma_cadastro_view.dart';
 import 'package:my_wallet/app/home/homepage_view.dart';
+import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/app/login/login_view.dart';
 
 import 'app/home/trilhas/trail_view.dart';
@@ -28,6 +29,7 @@ class Routes {
   static const String TRAILS_TRAIL_DETALHE = '/trails/trail';
 
   static final Map<String, WidgetBuilder> routes = {
+    AR: (context) => ArView(),
     LOGIN: (context) => LoginView(),
     HOME: (context) => HomePageView(),
     APP_SETTINGS: (context) => AppSettingsView(),

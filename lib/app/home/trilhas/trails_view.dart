@@ -106,9 +106,11 @@ class _TrailsViewState extends State<TrailsView> {
           future: fetchTrilhas(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
+              return Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
                 ),
               );
             } else {
@@ -117,7 +119,7 @@ class _TrailsViewState extends State<TrailsView> {
                 return Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(

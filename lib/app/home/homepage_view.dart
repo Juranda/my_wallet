@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/organizador_gastos/investiments.dart';
+import 'package:my_wallet/app/home/organizador_gastos/organizador_de_gastos_view.dart';
 import 'package:my_wallet/app/home/lobby/lobby.dart';
 import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/app/home/trilhas/trails_view.dart';

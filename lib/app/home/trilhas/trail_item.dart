@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/trilhas/trails_view.dart';
 import 'package:my_wallet/app/models/role.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/routes.dart';
@@ -66,6 +65,7 @@ class _TrailItemState extends State<TrailItem> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.trail.name,
@@ -87,16 +87,17 @@ class _TrailItemState extends State<TrailItem> {
                     onPressed: () async {
                       if (await widget.trilhaJaLiberada(widget.trail.id)) {
                         showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Text('A trilha já foi liberada!'),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text('Ok'),
-                                    )
-                                  ],
-                                ));
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text('A trilha já foi liberada!'),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('Ok'),
+                              )
+                            ],
+                          ),
+                        );
                       } else {
                         showDialog(
                           context: context,

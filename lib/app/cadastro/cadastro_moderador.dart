@@ -25,25 +25,28 @@ class CadastroModerador extends StatelessWidget {
   Widget build(BuildContext context) {
     UserProvider _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: const Text('Gerenciador de cadastros'),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Gerenciador de Cadastros',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Row(
-                children: [
-                  Text(
-                    _userProvider.nome,
-                    style: Theme.of(context).textTheme.bodyLarge,
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(fontSize: 20),
+                    text: 'Instituição de Ensino: ',
+                    children: [
+                      TextSpan(
+                        text: _userProvider.nome,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

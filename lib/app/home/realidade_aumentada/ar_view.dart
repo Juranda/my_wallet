@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart' show rootBundle;
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -14,7 +16,16 @@ class ArView extends StatefulWidget {
 class _ArViewState extends State<ArView> {
   late final WebViewController _controller;
 
-  @override
+  Future<void> _requestPermissions() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      await Permission.camera.request();
+    }
+  }
+
+  // void initState() {
+  //   super.initState();
+  // }
   void initState() {
     super.initState();
 
@@ -54,9 +65,8 @@ class _ArViewState extends State<ArView> {
           ),
         ),
       )
-      ..loadRequest(Uri.parse(
-          'https://ar-js-org.github.io/.github/profile/aframe/examples/marker-based/basic.html'));
-    //..loadFlutterAsset('assets/ar/arjs.html');
+      ..loadRequest(
+          Uri.parse('https://gabriel-ribeiro-v.github.io/ArJsThing/'));
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
@@ -69,33 +79,25 @@ class _ArViewState extends State<ArView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: WebViewWidget(controller: _controller),
-      height: MediaQuery.of(context).size.height,
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return WebViewWidget(controller: _controller);
+        },
+      ),
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller
-        .runJavaScript("""
+    _controller.runJavaScript("""
           navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then(mediaStream => {
               const stream = mediaStream;
               const tracks = stream.getTracks();
 
               tracks.forEach(track => track.stop())
-            });""")
-        .then(
-          (value) => super.dispose(),
-        )
-        .catchError(
-          (error) => {
-            SnackBar(
-              content: Text('Erro: ' + error),
-            )
-          },
-        );
+            });""").catchError((error) => SnackBar(content: Text('Erro: ' + error)));
   }
 }

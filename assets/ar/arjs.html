@@ -3,9 +3,15 @@
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <!-- we import arjs version without NFT but with marker + location based support -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="//cdn.8thwall.com/web/aframe/aframe-extras-7.2.0.min.js"></script>
   <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded arjs>
-      <a-marker preset="hiro">
+      <a-assets>
+        <img id="painel20" src="assets/20.png">
+        <img id="painel50" src="assets/50.png">
+        <img id="painel100" src="assets/100.png">
+      </a-assets>
+
         <!-- we use cors proxy to avoid cross-origin problems -->
         <!--
           ⚠️⚠️⚠️
@@ -13,13 +19,74 @@
           You need to host your own proxy and use it instead. The proxy is based on CORS Anywhere (see https://github.com/Rob--W/cors-anywhere).
           ⚠️⚠️⚠️
         -->
-        <a-entity
-          position="0 0 0"
-          scale="0.05 0.05 0.05"
-          gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
-        ></a-entity>
+
+      <a-marker preset='custom' type='pattern' url='assets/markers/pattern-20.patt' id="marker20">
+        <a-plane src="#painel20" height="1" width="1" rotation="0 0 0" position="0 1 0"></a-plane>
+       
       </a-marker>
+        
+      <a-marker preset='custom' type='pattern' url='assets/markers/pattern-50.patt' id="marker50">
+        <a-plane src="#painel50" height="1" width="1" rotation="0 0 0" position="0 1 0"></a-plane>
+     
+      </a-marker>
+        
+      <a-marker preset='custom' type='pattern' url='assets/markers/pattern-100.patt' id="marker100">
+        <a-plane src="#painel100" height="1" width="1" rotation="0 0 0" position="0 1 0"></a-plane>
+        
+      </a-marker>
+
+
+
       <a-entity camera></a-entity>
     </a-scene>
+    
+    <script>
+      // Defina os valores numéricos associados a cada marker
+      const markerValues = {
+          marker20: 20,
+          marker50: 50,
+          marker100: 100
+      };
+
+      const alunoDinheiro = 50
+
+      // Função para lidar com a detecção de markers
+      document.querySelectorAll('a-marker').forEach(marker => {
+        var currentChar;
+          marker.addEventListener('markerFound', (event) => {
+            if (event.target.id !== marker.id) return;
+            const newChar = novoPersonagem();
+            currentChar = newChar;
+            marker.appendChild(newChar);
+            const value = markerValues[marker.id];
+
+            newChar.setAttribute('animation-mixer', 'clip: Idle');
+
+            if (alunoDinheiro < value){
+              setTimeout(()=>newChar.setAttribute('animation-mixer', 'clip: Dyning; loop:once; clampWhenFinished:true; crossFadeDuration:1'), 1500)
+            }else if (alunoDinheiro === value){
+              setTimeout(()=>newChar.setAttribute('animation-mixer', 'clip: Dancing; loop: repeat; crossFadeDuration:1'), 1500)
+            }else{
+              setTimeout(()=>newChar.setAttribute('animation-mixer', 'clip: Flair; loop: repeat; crossFadeDuration:0.1'), 1500);
+            }
+        });
+
+        marker.addEventListener('markerLost', (event) => {
+          if (event.target.id !== marker.id) return;
+          marker.removeChild(currentChar);
+        });
+      });
+
+
+      function novoPersonagem(){
+        const newChar = document.createElement('a-entity');
+        newChar.setAttribute('position', '1 0 0');
+        newChar.setAttribute('scale', '1 1 1');
+        newChar.setAttribute('gltf-model', 'assets/personagemLegal.gltf');
+        newChar.setAttribute('rotation', '0 0 0');
+        newChar.setAttribute('animation-mixer', 'clip: Idle; loop: repeat');
+        return newChar;
+      }
+    </script>
   </body>
 </html>
