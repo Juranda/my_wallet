@@ -9,7 +9,15 @@ import 'routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MyWallet.instance.initialize();
+
+  // String annonKey = dotenv.get("ANNON_KEY");
+  // String url = dotenv.get("URL");
+
+  MyWallet.instance.initialize(
+      // annonKey,
+      // url,
+      );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

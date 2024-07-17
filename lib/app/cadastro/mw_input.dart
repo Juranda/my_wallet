@@ -22,7 +22,7 @@ class MyWalletInput extends StatelessWidget {
       child: TextField(
         onSubmitted: (_) => onSubmit(),
         controller: controller,
-        cursorColor: Theme.of(context).primaryColor,
+        cursorColor: Theme.of(context).colorScheme.primary,
         obscureText: password,
         enableSuggestions: !password,
         autocorrect: !password,

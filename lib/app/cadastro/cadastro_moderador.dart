@@ -62,7 +62,7 @@ class CadastroModerador extends StatelessWidget {
                         child: Text(
                           e.$1,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),

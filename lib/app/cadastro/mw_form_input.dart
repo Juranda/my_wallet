@@ -45,7 +45,7 @@ class MyWalletFormInput extends StatelessWidget {
       controller: controller,
       inputFormatters: inputFormatters,
       style: TextStyle(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.primary,
       ),
       decoration: InputDecoration(
         label: Text(

@@ -6,7 +6,10 @@ class MyWallet {
   MyWallet._();
   bool _initialized = false;
 
-  Future<void> initialize() async {
+  Future<void> initialize(
+      // String anonKey,
+      // String url,
+      ) async {
     assert(
       !instance._initialized,
       'This instance is already initialized',
@@ -29,10 +32,19 @@ class MyWallet {
     required int idTurma,
     double dinheiro = 100.0,
   }) async {
-    final AuthResponse response = await Supabase.instance.client.auth.signUp(
-      email: email,
-      password: senha,
-    );
+    AuthResponse response;
+
+    try {
+      response = await Supabase.instance.client.auth.signUp(
+        email: email,
+        password: senha,
+      );
+    } on AuthApiException catch (e) {
+      response = await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: senha,
+      );
+    }
 
     final User user = response.user!;
 

@@ -28,27 +28,54 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
 
   TextEditingController nomeController = TextEditingController();
 
-  void _selecionaNivelEscolar(int? nivel) async {}
+  void _selecionaNivelEscolar(int? nivel) async {
+    if (nivel == null) return;
+    setState(() {
+      escolaridade = nivel;
+    });
+  }
 
   Future<void> cadastrarTurma() async {
-    await Supabase.instance.client.from('turma').insert({
-      'nome': nomeController.text,
-      'nivel_escolaridade': escolaridade,
-      'id_professor': professorSelecionado!['id'],
-      'id_instituicao_ensino': id_instituicao_ensino
-    });
-
     try {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return const Text('Turma cadastrada com sucesso!');
-          });
-    } catch (e) {
+      await Supabase.instance.client.from('turma').insert({
+        'nome': nomeController.text,
+        'nivel_escolaridade': escolaridade,
+        'id_professor': professorSelecionado!['id'],
+        'id_instituicao_ensino': id_instituicao_ensino
+      });
       showDialog(
         context: context,
         builder: (context) {
-          return Text(e.toString());
+          return AlertDialog(
+            title: const Text('Sucesso!'),
+            content: const Text('Turma cadastrada com sucesso!'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    } on Exception catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Erro'),
+            content: Text(e.toString()),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ok'),
+              ),
+            ],
+          );
         },
       );
     }
@@ -61,12 +88,18 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
   @override
   initState() {
     super.initState();
+    UserProvider userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    id_instituicao_ensino = userProvider.instituicaoEnsino!.id;
     fetchProfessores = getProfessores();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
@@ -174,12 +207,12 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
                               .eq('nome', nomeController.text);
                           if (response.isNotEmpty) {
                             showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      title: Text('Erro'),
-                                      content:
-                                          Text('Esse nome já está em uso!'),
-                                    ));
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Erro'),
+                                content: Text('Esse nome já está em uso!'),
+                              ),
+                            );
                             return;
                           }
 
@@ -191,19 +224,21 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
                               .eq('id_professor', professorSelecionado!['id']);
                           if (response2.isNotEmpty) {
                             showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      title: Text('Erro'),
-                                      content: Text(
-                                          'Esse professor já está em uma turma!'),
-                                    ));
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Erro'),
+                                content: Text(
+                                  'Esse professor já está em uma turma!',
+                                ),
+                              ),
+                            );
                             return;
                           }
 
                           cadastrarTurma();
                         },
                         child: const Text('Cadastrar'),
-                      )
+                      ),
                     ],
                   ),
                 ),

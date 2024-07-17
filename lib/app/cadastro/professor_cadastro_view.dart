@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -193,14 +194,41 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                             showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return const Text(
-                                      'Professor cadastrado com sucesso!');
+                                  return AlertDialog(
+                                    title: const Text('Tudo certo'),
+                                    content: const Text(
+                                        'Professor cadastrado com sucesso!'),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: const Text('Ok'),
+                                      )
+                                    ],
+                                  );
                                 });
-                          } catch (e) {
+                          } on AuthException catch (e) {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return Text(e.toString());
+                                return AlertDialog(
+                                  title: const Text('Algo deu errado'),
+                                  content: Text(
+                                    switch (e.statusCode) {
+                                      '422' => 'Usuario já cadastrado',
+                                      '500' => 'Servidor não respondeu',
+                                      _ => 'Contate o suporte'
+                                    },
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Ok'),
+                                    )
+                                  ],
+                                );
                               },
                             );
                           }
