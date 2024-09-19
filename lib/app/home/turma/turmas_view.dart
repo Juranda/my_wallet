@@ -33,7 +33,7 @@ class _TurmasViewState extends State<TurmasView> {
   Future<void> removerAlunoDaTurma(int id) async {
     await Supabase.instance.client
         .from('aluno')
-        .update({'id_turma': null}).eq('id', 1);
+        .update({'id_turma': null}).eq('id', id);
   }
 
   @override
@@ -60,8 +60,19 @@ class _TurmasViewState extends State<TurmasView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text('Alunos (${alunos.length})',
-                  style: TextStyle(fontSize: 30), textAlign: TextAlign.center),
+              StreamBuilder<List<Map<String, dynamic>>>(
+                  stream: _alunoStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Text('Alunos (0)',
+                          style: TextStyle(fontSize: 30),
+                          textAlign: TextAlign.center);
+                    }
+
+                    return Text('Alunos (${snapshot.data!.length})',
+                        style: TextStyle(fontSize: 30),
+                        textAlign: TextAlign.center);
+                  }),
               if (_roleProvider.role == Role.professor)
                 IconButton(
                   onPressed: () {

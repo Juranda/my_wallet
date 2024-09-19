@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/app/home/trilhas/exercise_view.dart';
+import 'package:my_wallet/app/home/trilhas/exercises_view.dart';
 import 'package:my_wallet/app/models/role.dart';
 import 'package:my_wallet/app/models/trail.dart';
 import 'package:my_wallet/providers/user_provider.dart';
@@ -95,9 +97,17 @@ class _TrailViewState extends State<TrailView> {
               final Map<String, dynamic> atividade = atividades[index];
 
               return ListTile(
-                title: Text(atividade['nome']),
-                trailing: Text(alunoAtividades[index]['completada'].toString()),
-              );
+                  onTap: () => {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ExercisesView(index, atividades)))
+                      },
+                  title: Text(atividade['nome']),
+                  trailing: alunoAtividades[index]['completada']
+                      ? Icon(Icons.check_box_outlined)
+                      : Icon(Icons.check_box_outline_blank));
             },
           );
         },

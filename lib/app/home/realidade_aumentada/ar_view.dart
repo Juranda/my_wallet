@@ -2,6 +2,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -15,6 +16,7 @@ class ArView extends StatefulWidget {
 
 class _ArViewState extends State<ArView> {
   late final WebViewController _controller;
+  late double aluno_dinheiro;
 
   Future<void> _requestPermissions() async {
     var status = await Permission.camera.status;
@@ -23,12 +25,22 @@ class _ArViewState extends State<ArView> {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getDinheiro() async {
+    var response = await Supabase.instance.client
+        .from('aluno')
+        .select('dinheiro')
+        .eq('id_usuario', Supabase.instance.client.auth.currentUser!.id)
+        .limit(1);
+    return response;
+  }
+
   // void initState() {
   //   super.initState();
   // }
   void initState() {
     super.initState();
 
+    getDinheiro();
     Permission.camera.request();
 
     late final PlatformWebViewControllerCreationParams params;
@@ -56,17 +68,14 @@ class _ArViewState extends State<ArView> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Color.fromARGB(0, 255, 255, 255))
       ..addJavaScriptChannel(
-        'Toaster',
-        onMessageReceived: (message) => SnackBar(
-          content: Container(
-            child: Text(
-              message.message,
-            ),
-          ),
-        ),
+        "messageHandler",
+        onMessageReceived: (JavaScriptMessage javaScriptMessage) {
+          print("message from the web view=\"${javaScriptMessage.message}\"");
+        },
       )
       ..loadRequest(
           Uri.parse('https://gabriel-ribeiro-v.github.io/ArJsThing/'));
+    //..loadFlutterAsset('assets/ar/test.html');
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
@@ -80,11 +89,26 @@ class _ArViewState extends State<ArView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return WebViewWidget(controller: _controller);
-        },
-      ),
+      body: FutureBuilder(
+          future: getDinheiro(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Text("Erro ao acessar dinheiro");
+            }
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                aluno_dinheiro = snapshot.data![0]['dinheiro'];
+                _controller.runJavaScript(
+                    'receiveMessageFromFlutter(${aluno_dinheiro});');
+                return WebViewWidget(controller: _controller);
+              },
+            );
+          }),
     );
   }
 
