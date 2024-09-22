@@ -1,1 +1,1 @@
-enum Role { professor, aluno, moderador }
+enum Role { Professor, Aluno, Administrador }

@@ -6,6 +6,31 @@ CREATE TABLE Trilha (
     fk_Escolaridades_id int not null
 );
 
+CREATE TABLE Atividade (
+    id serial,
+    enunciado varchar(500) not null,
+    fk_Jogos_id int,
+    fk_Trilha_id int,
+    sequencia SERIAL,
+    PRIMARY KEY (id, sequencia)
+);
+
+CREATE TABLE AtividadeQuestao (
+    fk_Atividade_id int,
+    sequencia int not null,
+    enunciado varchar(500),
+    correta BOOLEAN,
+    PRIMARY KEY (fk_Atividade_id, sequencia)
+);
+
+ALTER TABLE AtividadeQuestao ADD CONSTRAINT Fk_AtividadeQuestao_1 
+ FOREIGN KEY (fk_Atividade_id) REFERENCES Atividade (id);
+
+CREATE TABLE Jogos (
+    id SERIAL PRIMARY KEY,
+    nome varchar(100) not null
+);
+
 CREATE TABLE Turma (
     id SERIAL PRIMARY KEY,
     nome varchar(100) NOT NULL,
@@ -27,10 +52,11 @@ CREATE TABLE AlunoTrilha_Realiza (
     fk_Aluno_id int not null
 );
 
-CREATE TABLE AtividadeCompleta_Atividade (
+CREATE TABLE AtividadeCompleta_Aluno (
     id SERIAL PRIMARY KEY,
     feito bool NOT NULL,
     acerto float not null,
+    opcao_selecionada int,
     fk_AlunoTrilha_Realiza_id int not null,
     fk_Trilha_id int not null
 );
@@ -63,6 +89,14 @@ CREATE TABLE Professor (
     id serial PRIMARY key not null,
     cnpjcpf VARCHAR(14) not null
 );
+
+CREATE TABLE ADMINISTRADOR (
+    id serial PRIMARY KEY not null,
+    FK_Usuario_id int not null
+);
+
+alter table ADMINISTRADOR add CONSTRAINT fk_Usuraio_1
+FOREIGN key (fk_usuario_id) REFERENCES Usuario (id);
 
 CREATE TABLE Escolaridades (
     nome varchar(100) NOT NULL,
@@ -102,7 +136,15 @@ ALTER TABLE Trilha ADD CONSTRAINT FK_Trilha_2
     FOREIGN KEY (fk_Escolaridades_id)
     REFERENCES Escolaridades (id)
     ON DELETE RESTRICT;
- 
+
+ALTER TABLE Atividade ADD CONSTRAINT Fk_Atividade_1
+    FOREIGN KEY (fk_Trilha_id)
+    REFERENCES Trilha (id);
+
+ALTER TABLE Atividade ADD CONSTRAINT Fk_Atividade_2
+    FOREIGN KEY (fk_Jogos_id)
+    REFERENCES Jogos (id);
+
 ALTER TABLE Turma ADD CONSTRAINT FK_Turma_2
     FOREIGN KEY (fk_InstituicaoEnsino_id)
     REFERENCES InstituicaoEnsino (id)
@@ -110,7 +152,7 @@ ALTER TABLE Turma ADD CONSTRAINT FK_Turma_2
  
 ALTER TABLE Turma ADD CONSTRAINT FK_Turma_3
     FOREIGN KEY (fk_Professor_id)
-    REFERENCES Aluno (id)
+    REFERENCES Professor (id)
     ON DELETE CASCADE;
  
 ALTER TABLE Turma ADD CONSTRAINT FK_Turma_4
@@ -134,12 +176,12 @@ ALTER TABLE AlunoTrilha_Realiza ADD CONSTRAINT FK_AlunoTrilha_Realiza_3
     FOREIGN KEY (fk_Aluno_id)
     REFERENCES Aluno (id);
  
-ALTER TABLE AtividadeCompleta_Atividade ADD CONSTRAINT FK_AtividadeCompleta_Atividade_2
+ALTER TABLE AtividadeCompleta_Aluno ADD CONSTRAINT FK_AtividadeCompleta_Atividade_2
     FOREIGN KEY (fk_AlunoTrilha_Realiza_id)
     REFERENCES AlunoTrilha_Realiza (id)
     ON DELETE RESTRICT;
  
-ALTER TABLE AtividadeCompleta_Atividade ADD CONSTRAINT FK_AtividadeCompleta_Atividade_3
+ALTER TABLE AtividadeCompleta_Aluno ADD CONSTRAINT FK_AtividadeCompleta_Atividade_3
     FOREIGN KEY (fk_Trilha_id)
     REFERENCES Trilha (id);
  

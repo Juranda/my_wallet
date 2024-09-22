@@ -73,7 +73,7 @@ class _TurmasViewState extends State<TurmasView> {
                         style: TextStyle(fontSize: 30),
                         textAlign: TextAlign.center);
                   }),
-              if (_roleProvider.role == Role.professor)
+              if (_roleProvider.tipoUsuario == Role.Professor)
                 IconButton(
                   onPressed: () {
                     showDialog(
@@ -124,7 +124,7 @@ class _TurmasViewState extends State<TurmasView> {
                       title: Text(
                         aluno['nome'],
                       ),
-                      trailing: _roleProvider.role == Role.professor
+                      trailing: _roleProvider.tipoUsuario == Role.Professor
                           ? IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {

@@ -60,7 +60,7 @@ class _NewsSectionState extends State<NewsSection> {
               children: [
                 ...widget.items!,
                 ...widget.addedItems,
-                if (roleProvider.role == Role.professor)
+                if (roleProvider.tipoUsuario == Role.Professor)
                   Container(
                     height: 100,
                     width: 100,

@@ -29,7 +29,7 @@ class AlunoProfile extends StatelessWidget {
             ),
           ],
         ),
-        if (roleProvider.role == Role.professor)
+        if (roleProvider.tipoUsuario == Role.Professor)
           IconButton(
             onPressed: () {
               showDialog(

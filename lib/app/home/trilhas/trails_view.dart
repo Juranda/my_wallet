@@ -19,19 +19,21 @@ class _TrailsViewState extends State<TrailsView> {
   late final UserProvider _userProvider;
 
   Future<List<Map<String, dynamic>>> fetchTrilhas() async {
-    if (_userProvider.role == Role.professor) {
+    if (_userProvider.tipoUsuario == Role.Professor) {
       return await Supabase.instance.client.from('trilha').select();
-    } else {
+    } else if (_userProvider.tipoUsuario == Role.Aluno) {
       final response = await Supabase.instance.client
           .from('trilha_turma')
           .select('id_trilha')
-          .eq('id_turma', _userProvider.id_turma);
+          .eq('id_turma', _userProvider.aluno.id_turma);
       final List<int> ids = response.map((e) => e['id_trilha'] as int).toList();
       final newResponse = await Supabase.instance.client
           .from('trilha')
           .select()
           .inFilter('id', ids);
       return newResponse;
+    } else {
+      return List.empty();
     }
   }
 
@@ -152,7 +154,6 @@ class _TrailsViewState extends State<TrailsView> {
                             trilhas[index]['id'],
                             trilhas[index]['nome'],
                             trilhas[index]['descricao'],
-                            false,
                           ),
                           liberarTrilha,
                           trilhaJaLiberada,

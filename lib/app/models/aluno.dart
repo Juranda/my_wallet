@@ -1,27 +1,48 @@
-class Aluno {
+import 'package:my_wallet/app/models/role.dart';
+import 'package:my_wallet/app/models/usuario.dart';
+
+class Aluno extends Usuario {
+  final int id_usuario;
   final int id;
-  final int instituicaoensino;
   final String cpf;
-  final DateTime created_at;
-  final String nome;
-  final String sobrenome;
-  final String escolaridade;
-  final String id_usuario;
-  final String email;
-  final String nome_turma;
   final int id_turma;
+  final String nome_turma;
+  final int id_escolaridade;
+  final String escolaridade;
 
   Aluno({
+    required super.created_at,
+    required super.id_supabase,
+    required super.id_instituicao_ensino,
+    required this.id_usuario,
     required this.id,
-    required this.instituicaoensino,
+    required super.nome,
+    required super.email,
+    required super.tipoUsuario,
     required this.cpf,
-    required this.created_at,
-    required this.nome,
-    required this.sobrenome,
-    required this.escolaridade,
     required this.id_turma,
     required this.nome_turma,
-    required this.id_usuario,
-    required this.email,
-  });
+    required this.id_escolaridade,
+    required this.escolaridade,
+  }) {
+    super.tipoUsuario = Role.Aluno;
+  }
+
+  factory Aluno.fromMap(Map<String, dynamic> map) {
+    return Aluno(
+      created_at: DateTime.parse(map['created_at']),
+      id_supabase: map['id_supabase'],
+      id_instituicao_ensino: map['id_instituicao_ensino'],
+      nome: map['nome'],
+      email: map['email'],
+      tipoUsuario: Role.Aluno,
+      id_usuario: map['id_usuario'],
+      id: map['id'],
+      cpf: map['cpf'],
+      id_turma: map['id_turma'] ?? 0,
+      nome_turma: map['nome_turma'] ?? "",
+      id_escolaridade: map['instituicaoensino'],
+      escolaridade: map['escolaridade_turma'],
+    );
+  }
 }

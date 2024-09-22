@@ -92,7 +92,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
       context,
       listen: false,
     );
-    id_instituicao_ensino = userProvider.instituicaoEnsino!.id;
+    id_instituicao_ensino = userProvider.usuario.id_instituicao_ensino;
     fetchProfessores = getProfessores();
   }
 

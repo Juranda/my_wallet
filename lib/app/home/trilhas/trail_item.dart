@@ -34,10 +34,6 @@ class _TrailItemState extends State<TrailItem> {
   @override
   Widget build(BuildContext context) {
     Color color = Theme.of(context).colorScheme.primary;
-    if (widget.trail.completed) {
-      color = color.withOpacity(0.5);
-    }
-
     return Container(
       decoration: BoxDecoration(
         color: color,
@@ -82,47 +78,49 @@ class _TrailItemState extends State<TrailItem> {
                   ),
                 ),
               ),
-              if (_user_provider.role == Role.professor)
+              if (_user_provider.tipoUsuario == Role.Professor)
                 IconButton(
-                    onPressed: () async {
-                      if (await widget.trilhaJaLiberada(widget.trail.id)) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text('A trilha já foi liberada!'),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('Ok'),
-                              )
-                            ],
-                          ),
-                        );
+                  onPressed: () async {
+                    if (await widget.trilhaJaLiberada(widget.trail.id)) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Text('A trilha já foi liberada!'),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Ok'),
+                            )
+                          ],
+                        ),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Text('Trilha liberada!'),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Ok'),
+                            )
+                          ],
+                        ),
+                      );
+                      widget.liberarTrilha(widget.trail.id);
+                    }
+                  },
+                  icon: FutureBuilder<bool>(
+                    future: widget.trilhaJaLiberada(widget.trail.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.data == true) {
+                        return Icon(Icons.check);
                       } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text('Trilha liberada!'),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('Ok'),
-                              )
-                            ],
-                          ),
-                        );
-                        widget.liberarTrilha(widget.trail.id);
+                        return Icon(Icons.lock);
                       }
                     },
-                    icon: FutureBuilder<bool>(
-                        future: widget.trilhaJaLiberada(widget.trail.id),
-                        builder: (context, snapshot) {
-                          if (snapshot.data == true) {
-                            return Icon(Icons.check);
-                          } else {
-                            return Icon(Icons.lock);
-                          }
-                        }))
+                  ),
+                ),
             ],
           ),
         ),

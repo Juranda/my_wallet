@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/app/login/logo.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
-import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:validadores/ValidarEmail.dart';
@@ -19,71 +19,17 @@ class _LoginViewState extends State<LoginView> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+
   Future<void> _tryLogin(UserProvider userProvider) async {
     setState(() {
       isLoading = true;
     });
 
-    final supabase = Supabase.instance.client;
-
     try {
-      late AuthResponse authResponse;
-
-      AuthResponse response = await supabase.auth.signInWithPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-
-      authResponse = await response;
-
-      String id_usuario = authResponse.user!.id;
-      final aluno = await supabase
-          .from('view_aluno')
-          .select()
-          .eq('id_usuario', id_usuario)
-          .limit(1)
-          .maybeSingle();
-
-      if (aluno != null && aluno.isNotEmpty) {
-        userProvider.setAluno(aluno);
-
-        Navigator.pushNamed(context, Routes.HOME);
-
-        return;
-      }
-
-      final professor = await supabase
-          .from('view_professor')
-          .select()
-          .eq('id_usuario', id_usuario)
-          .limit(1)
-          .maybeSingle();
-
-      if (professor != null && professor.isNotEmpty) {
-        userProvider.setProfessor(professor);
-        Navigator.pushNamed(context, Routes.HOME);
-        return;
-      }
-
-      final instituicao_ensino = await supabase
-          .from('instituicaoensino')
-          .select()
-          .eq('id_usuario', id_usuario)
-          .limit(1)
-          .maybeSingle();
-
-      if (instituicao_ensino != null && instituicao_ensino.isNotEmpty) {
-        userProvider.setInstituicaoEnsino(instituicao_ensino);
-        Navigator.pushNamed(context, Routes.ADM);
-        return;
-      }
-
-      Navigator.pushNamed(
-        context,
-        Routes.SIGNUP_DELETAR,
-        arguments: "professor",
-      );
-    } on AuthException catch (e) {
+      Map<String, dynamic> usuario = await MyWallet.instance
+          .login(email: emailController.text, senha: passwordController.text);
+      userProvider.setUser(usuario);
+    } on AuthException {
       showDialog(
         context: context,
         barrierDismissible: true,
@@ -140,7 +86,6 @@ class _LoginViewState extends State<LoginView> {
                       )
                     : LayoutBuilder(
                         builder: (context, constraints) {
-                          debugPrint("Altura maxima ${constraints.maxHeight}");
                           return Container(
                             height: constraints.maxHeight,
                             child: Column(

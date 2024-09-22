@@ -52,7 +52,7 @@ class TrailLobbyNewsCard extends StatelessWidget {
                         trailName,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
-                      if (roleProvider.role == Role.professor)
+                      if (roleProvider.tipoUsuario == Role.Professor)
                         IconButton(
                             onPressed: () {
                               showDialog(

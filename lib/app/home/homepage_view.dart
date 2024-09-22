@@ -39,7 +39,7 @@ class _HomePageViewState extends State<HomePageView> {
     super.initState();
     _userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    if (_userProvider.role == Role.aluno) {
+    if (_userProvider.tipoUsuario == Role.Aluno) {
       navigationBarDestinations.insert(
         2,
         NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'),
@@ -100,13 +100,13 @@ class _HomePageViewState extends State<HomePageView> {
                               'Seja bem-vindo ${_userProvider.nome}!',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
-                            switch (_userProvider.role) {
-                              Role.professor => Text('Professor'),
-                              Role.aluno => Text(
-                                  'Turma ' + (_userProvider.turma),
+                            switch (_userProvider.tipoUsuario) {
+                              Role.Professor => Text('Professor'),
+                              Role.Aluno => Text(
+                                  'Turma ' + (_userProvider.aluno.nome_turma),
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
-                              Role.moderador => Text('ADMINISTRADOR'),
+                              Role.Administrador => Text('ADMINISTRADOR'),
                             }
                           ],
                         ),

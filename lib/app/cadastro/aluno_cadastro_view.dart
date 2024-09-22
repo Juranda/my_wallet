@@ -64,7 +64,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   void initState() {
     super.initState();
     UserProvider userProvider = Provider.of(context, listen: false);
-    id_instituicao_ensino = userProvider.instituicaoEnsino!.id;
+    id_instituicao_ensino = userProvider.usuario.id_instituicao_ensino;
   }
 
   @override

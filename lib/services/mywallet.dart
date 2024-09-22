@@ -21,6 +21,33 @@ class MyWallet {
     _initialized = true;
   }
 
+  /// Tenta logar o usuario, se sucesso, retorna um Map com os dados do usuario, se nao, joga uma excessao
+  Future<Map<String, dynamic>> login({
+    required String email,
+    required String senha,
+  }) async {
+    final supabase = Supabase.instance.client;
+    AuthResponse authResponse = await supabase.auth.signInWithPassword(
+      email: email,
+      password: senha,
+    );
+
+    String id_supabase = authResponse.user!.id;
+
+    final usuario = await supabase
+        .from('view_usuario')
+        .select()
+        .eq('id_supabase', id_supabase)
+        .limit(1)
+        .maybeSingle();
+
+    if (usuario == null || usuario.isEmpty) {
+      throw Exception('Usuário não existe');
+    }
+
+    return usuario;
+  }
+
   void cadastrarAluno({
     required int idInstituicaoEnsino,
     required String nome,
@@ -39,7 +66,7 @@ class MyWallet {
         email: email,
         password: senha,
       );
-    } on AuthApiException catch (e) {
+    } on AuthApiException {
       response = await Supabase.instance.client.auth.signInWithPassword(
         email: email,
         password: senha,

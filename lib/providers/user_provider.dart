@@ -1,94 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/app/models/role.dart';
 import 'package:my_wallet/app/models/aluno.dart';
 import 'package:my_wallet/app/models/professor.dart';
-import 'package:my_wallet/app/models/role.dart';
-
-import '../app/models/instituicao_ensino.dart';
+import 'package:my_wallet/app/models/administrador.dart';
+import 'package:my_wallet/app/models/usuario.dart';
 
 class UserProvider with ChangeNotifier {
-  InstituicaoEnsino? instituicaoEnsino;
-  Aluno? aluno;
-  Professor? professor;
+  late Usuario usuario;
 
-  Role get role {
-    return aluno != null
-        ? Role.aluno
-        : professor != null
-            ? Role.professor
-            : Role.moderador;
+  Role get tipoUsuario {
+    return usuario.tipoUsuario;
+  }
+
+  Aluno get aluno {
+    return usuario as Aluno;
+  }
+
+  Professor get professor {
+    return usuario as Professor;
+  }
+
+  Administrador get administrador {
+    return usuario as Administrador;
   }
 
   String get nome {
-    return switch (role) {
-      Role.professor => professor!.nome,
-      Role.aluno => aluno!.nome,
-      Role.moderador => instituicaoEnsino!.nome
-    };
+    return usuario.nome;
   }
 
-  int get id_turma {
-    return switch (role) {
-      Role.professor => professor!.id_turma,
-      Role.aluno => aluno!.id_turma,
-      Role.moderador => 0,
-    };
-  }
+  void setUser(Map<String, dynamic> user) {
+    Role role = Role.values
+        .firstWhere((element) => element.name == user['tipoUsuario']);
 
-  String get turma {
-    return switch (role) {
-      Role.professor => professor!.nome_turma ?? "SEM TURMA",
-      Role.aluno => aluno!.nome_turma,
-      Role.moderador => "SEM TURMA",
-    };
-  }
-
-  void setAluno(Map<String, dynamic> aluno) {
-    this.aluno = Aluno(
-      id: aluno['id'],
-      id_usuario: aluno['id_usuario'],
-      cpf: aluno['cpf'],
-      nome: aluno['nome'],
-      sobrenome: aluno['sobrenome'],
-      email: aluno['email'],
-      nome_turma: aluno['nome_turma'] ?? "",
-      id_turma: aluno['id_turma'] ?? 0,
-      instituicaoensino: aluno['instituicaoensino'],
-      created_at: DateTime.parse(aluno['created_at']),
-      escolaridade: aluno['escolaridade_turma'],
-    );
-
-    professor = null;
-    instituicaoEnsino = null;
-  }
-
-  void setProfessor(Map<String, dynamic> professor) {
-    this.professor = Professor(
-      id: professor['id'],
-      id_usuario: professor['id_usuario'],
-      created_at: DateTime.parse(professor['created_at']),
-      cpfcnpj: professor['cnpjcpf'],
-      nome: professor['nome'],
-      sobrenome: professor['sobrenome'],
-      email: professor['email'],
-      nome_turma: professor['nome_turma'] ?? "SEM TURMA",
-      escolaridade_turma: professor['escolaridade_turma'] ?? "",
-      id_turma: professor['id_turma'] ?? 0,
-      id_escolaridade: professor['id_escolaridade'] ?? 0,
-      instituicaoensino: professor['instituicaoensino'],
-    );
-
-    aluno = null;
-    instituicaoEnsino = null;
-  }
-
-  void setInstituicaoEnsino(Map<String, dynamic> instituicaoEnsino) {
-    this.instituicaoEnsino = new InstituicaoEnsino(
-        id: instituicaoEnsino['id'],
-        created_at: DateTime.parse(instituicaoEnsino['created_at']),
-        nome: instituicaoEnsino['nome'],
-        codigoinep: instituicaoEnsino['codigoinep']);
-
-    aluno = null;
-    professor = null;
+    switch (role) {
+      case Role.Professor:
+        this.usuario = Professor.fromMap(user);
+        break;
+      case Role.Aluno:
+        this.usuario = Aluno.fromMap(user);
+        break;
+      case Role.Administrador:
+        this.usuario = Administrador.fromMap(user);
+        break;
+    }
   }
 }

@@ -27,7 +27,7 @@ class AlunoListTile extends StatelessWidget {
           Text(nome),
         ],
       ),
-      trailing: _user_provider.role == Role.professor
+      trailing: _user_provider.tipoUsuario == Role.Professor
           ? IconButton(
               icon: Icon(Icons.delete),
               onPressed: () => removerAluno(tileID),
