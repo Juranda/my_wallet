@@ -1,7 +1,13 @@
+import 'package:my_wallet/app/models/administrador.dart';
+import 'package:my_wallet/app/models/aluno.dart';
+import 'package:my_wallet/app/models/professor.dart';
+import 'package:my_wallet/app/models/usuario.dart';
+import 'package:my_wallet/services/trailsservice.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyWallet {
   static MyWallet instance = MyWallet._();
+  static TrailsService trailsService = TrailsService();
 
   MyWallet._();
   bool _initialized = false;
@@ -22,7 +28,7 @@ class MyWallet {
   }
 
   /// Tenta logar o usuario, se sucesso, retorna um Map com os dados do usuario, se nao, joga uma excessao
-  Future<Map<String, dynamic>> login({
+  Future<Usuario> login({
     required String email,
     required String senha,
   }) async {
@@ -34,7 +40,7 @@ class MyWallet {
 
     String id_supabase = authResponse.user!.id;
 
-    final usuario = await supabase
+    var usuario = await supabase
         .from('view_usuario')
         .select()
         .eq('id_supabase', id_supabase)
@@ -45,7 +51,36 @@ class MyWallet {
       throw Exception('Usuário não existe');
     }
 
-    return usuario;
+    switch (usuario['tipo']) {
+      case "PROFESSOR":
+        usuario = await Supabase.instance.client
+            .from('view_professor')
+            .select()
+            .eq('id_supabase', usuario['id_supabase'])
+            .limit(1)
+            .single();
+
+        return Professor.fromMap(usuario);
+      case "ALUNO":
+        usuario = await Supabase.instance.client
+            .from('view_aluno')
+            .select()
+            .eq('id_supabase', usuario['id_supabase'])
+            .limit(1)
+            .single();
+        return Aluno.fromMap(usuario);
+      case "ADMINISTRADOR":
+        usuario = await Supabase.instance.client
+            .from('view_administrador')
+            .select()
+            .eq('id_supabase', usuario['id_supabase'])
+            .limit(1)
+            .single();
+
+        return Administrador.fromMap(usuario);
+    }
+
+    throw Exception('Tipo inválido');
   }
 
   void cadastrarAluno({

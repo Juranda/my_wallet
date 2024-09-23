@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/app/login/logo.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
+import 'package:my_wallet/app/models/usuario.dart';
 import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,9 +28,11 @@ class _LoginViewState extends State<LoginView> {
     });
 
     try {
-      Map<String, dynamic> usuario = await MyWallet.instance
+      Usuario usuario = await MyWallet.instance
           .login(email: emailController.text, senha: passwordController.text);
       userProvider.setUser(usuario);
+
+      Navigator.of(context).pushNamed(Routes.HOME);
     } on AuthException {
       showDialog(
         context: context,
