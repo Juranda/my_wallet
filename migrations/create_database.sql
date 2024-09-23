@@ -3,6 +3,7 @@
 CREATE TABLE Trilha (
     id SERIAL PRIMARY KEY,
     nome varchar(100) not null,
+    url text, 
     fk_Escolaridades_id int not null
 );
 
@@ -18,8 +19,8 @@ CREATE TABLE Atividade (
 CREATE TABLE AtividadeQuestao (
     fk_Atividade_id int,
     sequencia int not null,
-    enunciado varchar(500),
-    correta BOOLEAN,
+    enunciado text not null,
+    correta BOOLEAN not null,
     PRIMARY KEY (fk_Atividade_id, sequencia)
 );
 
@@ -40,6 +41,7 @@ CREATE TABLE Turma (
 );
 
 CREATE TABLE TurmaTrilha_Possui (
+    id serial PRIMARY key,
     fk_Turma_id int not null,
     fk_Trilha_id int not null
 );
@@ -56,10 +58,13 @@ CREATE TABLE AtividadeCompleta_Aluno (
     id SERIAL PRIMARY KEY,
     feito bool NOT NULL,
     acerto float not null,
-    opcao_selecionada int,
+    opcao_selecionada int DEFAULT 0 not null ,
     fk_AlunoTrilha_Realiza_id int not null,
-    fk_Trilha_id int not null
+    fk_Trilha_id int not null,
+    fk_Atividade_id int not null
 );
+
+
 
 CREATE TABLE NoticiaProfessor (
     url varchar(500) NOT NULL,
@@ -184,6 +189,10 @@ ALTER TABLE AtividadeCompleta_Aluno ADD CONSTRAINT FK_AtividadeCompleta_Atividad
 ALTER TABLE AtividadeCompleta_Aluno ADD CONSTRAINT FK_AtividadeCompleta_Atividade_3
     FOREIGN KEY (fk_Trilha_id)
     REFERENCES Trilha (id);
+
+ALTER TABLE AtividadeCompleta_Aluno ADD CONSTRAINT FK_AtividadeCompleta_Atividade_4
+    FOREIGN KEY (fk_Atividade_id)
+    REFERENCES Atividade (id);
  
 ALTER TABLE NoticiaProfessor ADD CONSTRAINT FK_NoticiaProfessor_1
     FOREIGN KEY (fk_Turma_id)
