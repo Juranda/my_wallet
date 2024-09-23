@@ -6,7 +6,7 @@ class Professor extends Usuario {
   final String cpfcnpj;
   final int id_usuario;
 
-  Professor({
+  const Professor({
     required super.created_at,
     required super.id_supabase,
     required super.id_instituicao_ensino,
@@ -16,9 +16,7 @@ class Professor extends Usuario {
     required super.email,
     required super.tipoUsuario,
     required this.cpfcnpj,
-  }) {
-    super.tipoUsuario = Role.Professor;
-  }
+  });
 
   factory Professor.fromMap(Map<String, dynamic> map) {
     return Professor(

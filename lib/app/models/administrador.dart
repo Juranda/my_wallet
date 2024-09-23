@@ -5,7 +5,7 @@ class Administrador extends Usuario {
   final int id;
   final int id_usuario;
 
-  Administrador({
+  const Administrador({
     required super.created_at,
     required super.id_supabase,
     required super.id_instituicao_ensino,
@@ -14,9 +14,7 @@ class Administrador extends Usuario {
     required super.nome,
     required super.email,
     required super.tipoUsuario,
-  }) {
-    super.tipoUsuario = Role.Administrador;
-  }
+  });
 
   factory Administrador.fromMap(Map<String, dynamic> map) {
     return Administrador(

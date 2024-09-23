@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../models/trail.dart';
 
 class TrailItem extends StatefulWidget {
-  final Trail trail;
+  final Trilha trail;
   final Future<void> Function(int) liberarTrilha;
   final Future<bool> Function(int) trilhaJaLiberada;
   const TrailItem(this.trail, this.liberarTrilha, this.trilhaJaLiberada,
@@ -42,9 +42,7 @@ class _TrailItemState extends State<TrailItem> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: _user_provider.professor == null
-              ? () => abrirTrilha(context)
-              : null,
+          onTap: _user_provider.eAluno ? () => abrirTrilha(context) : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -64,15 +62,9 @@ class _TrailItemState extends State<TrailItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.trail.name,
+                        widget.trail.nome,
                         style: Theme.of(context).textTheme.headlineMedium,
                         textAlign: TextAlign.left,
-                      ),
-                      Text(
-                        widget.trail.description,
-                        textAlign: TextAlign.left,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),

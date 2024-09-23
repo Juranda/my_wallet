@@ -12,15 +12,28 @@ class UserProvider with ChangeNotifier {
     return usuario.tipoUsuario;
   }
 
+  bool get eAluno => Role.Aluno == usuario.tipoUsuario;
+  bool get eProfessor => Role.Professor == usuario.tipoUsuario;
+  bool get eAdministrador => Role.Administrador == usuario.tipoUsuario;
+
   Aluno get aluno {
+    if (tipoUsuario != Role.Aluno) {
+      throw Exception('Tipo incorreto');
+    }
     return usuario as Aluno;
   }
 
   Professor get professor {
+    if (tipoUsuario != Role.Professor) {
+      throw Exception('Tipo incorreto');
+    }
     return usuario as Professor;
   }
 
   Administrador get administrador {
+    if (tipoUsuario != Role.Administrador) {
+      throw Exception('Tipo incorreto');
+    }
     return usuario as Administrador;
   }
 
@@ -28,20 +41,7 @@ class UserProvider with ChangeNotifier {
     return usuario.nome;
   }
 
-  void setUser(Map<String, dynamic> user) {
-    Role role = Role.values
-        .firstWhere((element) => element.name == user['tipoUsuario']);
-
-    switch (role) {
-      case Role.Professor:
-        this.usuario = Professor.fromMap(user);
-        break;
-      case Role.Aluno:
-        this.usuario = Aluno.fromMap(user);
-        break;
-      case Role.Administrador:
-        this.usuario = Administrador.fromMap(user);
-        break;
-    }
+  void setUser(Usuario user) {
+    this.usuario = user;
   }
 }

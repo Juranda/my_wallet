@@ -25,9 +25,8 @@ class _TurmasViewState extends State<TurmasView> {
   void initState() {
     super.initState();
     _roleProvider = Provider.of<UserProvider>(context, listen: false);
-    _alunoStream = Supabase.instance.client
-        .from('aluno')
-        .stream(primaryKey: ['id']).eq('id_turma', _roleProvider.id_turma);
+    _alunoStream = Supabase.instance.client.from('aluno').stream(
+        primaryKey: ['id']).eq('id_turma', _roleProvider.aluno.id_turma);
   }
 
   Future<void> removerAlunoDaTurma(int id) async {
@@ -45,7 +44,7 @@ class _TurmasViewState extends State<TurmasView> {
           color: Theme.of(context).colorScheme.primary,
           child: Center(
             child: Text(
-              'Turma ' + _roleProvider.turma,
+              'Turma ' + _roleProvider.aluno.nome_turma,
               style: TextStyle(fontSize: 40),
             ),
           ),

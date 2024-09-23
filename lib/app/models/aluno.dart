@@ -10,7 +10,7 @@ class Aluno extends Usuario {
   final int id_escolaridade;
   final String escolaridade;
 
-  Aluno({
+  const Aluno({
     required super.created_at,
     required super.id_supabase,
     required super.id_instituicao_ensino,
@@ -24,9 +24,7 @@ class Aluno extends Usuario {
     required this.nome_turma,
     required this.id_escolaridade,
     required this.escolaridade,
-  }) {
-    super.tipoUsuario = Role.Aluno;
-  }
+  });
 
   factory Aluno.fromMap(Map<String, dynamic> map) {
     return Aluno(
@@ -41,8 +39,8 @@ class Aluno extends Usuario {
       cpf: map['cpf'],
       id_turma: map['id_turma'] ?? 0,
       nome_turma: map['nome_turma'] ?? "",
-      id_escolaridade: map['instituicaoensino'],
-      escolaridade: map['escolaridade_turma'],
+      id_escolaridade: map['id_escolaridade'],
+      escolaridade: map['escolaridade'],
     );
   }
 }
