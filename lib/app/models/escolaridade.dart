@@ -1,1 +1,1 @@
-enum Escolaridade { fundamental, medio, superior }
+enum Escolaridade { Fundamental, Medio, Superior }
