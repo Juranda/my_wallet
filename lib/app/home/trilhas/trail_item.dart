@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/models/role.dart';
+import 'package:my_wallet/models/users/role.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/routes.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/trail.dart';
+import '../../../models/trilha/trail.dart';
 
 class TrailItem extends StatefulWidget {
   final Trilha trail;

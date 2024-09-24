@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/models/trail.dart';
+import 'package:my_wallet/models/trilha/trail.dart';
 import 'package:my_wallet/services/mywallet.dart';
 
 class TrailView extends StatefulWidget {
@@ -40,15 +40,19 @@ class _TrailViewState extends State<TrailView> {
             );
           }
 
-          return Column(
-            children: snapshot.data![0].atividades.map((e) {
-              return InkWell(
-                onTap: () => print('Hello'),
-                child: Container(
-                  child: Text(e.atividade.enunciado),
-                ),
-              );
-            }).toList(),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: snapshot.data![0].atividades.map((e) {
+                return InkWell(
+                  onTap: () => print('Hello'),
+                  child: Container(
+                    child: Text(e.atividade.enunciado),
+                  ),
+                );
+              }).toList(),
+            ),
           );
         },
       ),

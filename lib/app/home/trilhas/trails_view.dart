@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/models/role.dart';
+import 'package:my_wallet/models/users/role.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
