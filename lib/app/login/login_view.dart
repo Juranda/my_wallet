@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/app/login/logo.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
 import 'package:my_wallet/models/users/usuario.dart';
+import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/services/mywallet.dart';
@@ -31,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
       Usuario usuario = await MyWallet.userService
           .login(email: emailController.text, senha: passwordController.text);
       userProvider.setUser(usuario);
-
+      //Provider.of<TurmaProvider>(context, listen: false).setTurma(turma)
       Navigator.of(context).pushNamed(Routes.HOME);
     } on AuthException {
       showDialog(
@@ -62,6 +63,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
 
     return Material(
       child: Container(

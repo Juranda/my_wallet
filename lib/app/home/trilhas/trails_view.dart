@@ -65,8 +65,9 @@ class _TrailsViewState extends State<TrailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final idInstituicaoEnsino = _userProvider.aluno.id_instituicao_ensino;
-    final idTurma = _userProvider.aluno.id_turma;
+    final idInstituicaoEnsino = _userProvider.usuario.id_instituicao_ensino;
+    final idTurma;
+    if (_userProvider.eAluno) idTurma = _userProvider.aluno.id;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -88,8 +89,12 @@ class _TrailsViewState extends State<TrailsView> {
         FutureBuilder(
           //se é professor, mostre todas as trilhas
           //se for aluno, mostre só as da turma (fetch trilhas)
-          future: MyWallet.trailsService
-              .getAllTrilhas(idInstituicaoEnsino, idTurma),
+          future: _userProvider.eAluno
+              ? MyWallet.trailsService.getAllTrilhasDoAluno(
+                  idInstituicaoEnsino, _userProvider.aluno.id)
+              : MyWallet.trailsService.getAllTrilhas(
+                  idInstituicaoEnsino,
+                ),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return AlertDialog(
