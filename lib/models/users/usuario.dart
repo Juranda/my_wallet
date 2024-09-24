@@ -1,4 +1,4 @@
-import 'package:my_wallet/app/models/role.dart';
+import 'package:my_wallet/models/users/role.dart';
 
 abstract class Usuario {
   final String id_supabase;

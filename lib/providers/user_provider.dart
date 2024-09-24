@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/models/role.dart';
-import 'package:my_wallet/app/models/aluno.dart';
-import 'package:my_wallet/app/models/professor.dart';
-import 'package:my_wallet/app/models/administrador.dart';
-import 'package:my_wallet/app/models/usuario.dart';
+import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/aluno.dart';
+import 'package:my_wallet/models/users/professor.dart';
+import 'package:my_wallet/models/users/administrador.dart';
+import 'package:my_wallet/models/users/usuario.dart';
 
 class UserProvider with ChangeNotifier {
   late Usuario usuario;

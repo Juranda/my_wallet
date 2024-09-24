@@ -5,7 +5,7 @@ import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../models/role.dart';
+import '../../../models/users/role.dart';
 
 class TurmasView extends StatefulWidget {
   TurmasView({super.key});

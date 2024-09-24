@@ -28,8 +28,6 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
     ('Ensino Superior', 3),
   ];
 
-  MyWallet myWallet = MyWallet.instance;
-
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
   TextEditingController dataNascimentoController = TextEditingController();
@@ -238,7 +236,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       ElevatedButton(
                         onPressed: () async {
                           try {
-                            myWallet.cadastrarAluno(
+                            MyWallet.userService.cadastrarAluno(
                               idInstituicaoEnsino: id_instituicao_ensino,
                               nome: nomeController.text.substring(
                                   0, nomeController.text.indexOf(" ")),

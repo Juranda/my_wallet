@@ -8,7 +8,7 @@ import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../models/role.dart';
+import '../../models/users/role.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});

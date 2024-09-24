@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/role.dart';
+import '../../../models/users/role.dart';
 
 class AlunoListTile extends StatelessWidget {
   final String nome;

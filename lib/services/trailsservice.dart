@@ -1,9 +1,9 @@
-import 'package:my_wallet/app/models/atividade.dart';
-import 'package:my_wallet/app/models/atividade_aluno_realiza.dart';
-import 'package:my_wallet/app/models/atividade_questao.dart';
-import 'package:my_wallet/app/models/escolaridade.dart';
-import 'package:my_wallet/app/models/trail.dart';
-import 'package:my_wallet/app/models/trilha_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/atividade.dart';
+import 'package:my_wallet/models/trilha/atividade_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/atividade_questao.dart';
+import 'package:my_wallet/models/escolaridade.dart';
+import 'package:my_wallet/models/trilha/trail.dart';
+import 'package:my_wallet/models/trilha/trilha_aluno_realiza.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TrailsService {
@@ -33,8 +33,9 @@ class TrailsService {
 
   Future<List<TrilhaAlunoRealiza>> getAllTrilhasDoAluno(
     int idInstituicao,
-    int idAluno,
-  ) async {
+    int idAluno, {
+    bool cached = false,
+  }) async {
     final alunoTrilhas = await Supabase.instance.client
         .from('alunotrilha_realiza')
         .select(
@@ -95,57 +96,4 @@ class TrailsService {
     }
     return trilhasAluno;
   }
-
-  // Future<TrilhaAlunoRealiza> getTrilhaLiberada(
-  //     int idInstituicao, int idAluno, int idTrilha) async {
-  //   // Selecione todas as trilhas  que estão
-
-  //   var alunoTrilhaRealiza = await Supabase.instance.client
-  //       .from('alunotrilha_realiza')
-  //       .select(
-  //           'id, pontuacao, completada_em, trilha(id, nome, img_url, escolaridades(id, nome)), aluno!inner(id, usuario!inner(instituicaoensino(id))), atividadecompleta_aluno!inner(id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, jogos(id)))')
-  //       .eq('aluno.usuario.instituicaoensino.id', idInstituicao)
-  //       .eq('aluno.id', idAluno)
-  //       .eq('trilha.id', idTrilha)
-  //       .limit(1)
-  //       .single();
-
-  //   List<AtividadeAlunoRealiza> atividades = [];
-
-  //   for (var atividadeCompletaAluno
-  //       in alunoTrilhaRealiza['atividadecompleta_aluno'] as List<dynamic>) {
-  //     var atividade =
-  //         atividadeCompletaAluno['atividade'] as Map<String, dynamic>;
-
-  //     atividades.add(AtividadeAlunoRealiza(
-  //       enunciado: atividade['enunciado'],
-  //       sequencia: atividade['sequencia'],
-  //       idAtividade: atividade['id'],
-  //       feito: atividadeCompletaAluno['feito'],
-  //       idTrilha: idTrilha,
-  //       idAlunoTrilhaRealiza: alunoTrilhaRealiza['id'],
-  //       id: atividadeCompletaAluno['id'],
-  //       acerto: (atividadeCompletaAluno['acerto'] as int).toDouble(),
-  //       opcaoSelecionada: atividadeCompletaAluno['opcao_selecionada'],
-  //     ));
-  //   }
-
-  //   var trilha = alunoTrilhaRealiza['trilha'];
-
-  //   var trilhaAluno = TrilhaAlunoRealiza(
-  //     idInstituicao: idInstituicao,
-  //     trilha: Trilha(
-  //       trilha['id'],
-  //       trilha['nome'],
-  //       trilha['img_url'] ?? "",
-  //       Escolaridade.values.elementAt(trilha['escolaridades']['id']),
-  //     ),
-  //     pontuacao: alunoTrilhaRealiza['pontuacao'],
-  //     idAluno: idAluno,
-  //     completadaEm: alunoTrilhaRealiza['completada_em'],
-  //     atividades: atividades,
-  //   );
-
-  //   return trilhaAluno;
-  // }
 }

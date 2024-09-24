@@ -4,7 +4,7 @@ import 'package:my_wallet/app/home/lobby/lobby_add_news.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../models/role.dart';
+import '../../models/users/role.dart';
 
 class NewsSection extends StatefulWidget {
   final String sectionTitle;

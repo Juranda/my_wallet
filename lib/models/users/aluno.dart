@@ -1,5 +1,5 @@
-import 'package:my_wallet/app/models/role.dart';
-import 'package:my_wallet/app/models/usuario.dart';
+import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/usuario.dart';
 
 class Aluno extends Usuario {
   final int id_usuario;
