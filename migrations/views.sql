@@ -58,3 +58,18 @@ SELECT au.created_at,
 FROM administrador adm
 left join usuario U on U.id = adm.fk_usuario_id
 left join auth.users au on u.fk_usuario_supabase = au.id;
+
+/* VIEW GASTOS  */
+create view view_gastos as
+select
+  a.id as "id_aluno",
+  t.id as "id_transacao",
+  a.dinheiro as "valor_conta",
+  t.valor,
+  t.nome,
+  realizada_em,
+  c.nome as "categoria"
+from
+  aluno a
+  inner join transacao t on a.fk_usuario_id = t.fk_usuario_id
+  left join categoria c on c.id = t.fk_categoria_id;

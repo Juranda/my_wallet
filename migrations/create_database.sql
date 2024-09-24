@@ -64,8 +64,6 @@ CREATE TABLE AtividadeCompleta_Aluno (
     fk_Atividade_id int not null
 );
 
-
-
 CREATE TABLE NoticiaProfessor (
     url varchar(500) NOT NULL,
     fk_Turma_id int not null,
@@ -110,7 +108,7 @@ CREATE TABLE Escolaridades (
 
 CREATE TABLE InstituicaoEnsino (
     id SERIAL PRIMARY KEY,
-    codigo_inep char(8) NOT NULL,
+    codigo_inep char(8) NOT NULL UNIQUE,
     nome varchar(100) NOT NULL
 );
 
@@ -126,10 +124,11 @@ CREATE TABLE TipoUsuario (
 
 CREATE TABLE Transacao (
     id serial PRIMARY KEY,
-    valor money,
-    nome varchar(100),
-    fk_Usuario_id int,
-    fk_Categoria_id int
+    valor float8 NOT NULL,
+    nome varchar(100) NOT NULL,
+    realizada_em TIMESTAMP NOT NULL,
+    fk_Usuario_id int not null,
+    fk_Categoria_id int not null
 );
 
 CREATE TABLE Categoria (
@@ -252,9 +251,17 @@ ALTER TABLE Transacao ADD CONSTRAINT FK_Transacao_1
     REFERENCES Usuario (id)
     ON DELETE RESTRICT;
 
+ALTER TABLE Transacao ADD CONSTRAINT FK_Transacao_2
+    FOREIGN KEY (fk_Categoria_id)
+    REFERENCES Categoria (id)
+    ON DELETE RESTRICT;
+
 /* VALORES PADRÕES */
 INSERT INTO TipoUsuario (ID, tipo) VALUES (1, 'PROFESSOR'), (2, 'ALUNO'), (3, 'ADMINISTRADOR');
 INSERT INTO InstituicaoEnsino (ID, NOME, codigo_inep) VALUES (1, 'INSTITUICAO PADRAO', '00000000');
 INSERT INTO Escolaridades (ID, NOME) VALUES (1, 'ENSINO FUNDAMENTAL'), (2, 'ENSINO MÉDIO'), (3, 'ENSINO SUPERIOR');
 INSERT INTO InstituicaoEscolaridade_Aplica (fk_Escolaridades_id, fk_InstituicaoEnsino_id) values (1, 1), (2, 1), (3, 1);
 INSERT INTO Categoria (ID, NOME) VALUES (1, 'ESSENCIAL'), (2, 'NÃO NECESSARIO');
+
+create publication transacao_realtime
+for table transacao;
