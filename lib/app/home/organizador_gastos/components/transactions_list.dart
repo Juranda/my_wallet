@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:my_wallet/models/expenses/transacao.dart';
 
 class TransactionsList extends StatelessWidget {
+  final List<Transacao> transacoes;
+
+  const TransactionsList({super.key, required this.transacoes});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -9,46 +13,38 @@ class TransactionsList extends StatelessWidget {
         builder: (context, constraints) {
           return Container(
             height: 300,
-            child: StreamBuilder<List<Map<String, dynamic>>>(
-              stream: Supabase.instance.client
-                  .from('gasto')
-                  .stream(primaryKey: ['id']).eq('id_usuario',
-                      Supabase.instance.client.auth.currentUser!.id),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData ||
-                    snapshot.hasError ||
-                    snapshot.data!.isEmpty) return Container();
-
-                final gastos = snapshot.data!;
-                return ListView.builder(
-                  itemCount: gastos.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 5,
-                      margin: EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 5,
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          gastos[index]['titulo'],
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        subtitle: Text(gastos[index]['data']),
-                        leading: CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          radius: 30,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: FittedBox(
-                              child: Text('R\$${gastos[index]['valor']}',
-                                  style: TextStyle(color: Colors.black)),
+            child: ListView.builder(
+              itemCount: transacoes.length,
+              itemBuilder: (context, index) {
+                Transacao transacao = transacoes[index];
+                return Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 5,
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      transacao.nome,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    subtitle: Text(transacao.realizadaEm.toLocal().toString()),
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      radius: 30,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: FittedBox(
+                          child: Text(
+                            'R\$${transacao.valor}',
+                            style: TextStyle(
+                              color: Colors.black,
                             ),
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 );
               },
             ),
@@ -58,40 +54,3 @@ class TransactionsList extends StatelessWidget {
     );
   }
 }
-
-
-// Container(
-//               height: MediaQuery.of(context).size.height / 2,
-//               child: ListView.builder(
-//                 itemCount: _transactions.length,
-//                 itemBuilder: (context, index) {
-//                   final tr = _transactions[index];
-//                   return Card(
-//                     elevation: 5,
-//                     margin: EdgeInsets.symmetric(
-//                       vertical: 8,
-//                       horizontal: 5,
-//                     ),
-//                     child: ListTile(
-//                       leading: CircleAvatar(
-//                         backgroundColor: Theme.of(context).primaryColor,
-//                         radius: 30,
-//                         child: Padding(
-//                           padding: const EdgeInsets.all(6),
-//                           child: FittedBox(
-//                             child: Text('R\$${tr.value}'),
-//                           ),
-//                         ),
-//                       ),
-//                       title: Text(
-//                         tr.title,
-//                         style: Theme.of(context).textTheme.titleLarge,
-//                       ),
-//                       subtitle: Text(
-//                         DateFormat('d MMM y', 'pt-br').format(tr.date),
-//                       ),
-//                     ),
-//                   );
-//                 },
-//               ),
-//             ),
