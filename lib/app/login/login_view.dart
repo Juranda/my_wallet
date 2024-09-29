@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/app/login/logo.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
+import 'package:my_wallet/models/users/aluno.dart';
+import 'package:my_wallet/models/users/role.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
@@ -23,16 +25,37 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  Future<void> _tryLogin(UserProvider userProvider) async {
+
+  late final UserProvider _userProvider;
+  late final TurmaProvider _turmaProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
+  }
+
+
+  Future<void> _tryLogin() async {
     setState(() {
       isLoading = true;
     });
 
     try {
+      
       Usuario usuario = await MyWallet.userService
           .login(email: emailController.text, senha: passwordController.text);
-      userProvider.setUser(usuario);
-      //Provider.of<TurmaProvider>(context, listen: false).setTurma(turma)
+      _userProvider.setUser(usuario);
+      
+      //se aluno, pega turma_id dele
+      //se professor, pega a turma_id da primeira turma que achar dele
+      if (usuario.tipoUsuario == Role.Aluno){
+        _turmaProvider.setTurma(await MyWallet.turmaService.getTurma(_userProvider.aluno.id_turma));
+      }else if(usuario.tipoUsuario == Role.Professor){
+        _turmaProvider.setTurma((await MyWallet.turmaService.getAllProfessorTurmas(usuario.id_instituicao_ensino, _userProvider.professor.id)).first);
+      }
+
       Navigator.of(context).pushNamed(Routes.HOME);
     } on AuthException {
       showDialog(
@@ -62,9 +85,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
-
     return Material(
       child: Container(
         decoration: BoxDecoration(
@@ -106,7 +126,7 @@ class _LoginViewState extends State<LoginView> {
                                       MyWalletFormInput(
                                         label: 'Email',
                                         onFieldSubmitted: (value) =>
-                                            _tryLogin(userProvider),
+                                            _tryLogin(),
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Campo obrigatório';
@@ -126,7 +146,7 @@ class _LoginViewState extends State<LoginView> {
                                         showText: false,
                                         controller: passwordController,
                                         onFieldSubmitted: (value) =>
-                                            _tryLogin(userProvider),
+                                            _tryLogin(),
                                       ),
                                     ],
                                   ),
@@ -137,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
                                     child: InkWell(
                                       onTap: () {
                                         if (_formKey.currentState!.validate())
-                                          _tryLogin(userProvider);
+                                          _tryLogin();
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(8),

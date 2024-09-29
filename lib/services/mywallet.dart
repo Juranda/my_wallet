@@ -1,5 +1,6 @@
 import 'package:my_wallet/services/expenses_service.dart';
 import 'package:my_wallet/services/trailsservice.dart';
+import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -8,6 +9,7 @@ class MyWallet {
   static final TrailsService trailsService = TrailsService();
   static final UserService userService = UserService();
   static final ExpensesService expensesService = ExpensesService();
+  static final TurmaService turmaService = TurmaService();
 
   MyWallet._();
   bool _initialized = false;

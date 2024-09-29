@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/routes.dart';
+import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/trilha/trail.dart';
 
 class TrailItem extends StatefulWidget {
   final Trilha trail;
-  final Future<void> Function(int) liberarTrilha;
-  final Future<bool> Function(int) trilhaJaLiberada;
-  const TrailItem(this.trail, this.liberarTrilha, this.trilhaJaLiberada,
-      {super.key});
+  const TrailItem(this.trail,{super.key});
 
   @override
   State<TrailItem> createState() => _TrailItemState();
 }
 
 class _TrailItemState extends State<TrailItem> {
-  late UserProvider _user_provider;
+  late final UserProvider _user_provider;
+  late final TurmaProvider _turmaProvider;
 
   void abrirTrilha(context) async {
     Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE,
@@ -29,6 +29,7 @@ class _TrailItemState extends State<TrailItem> {
   void initState() {
     super.initState();
     _user_provider = Provider.of<UserProvider>(context, listen: false);
+    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
   }
 
   @override
@@ -73,7 +74,7 @@ class _TrailItemState extends State<TrailItem> {
               if (_user_provider.tipoUsuario == Role.Professor)
                 IconButton(
                   onPressed: () async {
-                    if (await widget.trilhaJaLiberada(widget.trail.id)) {
+                    if (await MyWallet.trailsService.trilhaJaLiberada(widget.trail.id, _turmaProvider.turma.id)) {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -99,11 +100,11 @@ class _TrailItemState extends State<TrailItem> {
                           ],
                         ),
                       );
-                      widget.liberarTrilha(widget.trail.id);
+                      MyWallet.trailsService.liberarTrilha(widget.trail.id,_turmaProvider.turma.id);
                     }
                   },
                   icon: FutureBuilder<bool>(
-                    future: widget.trilhaJaLiberada(widget.trail.id),
+                    future: MyWallet.trailsService.trilhaJaLiberada(widget.trail.id, _turmaProvider.turma.id),
                     builder: (context, snapshot) {
                       if (snapshot.data == true) {
                         return Icon(Icons.check);

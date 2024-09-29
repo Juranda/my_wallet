@@ -59,6 +59,7 @@ CREATE TABLE AtividadeCompleta_Aluno (
     feito bool NOT NULL,
     acerto float not null,
     opcao_selecionada int DEFAULT 0 not null ,
+    liberada bool DEFAULT false not null,
     fk_AlunoTrilha_Realiza_id int not null,
     fk_Trilha_id int not null,
     fk_Atividade_id int not null
