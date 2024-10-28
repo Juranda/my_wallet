@@ -2,15 +2,15 @@ import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/atividade_aluno_realiza.dart';
 import 'package:my_wallet/models/trilha/atividade_questao.dart';
 import 'package:my_wallet/models/escolaridade.dart';
-import 'package:my_wallet/models/trilha/trail.dart';
+import 'package:my_wallet/models/trilha/trilha.dart';
 import 'package:my_wallet/models/trilha/trilha_aluno_realiza.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TrailsService {
+class TrilhaService {
   Future<List<Trilha>> getAllTrilhasTurma(
       int idInstituicaoEnsino, int idTurma) async {
     final maps = await Supabase.instance.client
-        .from('turmatrilha_possui')
+        .from('turmaTrilha_possui')
         .select(
             'trilha(id, nome, img_url, escolaridades(id, nome)), turma(id, escolaridades(id, nome))')
         .eq('turma.id', idTurma);
@@ -58,7 +58,7 @@ class TrailsService {
     int turmaID    
     ) async {
     final response = await Supabase.instance.client
-        .from('turmatrilha_possui')
+        .from('turmaTrilha_possui')
         .select()
         .eq('fk_trilha_id', trilhaID)
         .eq('fk_turma_id', turmaID);
@@ -72,7 +72,7 @@ class TrailsService {
     ) async {
     if (await trilhaJaLiberada(trilhaID, turmaID)) return;
 
-    await Supabase.instance.client.from('turmatrilha_possui').insert(
+    await Supabase.instance.client.from('turmaTrilha_possui').insert(
         {'fk_turma_id': turmaID, 'fk_trilha_id': trilhaID});
 
     //pra cada aluno da turma, criar a relação atividade-aluno de todas as atividades dessa trilha
@@ -87,12 +87,12 @@ class TrailsService {
     for (Map<String, dynamic> aluno in alunos) {
       
       //apaga a relacao do aluno com essa trilha caso exista (essa situacao so acontece quando o aluno tem a trilha mesmo com o trilhaJaLiberada() da turma retornando false)
-      await Supabase.instance.client.from('alunotrilha_realiza')
+      await Supabase.instance.client.from('alunoTrilha_realiza')
       .delete()
       .eq('fk_aluno_id', aluno['id'])
       .eq('fk_trilha_id', trilhaID);
 
-      await Supabase.instance.client.from('alunotrilha_realiza')
+      await Supabase.instance.client.from('alunoTrilha_realiza')
       .insert({
         'fk_trilha_id': trilhaID,
         'fk_aluno_id': aluno['id']
@@ -100,7 +100,7 @@ class TrailsService {
 
       for (Map<String, dynamic> atividade in atividades) {
 
-        await Supabase.instance.client.from('atividadecompleta_aluno').insert({
+        await Supabase.instance.client.from('alunoAtividade_completa').insert({
           'liberada': atividades[0] == atividade,
           'feito': false,
           'fk_aluno_id': aluno['id'],
@@ -114,12 +114,16 @@ class TrailsService {
     int idAluno, {
     bool cached = false,
   }) async {
-    final alunoTrilhas = await Supabase.instance.client
-        .from('alunotrilha_realiza')
-        .select(
-            'id, pontuacao, completada_em, trilha(id, nome, escolaridades(id, nome)), aluno!inner(id, usuario!inner(instituicaoensino(id))), atividadecompleta_aluno!inner(id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadequestao(sequencia, enunciado, correta), jogos(id)))')
+    final alunoTrilhas;
+
+    alunoTrilhas = await Supabase.instance.client
+        .from('alunoTrilha_realiza')
+        .select('id, pontuacao, completada_em, trilha(id, nome, escolaridades(id, nome)), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_completa!inner(id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeQuestao(sequencia, enunciado, correta), jogos(id)))');
        
-        .eq('aluno.id', idAluno);
+        //.eq('aluno.usuario.instituicaoensino.id', idInstituicao)
+        //.eq('aluno.id', idAluno);
+    
+        
 
     List<TrilhaAlunoRealiza> trilhasAluno = [];
 
@@ -134,8 +138,8 @@ class TrailsService {
       );
 
       for (Map<String, dynamic> atividadeCompletaAluno
-          in alunoTrilha['atividadecompleta_aluno']) {
-        var respostas = atividadeCompletaAluno['atividade']['atividadequestao']
+          in alunoTrilha['alunoAtividade_completa']) {
+        var respostas = atividadeCompletaAluno['atividade']['atividadeQuestao']
             as List<dynamic>;
 
         var atividade = Atividade(
@@ -156,7 +160,7 @@ class TrailsService {
           idTrilha: alunoTrilha['trilha']['id'],
           idAlunoTrilhaRealiza: alunoTrilha['id'],
           id: atividadeCompletaAluno['id'],
-          acerto: (atividadeCompletaAluno['acerto'] as int).toDouble(),
+          acerto: (atividadeCompletaAluno['acerto']),
           opcaoSelecionada: atividadeCompletaAluno['opcao_selecionada'],
           feito: atividadeCompletaAluno['feito'],
           atividade: atividade,
@@ -164,11 +168,11 @@ class TrailsService {
       }
 
       trilhasAluno.add(TrilhaAlunoRealiza(
-        idInstituicao: idInstituicao,
+        id: alunoTrilha['id'],
         trilha: trilha,
         pontuacao: alunoTrilha['pontuacao'],
-        idAluno: idAluno,
-        completadaEm: alunoTrilha['completada_em'],
+        id_aluno: idAluno,
+        completada_em: alunoTrilha['completada_em'],
         atividades: atividades,
       ));
     }

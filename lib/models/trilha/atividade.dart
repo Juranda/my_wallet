@@ -1,5 +1,5 @@
 import 'package:my_wallet/models/trilha/atividade_questao.dart';
-import 'package:my_wallet/models/trilha/trail.dart';
+import 'package:my_wallet/models/trilha/trilha.dart';
 
 class Atividade {
   final Trilha trilha;
@@ -16,4 +16,14 @@ class Atividade {
     required this.enunciado,
     required this.respostas,
   });
+
+  factory Atividade.fromMap(Map<String, dynamic> map) {
+    return Atividade(
+      trilha: Trilha.fromMap(map['trilha']),
+      id: map['id'],
+      sequencia: map['sequencia'],
+      enunciado: map['enunciado'],
+      respostas: map['respostas']
+    );
+  }
 }

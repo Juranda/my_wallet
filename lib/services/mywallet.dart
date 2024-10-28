@@ -1,15 +1,17 @@
+import 'package:my_wallet/services/atividade_service.dart';
 import 'package:my_wallet/services/expenses_service.dart';
-import 'package:my_wallet/services/trailsservice.dart';
+import 'package:my_wallet/services/trilha_service.dart';
 import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyWallet {
   static final MyWallet instance = MyWallet._();
-  static final TrailsService trailsService = TrailsService();
+  static final TrilhaService trailsService = TrilhaService();
   static final UserService userService = UserService();
   static final ExpensesService expensesService = ExpensesService();
   static final TurmaService turmaService = TurmaService();
+  static final AtividadeService atividadeService = AtividadeService();
 
   MyWallet._();
   bool _initialized = false;

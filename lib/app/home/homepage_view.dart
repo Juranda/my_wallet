@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/app/home/organizador_gastos/organizador_de_gastos_view.dart';
 import 'package:my_wallet/app/home/lobby/lobby.dart';
 import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
-import 'package:my_wallet/app/home/trilhas/trails_view.dart';
+import 'package:my_wallet/app/home/trilhas/trilhas_view.dart';
 import 'package:my_wallet/app/home/turma/turmas_view.dart';
 import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/providers/user_provider.dart';
@@ -29,7 +29,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   final List<Widget> destinations = [
     Lobby(),
-    TrailsView(),
+    TrilhasView(),
     TurmasView(),
     ArView()
   ];

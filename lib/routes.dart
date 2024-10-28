@@ -9,7 +9,8 @@ import 'package:my_wallet/app/cadastro/professor_cadastro_view.dart';
 import 'package:my_wallet/app/cadastro/turma_cadastro_view.dart';
 import 'package:my_wallet/app/home/homepage_view.dart';
 import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
-import 'package:my_wallet/app/home/trilhas/trail_view.dart';
+import 'package:my_wallet/app/home/trilhas/atividades_view.dart';
+import 'package:my_wallet/app/home/trilhas/old_trail_view.dart';
 import 'package:my_wallet/app/login/login_view.dart';
 
 class Routes {
@@ -39,6 +40,6 @@ class Routes {
     ADM_CADASTRO_ALUNO: (context) => AlunoCadastroView(),
     ADM_CADASTRO_PROFESSOR: (context) => ProfessorCadastroView(),
     ADM_CADASTRO_TURMA: (context) => TurmaCadastroView(),
-    TRAILS_TRAIL_DETALHE: (context) => TrailView()
+    TRAILS_TRAIL_DETALHE: (context) => AtividadesView()
   };
 }

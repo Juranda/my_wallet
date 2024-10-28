@@ -1,18 +1,18 @@
 import 'package:my_wallet/models/trilha/atividade.dart';
 
 class AtividadeAlunoRealiza {
-  final int idAlunoTrilhaRealiza;
-  final int idTrilha;
   final int id;
+  final int idTrilha;
+  final int idAlunoTrilhaRealiza;
   final Atividade atividade;
-  final double acerto;
+  final bool acerto;
   final bool feito;
   final int opcaoSelecionada;
 
   AtividadeAlunoRealiza({
-    required this.idAlunoTrilhaRealiza,
-    required this.idTrilha,
     required this.id,
+    required this.idTrilha,
+    required this.idAlunoTrilhaRealiza,
     required this.atividade,
     required this.acerto,
     required this.feito,

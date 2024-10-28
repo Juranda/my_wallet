@@ -8,4 +8,11 @@ class AtividadeQuestao {
     required this.enunciado,
     required this.correta,
   });
+
+  factory AtividadeQuestao.fromMap(Map<String, dynamic> map){
+    return AtividadeQuestao(
+      sequencia: map['sequencia'], 
+      enunciado: map['enunciado'], 
+      correta: map['correta']);
+  }
 }
