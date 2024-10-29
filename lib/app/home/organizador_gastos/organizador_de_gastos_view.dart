@@ -33,14 +33,14 @@ class _InvestimentsState extends State<Investiments> {
         .from('aluno')
         .select('dinheiro')
         .eq(
-          'id_usuario',
+          'idUsuario',
           Supabase.instance.client.auth.currentUser!.id,
         )
         .single();
     await Supabase.instance.client
         .from('aluno')
         .update({'dinheiro': (dinheiro['dinheiro'] + money)}).eq(
-      'id_usuario',
+      'idUsuario',
       Supabase.instance.client.auth.currentUser!.id,
     );
   }
@@ -53,7 +53,7 @@ class _InvestimentsState extends State<Investiments> {
       'valor': value,
       'titulo': title,
       'data': data,
-      'id_usuario': Supabase.instance.client.auth.currentUser!.id
+      'idUsuario': Supabase.instance.client.auth.currentUser!.id
     });
     sumMoney(-value);
   }
@@ -73,7 +73,7 @@ class _InvestimentsState extends State<Investiments> {
       builder: (context, constraints) {
         return StreamBuilder<Conta>(
           stream: MyWallet.expensesService.streamConta(
-            _userProvider.usuario.id_instituicao_ensino,
+            _userProvider.usuario.idInstituicaoEnsino,
             _userProvider.aluno.id,
           ),
           builder: (context, snapshot) {

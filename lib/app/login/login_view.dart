@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/app/login/logo.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
 import 'package:my_wallet/models/users/aluno.dart';
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
@@ -50,10 +50,10 @@ class _LoginViewState extends State<LoginView> {
       
       //se aluno, pega turma_id dele
       //se professor, pega a turma_id da primeira turma que achar dele
-      if (usuario.tipoUsuario == Role.Aluno){
-        _turmaProvider.setTurma(await MyWallet.turmaService.getTurma(_userProvider.aluno.id_turma));
-      }else if(usuario.tipoUsuario == Role.Professor){
-        _turmaProvider.setTurma((await MyWallet.turmaService.getAllProfessorTurmas(usuario.id_instituicao_ensino, _userProvider.professor.id)).first);
+      if (usuario.tipoUsuario == Funcao.Aluno){
+        _turmaProvider.setTurma(await MyWallet.turmaService.getTurma(_userProvider.aluno.idTurma));
+      }else if(usuario.tipoUsuario == Funcao.Professor){
+        _turmaProvider.setTurma((await MyWallet.turmaService.getAllProfessorTurmas(usuario.idInstituicaoEnsino, _userProvider.professor.id)).first);
       }
 
       Navigator.of(context).pushNamed(Routes.HOME);

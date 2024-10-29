@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
@@ -31,7 +31,7 @@ class _TrilhasViewState extends State<TrilhasView> {
 
   @override
   Widget build(BuildContext context) {
-    final idInstituicaoEnsino = _userProvider.usuario.id_instituicao_ensino;
+    final idInstituicaoEnsino = _userProvider.usuario.idInstituicaoEnsino;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,7 +42,7 @@ class _TrilhasViewState extends State<TrilhasView> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              _userProvider.tipoUsuario == Role.Aluno
+              _userProvider.tipoUsuario == Funcao.Aluno
                   ? "Trilhas Liberadas"
                   : "Liberar Trilhas",
               textAlign: TextAlign.center,
@@ -55,7 +55,7 @@ class _TrilhasViewState extends State<TrilhasView> {
         if (_userProvider.eAluno)
           FutureBuilder(
             future: MyWallet.trailsService.getAllTrilhasDoAluno(
-                _userProvider.aluno.id_instituicao_ensino,
+                _userProvider.aluno.idInstituicaoEnsino,
                 _userProvider.aluno.id),
             builder: (context, snapshot) {
               if (snapshot.hasError) {

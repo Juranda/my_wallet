@@ -3,13 +3,13 @@ import 'package:my_wallet/models/escolaridade.dart';
 
 class Turma {
   final int id;
-  final int id_professor;
+  final int idProfessor;
   final String escolaridadeNome;
   final int escolaridadeId;
 
   const Turma(
       {required this.id,
-      required this.id_professor,
+      required this.idProfessor,
       required this.escolaridadeNome,
       required this.escolaridadeId});
 
@@ -17,7 +17,7 @@ class Turma {
   factory Turma.fromMap(Map<String, dynamic> map){
     return Turma(
       id: map['id'], 
-      id_professor: map['fk_professor_id'], 
+      idProfessor: map['fk_professor_id'], 
       escolaridadeNome: map['escolaridade_nome'],
       escolaridadeId: map['fk_escolaridades_id']);
   }

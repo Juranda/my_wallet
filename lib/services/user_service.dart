@@ -16,12 +16,12 @@ class UserService {
       password: senha,
     );
 
-    String id_supabase = authResponse.user!.id;
+    String idSupabase = authResponse.user!.id;
 
     var usuario = await supabase
         .from('view_usuario')
         .select()
-        .eq('id_supabase', id_supabase)
+        .eq('id_supabase', idSupabase)
         .limit(1)
         .maybeSingle();
 

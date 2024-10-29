@@ -1,45 +1,45 @@
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 
 class Aluno extends Usuario {
-  final int id_usuario;
+  final int idUsuario;
   final int id;
   final String cpf;
-  final int id_turma;
-  final String nome_turma;
-  final int id_escolaridade;
+  final int idTurma;
+  final String nomeTurma;
+  final int idEscolaridade;
   final String escolaridade;
 
   const Aluno({
-    required super.created_at,
-    required super.id_supabase,
-    required super.id_instituicao_ensino,
-    required this.id_usuario,
+    required super.criadoEm,
+    required super.idSupabase,
+    required super.idInstituicaoEnsino,
+    required this.idUsuario,
     required this.id,
     required super.nome,
     required super.email,
     required super.tipoUsuario,
     required this.cpf,
-    required this.id_turma,
-    required this.nome_turma,
-    required this.id_escolaridade,
+    required this.idTurma,
+    required this.nomeTurma,
+    required this.idEscolaridade,
     required this.escolaridade,
   });
 
   factory Aluno.fromMap(Map<String, dynamic> map) {
     return Aluno(
-      created_at: DateTime.parse(map['created_at']),
-      id_supabase: map['id_supabase'],
-      id_instituicao_ensino: map['id_instituicao_ensino'],
+      criadoEm: DateTime.parse(map['created_at']),
+      idSupabase: map['id_supabase'],
+      idInstituicaoEnsino: map['id_instituicao_ensino'],
       nome: map['nome'],
       email: map['email'],
-      tipoUsuario: Role.Aluno,
-      id_usuario: map['id_usuario'],
+      tipoUsuario: Funcao.Aluno,
+      idUsuario: map['id_usuario'],
       id: map['id'],
       cpf: map['cpf'],
-      id_turma: map['id_turma'] ?? 0,
-      nome_turma: map['nome_turma'] ?? "",
-      id_escolaridade: map['id_escolaridade'],
+      idTurma: map['id_turma'] ?? 0,
+      nomeTurma: map['nome_turma'] ?? "",
+      idEscolaridade: map['id_escolaridade'],
       escolaridade: map['escolaridade'],
     );
   }

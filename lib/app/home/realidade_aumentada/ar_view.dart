@@ -29,7 +29,7 @@ class _ArViewState extends State<ArView> {
     var response = await Supabase.instance.client
         .from('aluno')
         .select('dinheiro')
-        .eq('id_usuario', Supabase.instance.client.auth.currentUser!.id)
+        .eq('idUsuario', Supabase.instance.client.auth.currentUser!.id)
         .limit(1);
     return response;
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/aluno.dart';
 import 'package:my_wallet/models/users/professor.dart';
 import 'package:my_wallet/models/users/administrador.dart';
@@ -8,30 +8,30 @@ import 'package:my_wallet/models/users/usuario.dart';
 class UserProvider with ChangeNotifier {
   late Usuario usuario;
 
-  Role get tipoUsuario {
+  Funcao get tipoUsuario {
     return usuario.tipoUsuario;
   }
 
-  bool get eAluno => Role.Aluno == usuario.tipoUsuario;
-  bool get eProfessor => Role.Professor == usuario.tipoUsuario;
-  bool get eAdministrador => Role.Administrador == usuario.tipoUsuario;
+  bool get eAluno => Funcao.Aluno == usuario.tipoUsuario;
+  bool get eProfessor => Funcao.Professor == usuario.tipoUsuario;
+  bool get eAdministrador => Funcao.Administrador == usuario.tipoUsuario;
 
   Aluno get aluno {
-    if (tipoUsuario != Role.Aluno) {
+    if (tipoUsuario != Funcao.Aluno) {
       throw Exception('Tipo incorreto');
     }
     return usuario as Aluno;
   }
 
   Professor get professor {
-    if (tipoUsuario != Role.Professor) {
+    if (tipoUsuario != Funcao.Professor) {
       throw Exception('Tipo incorreto');
     }
     return usuario as Professor;
   }
 
   Administrador get administrador {
-    if (tipoUsuario != Role.Administrador) {
+    if (tipoUsuario != Funcao.Administrador) {
       throw Exception('Tipo incorreto');
     }
     return usuario as Administrador;

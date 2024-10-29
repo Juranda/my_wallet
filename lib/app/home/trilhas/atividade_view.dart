@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/models/trilha/atividade.dart';
-import 'package:my_wallet/models/trilha/atividade_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/aluno_atividade_realiza.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AtividadeView extends StatefulWidget {
   final Atividade atividade;
-  final AtividadeAlunoRealiza alunoRealiza;
+  final AlunoAtividadeRealiza alunoRealiza;
   final int? Function(int) getRespostaSelecionada;
   final Function(int, int) setRespostaSelecionada;
   const AtividadeView({required this.atividade, required this.alunoRealiza, required this.getRespostaSelecionada, required this.setRespostaSelecionada, super.key});

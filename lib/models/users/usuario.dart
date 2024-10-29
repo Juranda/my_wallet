@@ -1,19 +1,19 @@
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 
 abstract class Usuario {
-  final String id_supabase;
-  final int id_instituicao_ensino;
+  final String idSupabase;
+  final int idInstituicaoEnsino;
   final String nome;
-  final Role tipoUsuario;
-  final DateTime created_at;
+  final Funcao tipoUsuario;
+  final DateTime criadoEm;
   final String email;
 
   const Usuario({
-    required this.id_supabase,
+    required this.idSupabase,
     required this.nome,
-    required this.id_instituicao_ensino,
+    required this.idInstituicaoEnsino,
     required this.tipoUsuario,
-    required this.created_at,
+    required this.criadoEm,
     required this.email,
   });
 }

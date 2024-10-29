@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/models/trilha/trilha.dart';
-import 'package:my_wallet/models/trilha/trilha_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
 import 'package:my_wallet/services/mywallet.dart';
 
 class TrailView extends StatefulWidget {
@@ -11,11 +11,11 @@ class TrailView extends StatefulWidget {
 }
 
 class _TrailViewState extends State<TrailView> {
-  late TrilhaAlunoRealiza trilhaAlunoRealiza;
+  late AlunoTrilhaRealiza trilhaAlunoRealiza;
 
   @override
   Widget build(BuildContext context) {
-    this.trilhaAlunoRealiza = ModalRoute.of(context)!.settings.arguments as TrilhaAlunoRealiza;
+    this.trilhaAlunoRealiza = ModalRoute.of(context)!.settings.arguments as AlunoTrilhaRealiza;
 
     return Scaffold(
       appBar: AppBar(

@@ -1,12 +1,12 @@
 import 'package:my_wallet/models/trilha/atividade.dart';
-import 'package:my_wallet/models/trilha/atividade_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/aluno_atividade_realiza.dart';
 import 'package:my_wallet/models/trilha/atividade_questao.dart';
 import 'package:my_wallet/models/trilha/trilha.dart';
-import 'package:my_wallet/models/trilha/trilha_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AtividadeService{
-  // Future<List<AtividadeAlunoRealiza>> getAtividadeAlunoRealizaDeTrilha(int id_aluno, int id_trilha)async{
+  // Future<List<AtividadeAlunoRealiza>> getAtividadeAlunoRealizaDeTrilha(int idAluno, int id_trilha)async{
   //   var AtividadeAlunoRealiza = await Supabase.instance.client
   //   .from('alunoAtividade_completa')
   //   .select()
@@ -47,7 +47,7 @@ class AtividadeService{
     return questoes;
   }
 
-  Future<TrilhaAlunoRealiza> finalizarTrilha(TrilhaAlunoRealiza aluno_realiza, Map<int, int?> respostasSelecionadas) async{
+  Future<AlunoTrilhaRealiza> finalizarTrilha(AlunoTrilhaRealiza aluno_realiza, Map<int, int?> respostasSelecionadas) async{
     for (var questao in aluno_realiza.atividades) {
 
       var resposta_correta = questao.atividade.respostas[respostasSelecionadas[questao.atividade.id]!].correta;
@@ -61,7 +61,7 @@ class AtividadeService{
     }
       var response = await Supabase.instance.client.from('alunoTrilha_realiza').select('*, trilha(*)').eq('id', aluno_realiza.id).limit(1).single();
       response.addAll({'trilha': Trilha.fromMap(response['trilha'])});
-      return TrilhaAlunoRealiza.fromMap(response);
+      return AlunoTrilhaRealiza.fromMap(response);
     
   }
 }

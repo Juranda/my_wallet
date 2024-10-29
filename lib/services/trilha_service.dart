@@ -1,9 +1,9 @@
 import 'package:my_wallet/models/trilha/atividade.dart';
-import 'package:my_wallet/models/trilha/atividade_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/aluno_atividade_realiza.dart';
 import 'package:my_wallet/models/trilha/atividade_questao.dart';
 import 'package:my_wallet/models/escolaridade.dart';
 import 'package:my_wallet/models/trilha/trilha.dart';
-import 'package:my_wallet/models/trilha/trilha_aluno_realiza.dart';
+import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TrilhaService {
@@ -109,7 +109,7 @@ class TrilhaService {
       }
     }
   }
-  Future<List<TrilhaAlunoRealiza>> getAllTrilhasDoAluno(
+  Future<List<AlunoTrilhaRealiza>> getAllTrilhasDoAluno(
     int idInstituicao,
     int idAluno, {
     bool cached = false,
@@ -125,10 +125,10 @@ class TrilhaService {
     
         
 
-    List<TrilhaAlunoRealiza> trilhasAluno = [];
+    List<AlunoTrilhaRealiza> trilhasAluno = [];
 
     for (var alunoTrilha in alunoTrilhas) {
-      List<AtividadeAlunoRealiza> atividades = [];
+      List<AlunoAtividadeRealiza> atividades = [];
       var trilhaMap = alunoTrilha['trilha'];
       var trilha = Trilha(
         trilhaMap['id'],
@@ -156,7 +156,7 @@ class TrilhaService {
           }).toList(),
         );
 
-        atividades.add(AtividadeAlunoRealiza(
+        atividades.add(AlunoAtividadeRealiza(
           idTrilha: alunoTrilha['trilha']['id'],
           idAlunoTrilhaRealiza: alunoTrilha['id'],
           id: atividadeCompletaAluno['id'],
@@ -167,12 +167,12 @@ class TrilhaService {
         ));
       }
 
-      trilhasAluno.add(TrilhaAlunoRealiza(
+      trilhasAluno.add(AlunoTrilhaRealiza(
         id: alunoTrilha['id'],
         trilha: trilha,
         pontuacao: alunoTrilha['pontuacao'],
-        id_aluno: idAluno,
-        completada_em: alunoTrilha['completada_em'],
+        idAluno: idAluno,
+        completadaEm: alunoTrilha['completada_em'],
         atividades: atividades,
       ));
     }

@@ -52,52 +52,39 @@ class _ResultViewState extends State<ResultView> {
             SizedBox(
               height: 50,
             ),
-            FutureBuilder(
-                future: fetchAtividade(),
-                builder: (context, snapshot) {
-                  List<Widget> resultados = [];
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return CircularProgressIndicator();
-                  }
+            // FutureBuilder(
+            //     future: fetchAtividade(),
+            //     builder: (context, snapshot) {
+            //       List<Widget> resultados = [];
+            //       if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            //         return CircularProgressIndicator();
+            //       }
 
-                  final resposta = snapshot.data!;
-                  for (int i = 0; i < resposta.length; i++) {
-                    resultados.add(Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("Questão ${i + 1}: "),
-                        resposta[i]['resposta'] == "alternativa_correta"
-                            ? Icon(Icons.check)
-                            : Icon(Icons.close)
-                      ],
-                    ));
-                  }
-                  resultados.add(
-                    SizedBox(
-                      height: 50,
-                    ),
-                  );
-                  resultados.add(
-                      Text("Taxa de Acerto: ${calcularAcertos(resposta)}"));
-                  return Column(
-                    children: resultados,
-                  );
-                }),
+            //       final resposta = snapshot.data!;
+            //       for (int i = 0; i < resposta.length; i++) {
+            //         resultados.add(Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //           children: [
+            //             Text("Questão ${i + 1}: "),
+            //             resposta[i]['resposta'] == "alternativa_correta"
+            //                 ? Icon(Icons.check)
+            //                 : Icon(Icons.close)
+            //           ],
+            //         ));
+            //       }
+            //       resultados.add(
+            //         SizedBox(
+            //           height: 50,
+            //         ),
+            //       );
+            //       resultados.add(
+            //           Text("Taxa de Acerto: ${calcularAcertos(resposta)}"));
+            //       return Column(
+            //         children: resultados,
+            //       );
+            //     }),
             SizedBox(
               height: 50,
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                      onPressed: anteriorAtividade(), child: Text('Anterior')),
-                  ElevatedButton(
-                      onPressed: concluir(), child: Text('Concluir')),
-                ],
-              ),
             ),
           ],
         ),

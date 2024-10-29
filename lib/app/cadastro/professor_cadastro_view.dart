@@ -18,7 +18,7 @@ class ProfessorCadastroView extends StatefulWidget {
 }
 
 class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
-  int id_instituicao_ensino = 0;
+  int idInstituicaoEnsino = 0;
   List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
     ('Ensino Fundamental', 1),
@@ -37,7 +37,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   void initState() {
     super.initState();
     UserProvider userProvider = Provider.of(context, listen: false);
-    id_instituicao_ensino = userProvider.usuario.id_instituicao_ensino;
+    idInstituicaoEnsino = userProvider.usuario.idInstituicaoEnsino;
   }
 
   @override
@@ -182,14 +182,14 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                             await Supabase.instance.client
                                 .from('professor')
                                 .insert({
-                              'instituicaoensino': id_instituicao_ensino,
+                              'instituicaoensino': idInstituicaoEnsino,
                               'cnpjcpf': cpfController.text,
                               'nome': nomeController.text.substring(
                                   0, nomeController.text.indexOf(" ")),
                               'sobrenome': nomeController.text
                                   .substring(nomeController.text.indexOf(" ")),
                               'papel': 2,
-                              'id_usuario': user.id
+                              'idUsuario': user.id
                             });
                             showDialog(
                                 context: context,

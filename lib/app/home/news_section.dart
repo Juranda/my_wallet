@@ -4,7 +4,7 @@ import 'package:my_wallet/app/home/lobby/lobby_add_news.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/users/role.dart';
+import '../../models/users/funcao.dart';
 
 class NewsSection extends StatefulWidget {
   final String sectionTitle;
@@ -60,7 +60,7 @@ class _NewsSectionState extends State<NewsSection> {
               children: [
                 ...widget.items!,
                 ...widget.addedItems,
-                if (roleProvider.tipoUsuario == Role.Professor)
+                if (roleProvider.tipoUsuario == Funcao.Professor)
                   Container(
                     height: 100,
                     width: 100,

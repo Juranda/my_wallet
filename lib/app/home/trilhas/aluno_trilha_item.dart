@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/models/trilha/trilha_aluno_realiza.dart';
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/routes.dart';
@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 
 class AlunoTrilhaItem extends StatefulWidget {
-  final TrilhaAlunoRealiza trilhaAlunoRealiza;
+  final AlunoTrilhaRealiza trilhaAlunoRealiza;
   const AlunoTrilhaItem(this.trilhaAlunoRealiza, {super.key});
 
   @override
