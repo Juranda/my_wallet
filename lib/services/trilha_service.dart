@@ -53,10 +53,7 @@ class TrilhaService {
     return trilhas;
   }
 
-  Future<bool> trilhaJaLiberada(
-    int trilhaID,
-    int turmaID    
-    ) async {
+  Future<bool> trilhaJaLiberada(int trilhaID, int turmaID) async {
     final response = await Supabase.instance.client
         .from('turmaTrilha_possui')
         .select()
@@ -66,14 +63,12 @@ class TrilhaService {
     return response.isNotEmpty;
   }
 
-  Future<void> liberarTrilha(
-    int trilhaID,
-    int turmaID
-    ) async {
+  Future<void> liberarTrilha(int trilhaID, int turmaID) async {
     if (await trilhaJaLiberada(trilhaID, turmaID)) return;
 
-    await Supabase.instance.client.from('turmaTrilha_possui').insert(
-        {'fk_turma_id': turmaID, 'fk_trilha_id': trilhaID});
+    await Supabase.instance.client
+        .from('turmaTrilha_possui')
+        .insert({'fk_turma_id': turmaID, 'fk_trilha_id': trilhaID});
 
     //pra cada aluno da turma, criar a relação atividade-aluno de todas as atividades dessa trilha
     final alunos = await Supabase.instance.client
@@ -85,22 +80,19 @@ class TrilhaService {
         .select()
         .eq('fk_trilha_id', trilhaID);
     for (Map<String, dynamic> aluno in alunos) {
-      
       //apaga a relacao do aluno com essa trilha caso exista (essa situacao so acontece quando o aluno tem a trilha mesmo com o trilhaJaLiberada() da turma retornando false)
-      await Supabase.instance.client.from('alunoTrilha_realiza')
-      .delete()
-      .eq('fk_aluno_id', aluno['id'])
-      .eq('fk_trilha_id', trilhaID);
+      await Supabase.instance.client
+          .from('alunoTrilha_realiza')
+          .delete()
+          .eq('fk_aluno_id', aluno['id'])
+          .eq('fk_trilha_id', trilhaID);
 
-      await Supabase.instance.client.from('alunoTrilha_realiza')
-      .insert({
-        'fk_trilha_id': trilhaID,
-        'fk_aluno_id': aluno['id']
-      });
+      await Supabase.instance.client
+          .from('alunoTrilha_realiza')
+          .insert({'fk_trilha_id': trilhaID, 'fk_aluno_id': aluno['id']});
 
       for (Map<String, dynamic> atividade in atividades) {
-
-        await Supabase.instance.client.from('alunoAtividade_completa').insert({
+        await Supabase.instance.client.from('alunoAtividade_realiza').insert({
           'liberada': atividades[0] == atividade,
           'feito': false,
           'fk_aluno_id': aluno['id'],
@@ -109,6 +101,7 @@ class TrilhaService {
       }
     }
   }
+
   Future<List<AlunoTrilhaRealiza>> getAllTrilhasDoAluno(
     int idInstituicao,
     int idAluno, {
@@ -118,12 +111,11 @@ class TrilhaService {
 
     alunoTrilhas = await Supabase.instance.client
         .from('alunoTrilha_realiza')
-        .select('id, pontuacao, completada_em, trilha(id, nome, escolaridades(id, nome)), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_completa!inner(id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeQuestao(sequencia, enunciado, correta), jogos(id)))');
-       
-        //.eq('aluno.usuario.instituicaoensino.id', idInstituicao)
-        //.eq('aluno.id', idAluno);
-    
-        
+        .select(
+            'id, pontuacao, completada_em, trilha(id, nome, escolaridades(id, nome)), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_realiza!inner(id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeQuestao(sequencia, enunciado, correta), jogos(id)))');
+
+    //.eq('aluno.usuario.instituicaoensino.id', idInstituicao)
+    //.eq('aluno.id', idAluno);
 
     List<AlunoTrilhaRealiza> trilhasAluno = [];
 
@@ -138,7 +130,7 @@ class TrilhaService {
       );
 
       for (Map<String, dynamic> atividadeCompletaAluno
-          in alunoTrilha['alunoAtividade_completa']) {
+          in alunoTrilha['alunoAtividade_realiza']) {
         var respostas = atividadeCompletaAluno['atividade']['atividadeQuestao']
             as List<dynamic>;
 

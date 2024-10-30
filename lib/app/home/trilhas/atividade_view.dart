@@ -3,14 +3,16 @@ import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/aluno_atividade_realiza.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AtividadeView extends StatefulWidget {
   final Atividade atividade;
   final AlunoAtividadeRealiza alunoRealiza;
-  final int? Function(int) getRespostaSelecionada;
-  final Function(int, int) setRespostaSelecionada;
-  const AtividadeView({required this.atividade, required this.alunoRealiza, required this.getRespostaSelecionada, required this.setRespostaSelecionada, super.key});
+  final Function atualizarViewPrincipal;
+  const AtividadeView(
+      {required this.atividade,
+      required this.alunoRealiza,
+      required this.atualizarViewPrincipal,
+      super.key});
 
   @override
   State<AtividadeView> createState() => _AtividadeViewState();
@@ -27,51 +29,56 @@ class _AtividadeViewState extends State<AtividadeView> {
     // TODO: implement initState
     super.initState();
     _userProvider = Provider.of<UserProvider>(context, listen: false);
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    print(_escolha);
-  _escolha = widget.getRespostaSelecionada(widget.atividade.id);
+    _escolha = widget.alunoRealiza.opcaoSelecionada;
     alternativas = [
       RadioListTile(
-          key: UniqueKey() ,
+          key: UniqueKey(),
           title: Text("a) " + widget.atividade.respostas[0].enunciado),
           value: widget.atividade.respostas[0].sequencia,
           groupValue: _escolha,
           onChanged: (value) => setState(() {
-            widget.setRespostaSelecionada(widget.atividade.id, value);
-          })
-          ),
+                widget.alunoRealiza.opcaoSelecionada = value;
+                widget.alunoRealiza.feito = true;
+                print(widget.alunoRealiza.opcaoSelecionada);
+                widget.atualizarViewPrincipal();
+              })),
       RadioListTile(
-          key: UniqueKey() ,
+          key: UniqueKey(),
           title: Text("b) " + widget.atividade.respostas[1].enunciado),
           value: widget.atividade.respostas[1].sequencia,
           groupValue: _escolha,
           onChanged: (value) => setState(() {
-            widget.setRespostaSelecionada(widget.atividade.id, value);
-          })
-          ),
+                widget.alunoRealiza.opcaoSelecionada = value;
+                widget.alunoRealiza.feito = true;
+                print(widget.alunoRealiza.opcaoSelecionada);
+                widget.atualizarViewPrincipal();
+              })),
       RadioListTile(
-          key: UniqueKey() ,
+          key: UniqueKey(),
           title: Text("c) " + widget.atividade.respostas[2].enunciado),
           value: widget.atividade.respostas[2].sequencia,
           groupValue: _escolha,
           onChanged: (value) => setState(() {
-            widget.setRespostaSelecionada(widget.atividade.id, value);
-          })
-          ),
+                widget.alunoRealiza.opcaoSelecionada = value;
+                widget.alunoRealiza.feito = true;
+                print(widget.alunoRealiza.opcaoSelecionada);
+                widget.atualizarViewPrincipal();
+              })),
       RadioListTile(
-          key: UniqueKey() ,
+          key: UniqueKey(),
           title: Text("d) " + widget.atividade.respostas[3].enunciado),
           value: widget.atividade.respostas[3].sequencia,
           groupValue: _escolha,
           onChanged: (value) => setState(() {
-            widget.setRespostaSelecionada(widget.atividade.id, value);
-          })
-          ),
+                widget.alunoRealiza.opcaoSelecionada = value;
+                widget.alunoRealiza.feito = true;
+                print(widget.alunoRealiza.opcaoSelecionada);
+                widget.atualizarViewPrincipal();
+              })),
     ];
     return Padding(
       padding: const EdgeInsets.all(15.0),

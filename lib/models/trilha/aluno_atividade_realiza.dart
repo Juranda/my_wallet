@@ -6,8 +6,8 @@ class AlunoAtividadeRealiza {
   final int idAlunoTrilhaRealiza;
   final Atividade atividade;
   final bool? acerto;
-  final bool feito;
-  final int opcaoSelecionada;
+  bool feito;
+  int opcaoSelecionada;
 
   AlunoAtividadeRealiza({
     required this.id,
