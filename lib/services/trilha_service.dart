@@ -1,6 +1,6 @@
 import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/aluno_atividade_realiza.dart';
-import 'package:my_wallet/models/trilha/atividade_questao.dart';
+import 'package:my_wallet/models/trilha/atividade_opcao.dart';
 import 'package:my_wallet/models/escolaridade.dart';
 import 'package:my_wallet/models/trilha/trilha.dart';
 import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
@@ -112,62 +112,39 @@ class TrilhaService {
     alunoTrilhas = await Supabase.instance.client
         .from('alunoTrilha_realiza')
         .select(
-            'id, pontuacao, completada_em, trilha(id, nome, escolaridades(id, nome)), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_realiza!inner(id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeQuestao(sequencia, enunciado, correta), jogos(id)))');
+            'id, pontuacao, completada_em, trilha(id, nome, fk_escolaridades_id, img_url), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_realiza!inner(fk_trilha_id,fk_alunotrilha_realiza_id,id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeOpcao(sequencia, enunciado, correta), trilha(id,nome,img_url,fk_escolaridades_id), jogos(id)))')
+        .eq('aluno.usuario.instituicaoensino.id', idInstituicao)
+        .eq('aluno.id', idAluno);
 
-    //.eq('aluno.usuario.instituicaoensino.id', idInstituicao)
-    //.eq('aluno.id', idAluno);
-
-    List<AlunoTrilhaRealiza> trilhasAluno = [];
+    List<AlunoTrilhaRealiza> alunoTrilhaRealiza = [];
 
     for (var alunoTrilha in alunoTrilhas) {
-      List<AlunoAtividadeRealiza> atividades = [];
-      var trilhaMap = alunoTrilha['trilha'];
-      var trilha = Trilha(
-        trilhaMap['id'],
-        trilhaMap['nome'],
-        trilhaMap['img_url'] ?? "",
-        Escolaridade.values.elementAt(trilhaMap['escolaridades']['id'] - 1),
-      );
-
-      for (Map<String, dynamic> atividadeCompletaAluno
-          in alunoTrilha['alunoAtividade_realiza']) {
-        var respostas = atividadeCompletaAluno['atividade']['atividadeQuestao']
-            as List<dynamic>;
-
-        var atividade = Atividade(
-          id: atividadeCompletaAluno['atividade']['id'],
-          enunciado: atividadeCompletaAluno['atividade']['enunciado'],
-          sequencia: atividadeCompletaAluno['atividade']['sequencia'],
-          trilha: trilha,
-          respostas: respostas.map((resposta) {
-            return AtividadeQuestao(
-              sequencia: resposta['sequencia'],
-              correta: (resposta['correta'] as bool),
-              enunciado: resposta['enunciado'],
-            );
-          }).toList(),
-        );
-
-        atividades.add(AlunoAtividadeRealiza(
-          idTrilha: alunoTrilha['trilha']['id'],
-          idAlunoTrilhaRealiza: alunoTrilha['id'],
-          id: atividadeCompletaAluno['id'],
-          acerto: (atividadeCompletaAluno['acerto']),
-          opcaoSelecionada: atividadeCompletaAluno['opcao_selecionada'],
-          feito: atividadeCompletaAluno['feito'],
-          atividade: atividade,
-        ));
-      }
-
-      trilhasAluno.add(AlunoTrilhaRealiza(
-        id: alunoTrilha['id'],
-        trilha: trilha,
-        pontuacao: alunoTrilha['pontuacao'],
-        idAluno: idAluno,
-        completadaEm: alunoTrilha['completada_em'],
-        atividades: atividades,
-      ));
+      alunoTrilhaRealiza.add(AlunoTrilhaRealiza.fromMap(alunoTrilha));
     }
-    return trilhasAluno;
+    return alunoTrilhaRealiza;
   }
+
+
+ Future<AlunoTrilhaRealiza> finalizarTrilha(
+      AlunoTrilhaRealiza alunoTrilha_realiza) async {
+    for (var atividade in alunoTrilha_realiza.atividades) {
+      await Supabase.instance.client.from('alunoAtividade_realiza').update({
+        'opcao_selecionada': atividade.opcaoSelecionada,
+        'feito': true
+      }).eq('id', atividade.id);
+    }
+
+    
+
+    await Supabase.instance.client.from('alunoTrilha_realiza').update({
+      'completada_em':DateTime.now().toIso8601String()
+    }).eq('id', alunoTrilha_realiza.id);
+
+    var response = await Supabase.instance.client.from('alunoTrilha_realiza').select(
+            'id, pontuacao, completada_em, trilha(id, nome, fk_escolaridades_id, img_url), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_realiza!inner(fk_trilha_id,fk_alunotrilha_realiza_id,id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeOpcao(sequencia, enunciado, correta), trilha(id,nome,img_url,fk_escolaridades_id), jogos(id)))').eq('id', alunoTrilha_realiza.id).single();
+    var alunoTrilha = AlunoTrilhaRealiza.fromMap(response);
+
+    return alunoTrilha;
+  }
+
 }

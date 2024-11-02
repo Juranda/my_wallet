@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
-import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
-import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/routes.dart';
-import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 
 
 class AlunoTrilhaItem extends StatefulWidget {
   final AlunoTrilhaRealiza trilhaAlunoRealiza;
-  const AlunoTrilhaItem(this.trilhaAlunoRealiza, {super.key});
+  const AlunoTrilhaItem(this.trilhaAlunoRealiza, {required this.atualizarTrilhasView, super.key});
+
+  final Function atualizarTrilhasView;
 
   @override
   State<AlunoTrilhaItem> createState() => _AlunoTrilhaItemState();
@@ -20,8 +19,8 @@ class _AlunoTrilhaItemState extends State<AlunoTrilhaItem> {
   late final TurmaProvider _turmaProvider;
 
   void abrirTrilha(context) async {
-    Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE,
-        arguments: widget.trilhaAlunoRealiza);
+    await Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE,arguments: widget.trilhaAlunoRealiza);
+    widget.atualizarTrilhasView();
   }
 
   @override

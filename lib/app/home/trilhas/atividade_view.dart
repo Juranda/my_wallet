@@ -6,12 +6,14 @@ import 'package:provider/provider.dart';
 
 class AtividadeView extends StatefulWidget {
   final Atividade atividade;
+  final bool respostasBloqueadas;
   final AlunoAtividadeRealiza alunoRealiza;
   final Function atualizarViewPrincipal;
   const AtividadeView(
       {required this.atividade,
       required this.alunoRealiza,
       required this.atualizarViewPrincipal,
+      required this.respostasBloqueadas,
       super.key});
 
   @override
@@ -40,7 +42,7 @@ class _AtividadeViewState extends State<AtividadeView> {
           title: Text("a) " + widget.atividade.respostas[0].enunciado),
           value: widget.atividade.respostas[0].sequencia,
           groupValue: _escolha,
-          onChanged: (value) => setState(() {
+          onChanged: widget.respostasBloqueadas == true?null: (value) => setState(() {
                 widget.alunoRealiza.opcaoSelecionada = value;
                 widget.alunoRealiza.feito = true;
                 print(widget.alunoRealiza.opcaoSelecionada);
@@ -51,7 +53,7 @@ class _AtividadeViewState extends State<AtividadeView> {
           title: Text("b) " + widget.atividade.respostas[1].enunciado),
           value: widget.atividade.respostas[1].sequencia,
           groupValue: _escolha,
-          onChanged: (value) => setState(() {
+          onChanged: widget.respostasBloqueadas == true?null:(value) => setState(() {
                 widget.alunoRealiza.opcaoSelecionada = value;
                 widget.alunoRealiza.feito = true;
                 print(widget.alunoRealiza.opcaoSelecionada);
@@ -62,7 +64,7 @@ class _AtividadeViewState extends State<AtividadeView> {
           title: Text("c) " + widget.atividade.respostas[2].enunciado),
           value: widget.atividade.respostas[2].sequencia,
           groupValue: _escolha,
-          onChanged: (value) => setState(() {
+          onChanged: widget.respostasBloqueadas == true?null:(value) => setState(() {
                 widget.alunoRealiza.opcaoSelecionada = value;
                 widget.alunoRealiza.feito = true;
                 print(widget.alunoRealiza.opcaoSelecionada);
@@ -73,7 +75,7 @@ class _AtividadeViewState extends State<AtividadeView> {
           title: Text("d) " + widget.atividade.respostas[3].enunciado),
           value: widget.atividade.respostas[3].sequencia,
           groupValue: _escolha,
-          onChanged: (value) => setState(() {
+          onChanged: widget.respostasBloqueadas == true?null:(value) => setState(() {
                 widget.alunoRealiza.opcaoSelecionada = value;
                 widget.alunoRealiza.feito = true;
                 print(widget.alunoRealiza.opcaoSelecionada);

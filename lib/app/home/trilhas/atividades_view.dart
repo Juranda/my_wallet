@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/app/home/trilhas/atividade_view.dart';
-import 'package:my_wallet/app/home/trilhas/result_view.dart';
+import 'package:my_wallet/app/home/trilhas/resultados_view.dart';
 import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
+import 'package:my_wallet/services/mywallet.dart';
 
 class AtividadesView extends StatefulWidget {
   const AtividadesView({super.key});
@@ -12,16 +13,14 @@ class AtividadesView extends StatefulWidget {
 }
 
 class _AtividadesViewState extends State<AtividadesView> {
-  late AlunoTrilhaRealiza alunoTrilhaRealiza;
-  late List<Atividade> atividades = [];
+  AlunoTrilhaRealiza? alunoTrilhaRealiza;
+  final List<Atividade> atividades = [];
   final List<Widget> atividadesViews = [];
   var atividadeExibida = 0;
 
-  void FinalizarAtividade() {}
+  bool respostasBloqueadas = false;
 
   void showAlertDialog(BuildContext context) {
-    // set up the buttons
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Finalizar?"),
       content:
@@ -35,9 +34,12 @@ class _AtividadesViewState extends State<AtividadesView> {
         ),
         ElevatedButton(
           child: Text("Continuar"),
-          onPressed: () {
+          onPressed: () async {
             Navigator.pop(context);
-            ChangeSelectedIndex(1);
+            alunoTrilhaRealiza = await MyWallet.trailsService
+                .finalizarTrilha(alunoTrilhaRealiza!);
+            inicializarViews(alunoTrilhaRealiza!);
+            changeSelectedIndex(1);
           },
         )
       ],
@@ -51,7 +53,7 @@ class _AtividadesViewState extends State<AtividadesView> {
     );
   }
 
-  void ChangeSelectedIndex(int quanto) {
+  void changeSelectedIndex(int quanto) {
     setState(() {
       atividadeExibida =
           (atividadeExibida + quanto).clamp(0, atividadesViews.length - 1);
@@ -63,62 +65,81 @@ class _AtividadesViewState extends State<AtividadesView> {
     super.initState();
   }
 
+  void inicializarViews(AlunoTrilhaRealiza alunoTrilhaRealiza) {
+    atividades.clear();
+    atividadesViews.clear();
+    for (var atv_aluno_realiza in alunoTrilhaRealiza.atividades) {
+      atividades.add(atv_aluno_realiza.atividade);
+    }
+    respostasBloqueadas = alunoTrilhaRealiza.completadaEm != null;
+
+    for (int i = 0; i < atividades.length; i++) {
+      var key = UniqueKey();
+      atividadesViews.add(AtividadeView(
+          atividade: atividades[i],
+          alunoRealiza: alunoTrilhaRealiza.atividades[i],
+          atualizarViewPrincipal: () => setState(() {}),
+          respostasBloqueadas: respostasBloqueadas,
+          key: key));
+    }
+    atividadesViews.add(ResultadosView(
+      alunoTrilhaRealiza: alunoTrilhaRealiza,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    this.alunoTrilhaRealiza =
-        ModalRoute.of(context)!.settings.arguments as AlunoTrilhaRealiza;
-    if (atividades.isEmpty && atividadesViews.isEmpty) {
-      for (var atv_aluno_realiza in alunoTrilhaRealiza.atividades) {
-        atividades.add(atv_aluno_realiza.atividade);
-      }
+    if (alunoTrilhaRealiza == null) {
+      this.alunoTrilhaRealiza =
+          ModalRoute.of(context)!.settings.arguments as AlunoTrilhaRealiza;
+    }
 
-      for (int i = 0; i < atividades.length; i++) {
-        var key = UniqueKey();
-        atividadesViews.add(AtividadeView(
-            atividade: atividades[i],
-            alunoRealiza: alunoTrilhaRealiza.atividades[i],
-            atualizarViewPrincipal: () => setState(() {}),
-            key: key));
-      }
-      atividadesViews.add(ResultView());
+    if (atividades.isEmpty && atividadesViews.isEmpty) {
+      inicializarViews(alunoTrilhaRealiza!);
     }
     return Scaffold(
         appBar: AppBar(),
         body: Column(
           children: [
-            atividadesViews[atividadeExibida],
-            Expanded(
-              flex: 1,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+            Expanded(child: atividadesViews[atividadeExibida]),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                    onPressed: () => changeSelectedIndex(-1),
+                    child: Text('Anterior')),
+                if (atividadeExibida == atividadesViews.length - 1)
                   ElevatedButton(
-                      onPressed: () => ChangeSelectedIndex(-1),
-                      child: Text('Anterior')),
-                  if (atividadeExibida == atividadesViews.length - 1)
-                    ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Voltar'))
-                  else if (atividadeExibida == atividadesViews.length - 2)
-                    ElevatedButton(
-                        onPressed: alunoTrilhaRealiza
-                                    .atividades[atividadeExibida]
-                                    .opcaoSelecionada ==
-                                -1
-                            ? null
-                            : () => showAlertDialog(context),
-                        child: Text('Finalizar'))
-                  else
-                    ElevatedButton(
-                        onPressed: alunoTrilhaRealiza
-                                    .atividades[atividadeExibida].feito ==
-                                false
-                            ? null
-                            : () => ChangeSelectedIndex(1),
-                        child: Text('Próxima'))
-                ],
-              ),
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Voltar'))
+                else if (atividadeExibida == atividadesViews.length - 2 &&
+                    alunoTrilhaRealiza!.completadaEm == null)
+                  ElevatedButton(
+                      onPressed: alunoTrilhaRealiza!
+                                  .atividades[atividadeExibida].feito ==
+                              false
+                          ? null
+                          : () => showAlertDialog(context),
+                      child: Text('Finalizar'))
+                else if (atividadeExibida == atividadesViews.length - 2 &&
+                    alunoTrilhaRealiza!.completadaEm != null)
+                  ElevatedButton(
+                      onPressed: alunoTrilhaRealiza!
+                                  .atividades[atividadeExibida].feito ==
+                              false
+                          ? null
+                          : () => changeSelectedIndex(1),
+                      child: Text('Resultados'))
+                else
+                  ElevatedButton(
+                      onPressed: alunoTrilhaRealiza!
+                                  .atividades[atividadeExibida].feito ==
+                              false
+                          ? null
+                          : () => changeSelectedIndex(1),
+                      child: Text('Próxima'))
+              ],
             )
           ],
         ));

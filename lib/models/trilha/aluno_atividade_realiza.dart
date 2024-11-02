@@ -18,4 +18,15 @@ class AlunoAtividadeRealiza {
     required this.feito,
     required this.opcaoSelecionada,
   });
+
+  factory AlunoAtividadeRealiza.fromMap(Map<String, dynamic> map){
+    return AlunoAtividadeRealiza(
+      id: map['id'], 
+      idTrilha: map['fk_trilha_id'], 
+      idAlunoTrilhaRealiza: map['fk_alunotrilha_realiza_id'], 
+      atividade: Atividade.fromMap(map['atividade']), 
+      acerto: map['acerto'], 
+      feito: map['feito'], 
+      opcaoSelecionada: map['opcao_selecionada']);
+  }
 }

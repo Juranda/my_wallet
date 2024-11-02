@@ -6,14 +6,19 @@ class Trilha {
   final String imgUrl;
   final Escolaridade escolaridade;
 
-  Trilha(this.id, this.nome, this.imgUrl, this.escolaridade);
+  Trilha({
+    required this.id, 
+    required this.nome, 
+    required this.imgUrl, 
+    required this.escolaridade
+  });
 
   factory Trilha.fromMap(Map<String, dynamic> map) {
     return Trilha(
-      map['id'],
-      map['nome'],
-      map['img_url'] ?? "",
-      map['escolaridade'],
+      id: map['id'],
+      nome: map['nome'],
+      imgUrl: map['img_url'] != null? map['img_url']: "",
+      escolaridade: Escolaridade.values[map['fk_escolaridades_id']-1],
     );
   }
 }

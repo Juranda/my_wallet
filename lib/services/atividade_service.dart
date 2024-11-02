@@ -1,6 +1,6 @@
 import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/aluno_atividade_realiza.dart';
-import 'package:my_wallet/models/trilha/atividade_questao.dart';
+import 'package:my_wallet/models/trilha/atividade_opcao.dart';
 import 'package:my_wallet/models/trilha/trilha.dart';
 import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,7 +23,7 @@ class AtividadeService {
     List<Atividade> atividades = [];
 
     for (var atv in response) {
-      List<AtividadeQuestao> questoes = await getQuestoesDeAtividade(atv['id']);
+      List<AtividadeOpcao> questoes = await getQuestoesDeAtividade(atv['id']);
       atv.addAll({'respostas': questoes});
       atividades.add(Atividade.fromMap(atv));
     }
@@ -31,40 +31,19 @@ class AtividadeService {
     return atividades;
   }
 
-  Future<List<AtividadeQuestao>> getQuestoesDeAtividade(
-      int id_atividade) async {
+  Future<List<AtividadeOpcao>> getQuestoesDeAtividade(int id_atividade) async {
     var response = await Supabase.instance.client
-        .from('atividadeQuestao')
+        .from('atividadeOpcao')
         .select()
         .eq('fk_atividade_id', id_atividade);
 
-    List<AtividadeQuestao> questoes = [];
+    List<AtividadeOpcao> questoes = [];
 
     for (var qst in response) {
-      questoes.add(AtividadeQuestao.fromMap(qst));
+      questoes.add(AtividadeOpcao.fromMap(qst));
     }
 
     return questoes;
   }
 
-  Future<AlunoTrilhaRealiza> finalizarTrilha(
-      AlunoTrilhaRealiza aluno_realiza) async {
-    for (var atividade in aluno_realiza.atividades) {
-      await Supabase.instance.client
-          .from('alunoAtividade_realiza')
-          .update({'opcao_selecionada': atividade.opcaoSelecionada}).eq(
-              'id', atividade.id);
-    }
-
-    return aluno_realiza;
-
-    var response = await Supabase.instance.client
-        .from('alunoTrilha_realiza')
-        .select('*, trilha(*)')
-        .eq('id', aluno_realiza.id)
-        .limit(1)
-        .single();
-    response.addAll({'trilha': Trilha.fromMap(response['trilha'])});
-    return AlunoTrilhaRealiza.fromMap(response);
-  }
 }

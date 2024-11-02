@@ -26,13 +26,19 @@ class _TrilhasViewState extends State<TrilhasView> {
     _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
   }
 
+
+  void atualizarView(){
+    setState(() {
+      print('teste');
+    });
+  }
+
   //   setState(() {});
   // }
 
   @override
   Widget build(BuildContext context) {
     final idInstituicaoEnsino = _userProvider.usuario.idInstituicaoEnsino;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.max,
@@ -107,7 +113,7 @@ class _TrilhasViewState extends State<TrilhasView> {
                           scrollDirection: Axis.vertical,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) =>
-                              AlunoTrilhaItem(trilhas[index]),
+                              AlunoTrilhaItem(trilhas[index], atualizarTrilhasView: atualizarView,),
                         ),
                       );
                     },
