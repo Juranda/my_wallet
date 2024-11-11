@@ -65,93 +65,101 @@ class _TrailsViewState extends State<TrailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final idInstituicaoEnsino = _userProvider.aluno.id_instituicao_ensino;
-    final idTurma = _userProvider.aluno.id_turma;
+    final idInstituicaoEnsino = _userProvider.usuario.id_instituicao_ensino;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          color: Theme.of(context).colorScheme.background,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              _userProvider.tipoUsuario == Role.Aluno
-                  ? "Trilhas Liberadas"
-                  : "Liberar Trilhas",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.displaySmall,
+    if (_userProvider.eAluno) {
+      final idTurma = _userProvider.aluno.id_turma;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            color: Theme.of(context).colorScheme.background,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                _userProvider.tipoUsuario == Role.Aluno
+                    ? "Trilhas Liberadas"
+                    : "Liberar Trilhas",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
             ),
           ),
-        ),
-        FutureBuilder(
-          //se é professor, mostre todas as trilhas
-          //se for aluno, mostre só as da turma (fetch trilhas)
-          future: MyWallet.trailsService
-              .getAllTrilhas(idInstituicaoEnsino, idTurma),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return AlertDialog(
-                title: const Text("Um erro ocorreu"),
-                content: Text("Erro ${snapshot.error}"),
-              );
-            }
+          FutureBuilder(
+            //se é professor, mostre todas as trilhas
+            //se for aluno, mostre só as da turma (fetch trilhas)
+            future: MyWallet.trailsService
+                .getAllTrilhas(idInstituicaoEnsino, idTurma),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return AlertDialog(
+                  title: const Text("Um erro ocorreu"),
+                  content: Text("Erro ${snapshot.error}"),
+                );
+              }
 
-            if (!snapshot.hasData) {
-              return Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            } else {
-              final trilhas = snapshot.data;
-              if (trilhas == null || trilhas.isEmpty) {
-                return Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Nenhuma trilha disponível',
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
+              if (!snapshot.hasData) {
+                return Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
                     ),
                   ),
                 );
-              }
-              return Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Container(
-                      height: constraints.maxHeight,
-                      color: Theme.of(context).colorScheme.background,
-                      child: ListView.separated(
-                        separatorBuilder: (context, index) => const Divider(
-                          indent: 20,
-                          endIndent: 20,
-                        ),
-                        scrollDirection: Axis.vertical,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) => TrailItem(
-                          trilhas[index],
-                          liberarTrilha,
-                          trilhaJaLiberada,
+              } else {
+                final trilhas = snapshot.data;
+                if (trilhas == null || trilhas.isEmpty) {
+                  return Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Nenhuma trilha disponível',
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
-                    );
-                  },
-                ),
-              );
-            }
-          },
-        ),
-      ],
-    );
+                    ),
+                  );
+                }
+                return Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Container(
+                        height: constraints.maxHeight,
+                        color: Theme.of(context).colorScheme.background,
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => const Divider(
+                            indent: 20,
+                            endIndent: 20,
+                          ),
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) => TrailItem(
+                            trilhas[index],
+                            liberarTrilha,
+                            trilhaJaLiberada,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      );
+    }
+
+    if (_userProvider.eProfessor) {
+      return const Text('Olá professor!');
+    }
+
+    return const Text('Olá administrador!');
   }
 }

@@ -32,6 +32,11 @@ class _LoginViewState extends State<LoginView> {
           .login(email: emailController.text, senha: passwordController.text);
       userProvider.setUser(usuario);
 
+      if (userProvider.eAdministrador) {
+        Navigator.of(context).pushNamed(Routes.ADM);
+        return;
+      }
+
       Navigator.of(context).pushNamed(Routes.HOME);
     } on AuthException {
       showDialog(

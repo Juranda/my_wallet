@@ -25,8 +25,10 @@ class _TurmasViewState extends State<TurmasView> {
   void initState() {
     super.initState();
     _roleProvider = Provider.of<UserProvider>(context, listen: false);
-    _alunoStream = Supabase.instance.client.from('aluno').stream(
-        primaryKey: ['id']).eq('id_turma', _roleProvider.aluno.id_turma);
+    if (_roleProvider.eAluno) {
+      _alunoStream = Supabase.instance.client.from('aluno').stream(
+          primaryKey: ['id']).eq('id_turma', _roleProvider.aluno.id_turma);
+    }
   }
 
   Future<void> removerAlunoDaTurma(int id) async {
@@ -37,6 +39,14 @@ class _TurmasViewState extends State<TurmasView> {
 
   @override
   Widget build(BuildContext context) {
+    if (_roleProvider.eProfessor) {
+      return const Text('Olá professor');
+    }
+
+    if (_roleProvider.eAdministrador) {
+      return const Text('Olá administrador');
+    }
+
     return Column(
       children: [
         Container(
@@ -44,7 +54,12 @@ class _TurmasViewState extends State<TurmasView> {
           color: Theme.of(context).colorScheme.primary,
           child: Center(
             child: Text(
-              'Turma ' + _roleProvider.aluno.nome_turma,
+              'Turma ' +
+                  (_roleProvider.eProfessor
+                      ? _roleProvider.professor.turmaAtual
+                      : _roleProvider.eAluno
+                          ? _roleProvider.aluno.nome_turma
+                          : ''),
               style: TextStyle(fontSize: 40),
             ),
           ),

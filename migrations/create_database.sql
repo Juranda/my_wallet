@@ -73,6 +73,7 @@ CREATE TABLE NoticiaProfessor (
 CREATE TABLE Usuario (
     id SERIAL PRIMARY KEY,
     nome varchar(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
     fk_Usuario_supabase uuid NOT NULL,
     fk_InstituicaoEnsino_id int not null,
     fk_TipoUsuario_id int not null
@@ -135,6 +136,16 @@ CREATE TABLE Categoria (
     id int PRIMARY KEY,
     nome varchar(100)
 );
+
+create TABLE CATEGORIA_USUARIO (
+  id SERIAL,
+  NOME TEXT,
+  fk_usuario_id int,
+  primary key (id)
+);
+
+ALTER TABLE CATEGORIA_USUARIO ADD constraint fk_categoria_usuario_1
+foreign key (fk_usuario_id) references usuario (id)
  
 ALTER TABLE Trilha ADD CONSTRAINT FK_Trilha_2
     FOREIGN KEY (fk_Escolaridades_id)

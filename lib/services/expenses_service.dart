@@ -1,45 +1,15 @@
+import 'package:my_wallet/app/home/organizador_gastos/models/transaction.dart';
+import 'package:my_wallet/models/expenses/categoria.dart';
 import 'package:my_wallet/models/expenses/conta.dart';
-import 'package:my_wallet/models/expenses/transacao.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-class ExpensesService {
-  Future<Conta> getContaAluno(int idInstituicao, int idAluno) async {
-    var contaMap = await Supabase.instance.client
-        .from('aluno')
-        .select(
-            'id, dinheiro, usuario(id, instituicaoensino(id), transacao(id, valor, nome, realizada_em, categoria(nome)))')
-        .eq('id', idAluno)
-        .limit(1)
-        .single();
+abstract class ExpensesService {
+  Stream<Conta> getTransacoesStream({
+    required int idInstituicao,
+    required int idAluno,
+    int limit = 10,
+  });
 
-    List<Transacao> transacoes = [];
-
-    for (Map<String, dynamic> transacaoMap in contaMap['usuario']
-        ['transacao']) {
-      transacoes.add(Transacao(
-        id: transacaoMap['id'],
-        idAluno: idAluno,
-        nome: transacaoMap['nome'],
-        valor: transacaoMap['valor'].toDouble(),
-        realizadaEm: DateTime.parse(transacaoMap['realizada_em']),
-        categoria: transacaoMap['categoria']['nome'],
-      ));
-    }
-
-    Conta conta = Conta(
-      idAluno: idAluno,
-      dinheiro: contaMap['dinheiro'].toDouble(),
-      transacoes: transacoes,
-    );
-
-    return conta;
-  }
-
-  Stream<Conta> streamConta(int idInstituicao, int idAluno) {
-    return Supabase.instance.client.from('transacao').stream(
-      primaryKey: ['id'],
-    ).asyncMap((event) async {
-      return await getContaAluno(idInstituicao, idAluno);
-    });
-  }
+  Future<Conta> getContaAluno(int idInstituicao, int idAluno);
+  Future<void> inserirTransacao(CreateTransaction transacao);
+  Future<List<Categoria>> getCategoriasUsuario(int idAluno);
 }

@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:my_wallet/models/users/role.dart';
 
-abstract class Usuario {
+class Usuario {
+  final int id_usuario;
   final String id_supabase;
   final int id_instituicao_ensino;
   final String nome;
@@ -9,6 +11,7 @@ abstract class Usuario {
   final String email;
 
   const Usuario({
+    required this.id_usuario,
     required this.id_supabase,
     required this.nome,
     required this.id_instituicao_ensino,
