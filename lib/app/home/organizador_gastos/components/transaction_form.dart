@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_wallet/app/home/organizador_gastos/models/transaction.dart';
+import 'package:my_wallet/models/expenses/categoria.dart';
+import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/services/mywallet.dart';
+import 'package:provider/provider.dart';
 
 class TransactionForm extends StatefulWidget {
-  TransactionForm({required this.onSubmit});
+  TransactionForm({
+    required this.categorias,
+  });
 
-  final Future<void> Function(
-      {required String title,
-      required double value,
-      required String data}) onSubmit;
+  final List<Categoria> categorias;
 
   @override
   State<TransactionForm> createState() => _TransactionFormState();
@@ -17,8 +21,10 @@ class _TransactionFormState extends State<TransactionForm> {
   final titleController = TextEditingController();
   final valueController = TextEditingController();
   late DateTime _selectedDate = DateTime.now();
+  late Categoria selectedCategoria;
 
   void _submitForm() {
+    UserProvider userProvider = Provider.of(context, listen: false);
     final title = titleController.text;
     final value = double.tryParse(valueController.text) ?? 0;
 
@@ -27,8 +33,16 @@ class _TransactionFormState extends State<TransactionForm> {
     }
 
     Navigator.pop(context);
-    widget.onSubmit(
-        title: title, value: value, data: _selectedDate.toIso8601String());
+
+    final createTransaction = CreateTransaction(
+      idUsuario: userProvider.usuario.id_usuario,
+      idCategoria: selectedCategoria.id,
+      title: title,
+      value: value,
+      date: DateTime.parse(_selectedDate.toIso8601String()),
+    );
+
+    MyWallet.expensesService.inserirTransacao(createTransaction);
   }
 
   void _showDatePicker() {
@@ -44,6 +58,13 @@ class _TransactionFormState extends State<TransactionForm> {
         _selectedDate = pickedDate;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedCategoria = widget.categorias.first;
   }
 
   @override
@@ -73,7 +94,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Data selecionada: ${DateFormat('dd/M/y').format(_selectedDate)}',
+                      'Data selecionada: ${DateFormat('dd/MM/yyyy').format(_selectedDate)}',
                     ),
                   ),
                   TextButton(
@@ -90,6 +111,23 @@ class _TransactionFormState extends State<TransactionForm> {
                 ],
               ),
             ),
+            if (widget.categorias.isNotEmpty)
+              DropdownButton(
+                isExpanded: true,
+                hint: const Text('Categoria'),
+                items: widget.categorias
+                    .map(
+                      (categoria) => DropdownMenuItem(
+                        child: Text(categoria.nome),
+                        value: categoria,
+                      ),
+                    )
+                    .toList(),
+                onChanged: (e) => setState(() {
+                  selectedCategoria = e as Categoria;
+                }),
+                value: selectedCategoria,
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -108,7 +146,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

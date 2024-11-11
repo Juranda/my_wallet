@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_wallet/models/expenses/transacao.dart';
 
 class TransactionsList extends StatelessWidget {
   final List<Transacao> transacoes;
 
-  const TransactionsList({super.key, required this.transacoes});
+  TransactionsList({super.key, required this.transacoes});
+
+  final DateFormat dateFormat = DateFormat('dd/MM/yyyy - HH:mm:ss');
+  final NumberFormat numberFormat = NumberFormat.currency();
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +32,21 @@ class TransactionsList extends StatelessWidget {
                       transacao.nome,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    subtitle: Text(transacao.realizadaEm.toLocal().toString()),
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      radius: 30,
+                    subtitle: Text(
+                      dateFormat.format(transacao.realizadaEm),
+                    ),
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      height: 40,
+                      width: 60,
                       child: Padding(
                         padding: const EdgeInsets.all(6),
                         child: FittedBox(
                           child: Text(
-                            'R\$${transacao.valor}',
+                            'R\$${transacao.valor.toStringAsFixed(2).replaceAll('.', ',')}',
                             style: TextStyle(
                               color: Colors.black,
                             ),

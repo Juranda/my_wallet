@@ -1,9 +1,9 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
 import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:validadores/ValidarCNPJ.dart';
@@ -26,6 +26,8 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
     ('Ensino Superior', 3),
   ];
 
+  late final UserProvider _userProvider;
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
@@ -36,8 +38,8 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   @override
   void initState() {
     super.initState();
-    UserProvider userProvider = Provider.of(context, listen: false);
-    id_instituicao_ensino = userProvider.usuario.id_instituicao_ensino;
+    _userProvider = Provider.of(context, listen: false);
+    id_instituicao_ensino = _userProvider.usuario.id_instituicao_ensino;
   }
 
   @override
@@ -171,26 +173,16 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                       ElevatedButton(
                         onPressed: () async {
                           try {
-                            final AuthResponse response =
-                                await Supabase.instance.client.auth.signUp(
+                            MyWallet.userService.cadastrarProfessor(
+                              idInstituicaoEnsino:
+                                  _userProvider.usuario.id_instituicao_ensino,
+                              nome: nomeController.text.split(' ')[0],
+                              sobrenome: nomeController.text.split(' ')[1],
                               email: emailController.text,
-                              password: passwordController.text,
+                              senha: passwordController.text,
+                              cnpjcpf: cpfController.text,
                             );
 
-                            final User user = response.user!;
-
-                            await Supabase.instance.client
-                                .from('professor')
-                                .insert({
-                              'instituicaoensino': id_instituicao_ensino,
-                              'cnpjcpf': cpfController.text,
-                              'nome': nomeController.text.substring(
-                                  0, nomeController.text.indexOf(" ")),
-                              'sobrenome': nomeController.text
-                                  .substring(nomeController.text.indexOf(" ")),
-                              'papel': 2,
-                              'id_usuario': user.id
-                            });
                             showDialog(
                                 context: context,
                                 builder: (context) {
@@ -207,14 +199,14 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                                     ],
                                   );
                                 });
-                          } on AuthException catch (e) {
+                          } on PostgrestException catch (e) {
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('Algo deu errado'),
                                   content: Text(
-                                    switch (e.statusCode) {
+                                    switch (e.code) {
                                       '422' => 'Usuario já cadastrado',
                                       '500' => 'Servidor não respondeu',
                                       _ => 'Contate o suporte'
