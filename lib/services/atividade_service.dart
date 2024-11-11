@@ -23,8 +23,13 @@ class AtividadeService {
     List<Atividade> atividades = [];
 
     for (var atv in response) {
-      List<AtividadeOpcao> questoes = await getQuestoesDeAtividade(atv['id']);
-      atv.addAll({'respostas': questoes});
+      var questoes = await Supabase.instance.client
+        .from('atividadeOpcao')
+        .select()
+        .eq('fk_atividade_id', atv['id']);
+      atv.addAll({'atividadeOpcao': questoes});
+
+      atv.addAll({'trilha':(await Supabase.instance.client.from('trilha').select().eq('id', id_trilha).single()) }) ;
       atividades.add(Atividade.fromMap(atv));
     }
 

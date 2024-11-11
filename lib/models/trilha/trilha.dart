@@ -1,4 +1,5 @@
 import 'package:my_wallet/models/escolaridade.dart';
+import 'package:my_wallet/models/trilha/atividade.dart';
 
 class Trilha {
   final int id;
@@ -14,6 +15,7 @@ class Trilha {
   });
 
   factory Trilha.fromMap(Map<String, dynamic> map) {
+
     return Trilha(
       id: map['id'],
       nome: map['nome'],

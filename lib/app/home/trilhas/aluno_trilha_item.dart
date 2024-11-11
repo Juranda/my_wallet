@@ -19,7 +19,7 @@ class _AlunoTrilhaItemState extends State<AlunoTrilhaItem> {
   late final TurmaProvider _turmaProvider;
 
   void abrirTrilha(context) async {
-    await Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE,arguments: widget.trilhaAlunoRealiza);
+    await Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE_ALUNO,arguments: widget.trilhaAlunoRealiza);
     widget.atualizarTrilhasView();
   }
 

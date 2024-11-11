@@ -13,12 +13,11 @@ class Turma {
       required this.escolaridadeNome,
       required this.escolaridadeId});
 
-
-  factory Turma.fromMap(Map<String, dynamic> map){
+  factory Turma.fromMap(Map<String, dynamic> map) {
     return Turma(
-      id: map['id'], 
-      idProfessor: map['fk_professor_id'], 
-      escolaridadeNome: map['escolaridade_nome'],
-      escolaridadeId: map['fk_escolaridades_id']);
+        id: map['id'],
+        idProfessor: map['fk_professor_id'],
+        escolaridadeNome: Escolaridade.values[map['fk_escolaridades_id']].name,
+        escolaridadeId: map['fk_escolaridades_id']);
   }
 }

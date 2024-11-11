@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/trilhas/atividade_view.dart';
+import 'package:my_wallet/app/home/trilhas/atividade_aluno_view.dart';
 import 'package:my_wallet/app/home/trilhas/resultados_view.dart';
 import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
 import 'package:my_wallet/services/mywallet.dart';
 
-class AtividadesView extends StatefulWidget {
-  const AtividadesView({super.key});
+class AtividadesAlunoView extends StatefulWidget {
+  const AtividadesAlunoView({super.key});
 
   @override
-  State<AtividadesView> createState() => _AtividadesViewState();
+  State<AtividadesAlunoView> createState() => _AtividadesAlunoViewState();
 }
 
-class _AtividadesViewState extends State<AtividadesView> {
+class _AtividadesAlunoViewState extends State<AtividadesAlunoView> {
   AlunoTrilhaRealiza? alunoTrilhaRealiza;
   final List<Atividade> atividades = [];
   final List<Widget> atividadesViews = [];
@@ -75,7 +75,7 @@ class _AtividadesViewState extends State<AtividadesView> {
 
     for (int i = 0; i < atividades.length; i++) {
       var key = UniqueKey();
-      atividadesViews.add(AtividadeView(
+      atividadesViews.add(AtividadeAlunoView(
           atividade: atividades[i],
           alunoRealiza: alunoTrilhaRealiza.atividades[i],
           atualizarViewPrincipal: () => setState(() {}),
@@ -98,7 +98,7 @@ class _AtividadesViewState extends State<AtividadesView> {
       inicializarViews(alunoTrilhaRealiza!);
     }
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: Text(alunoTrilhaRealiza!.trilha.nome)),
         body: Column(
           children: [
             Expanded(child: atividadesViews[atividadeExibida]),

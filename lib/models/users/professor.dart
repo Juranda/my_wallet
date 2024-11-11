@@ -21,7 +21,7 @@ class Professor extends Usuario {
   factory Professor.fromMap(Map<String, dynamic> map) {
     return Professor(
       criadoEm: DateTime.parse(map['created_at']),
-      idSupabase: map['id_usuario_supabase'],
+      idSupabase: map['id_supabase'],
       idInstituicaoEnsino: map['id_instituicao_ensino'],
       idUsuario: map['id_usuario'],
       id: map['id'],

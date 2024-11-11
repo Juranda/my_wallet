@@ -61,6 +61,11 @@ class UserService {
     throw Exception('Tipo inválido');
   }
 
+  Future<Aluno> getAluno(int alunoId)async{
+    var response = await Supabase.instance.client.from('view_usuario').select('aluno(fk_usuario_supabase)').eq('id', alunoId).single();
+    return Aluno.fromMap(response);
+  }
+
   void cadastrarAluno({
     required int idInstituicaoEnsino,
     required String nome,

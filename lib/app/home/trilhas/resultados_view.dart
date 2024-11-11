@@ -23,11 +23,13 @@ class _ResultadosViewState extends State<ResultadosView> {
     }
     return "${acertos}/${widget.alunoTrilhaRealiza.atividades.length}";
   }
+  bool exibindoDetalhes = false;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> resultados = [];
     List<Widget> detalhes = [];
+
 
     for (var atividade in widget.alunoTrilhaRealiza.atividades) {
       detalhes.add(ResultadoDetalhes(alunoAtividadeRealiza: atividade));
@@ -63,10 +65,22 @@ class _ResultadosViewState extends State<ResultadosView> {
                 height: 50,
               ),
               Text("Total: " + calcularAcertos()),
-              ...detalhes,
-              ...detalhes,
-              ...detalhes,
-              ...detalhes,
+              ExpansionPanelList(
+                expandedHeaderPadding: EdgeInsets.zero,
+                
+                children: [
+                  ExpansionPanel(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    headerBuilder: (context, isOpen) => Center(child: Text('Mostrar Detalhes'),),
+                    body: Column(children: detalhes,),
+                    isExpanded: exibindoDetalhes
+                  ),
+                ],
+                expansionCallback: (i, isOpen)=>setState(() {
+                  exibindoDetalhes = !exibindoDetalhes;
+                  print(exibindoDetalhes);
+                })
+              ),
             ],
           ),
         ),
