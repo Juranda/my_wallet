@@ -16,7 +16,7 @@ void main() async {
   initializeDateFormatting();
 
   await dotenv.load(
-      fileName: 'assets/env/${kReleaseMode ? '.prod' : '.dev'}.env');
+      fileName: 'assets/env/${!kReleaseMode ? '.prod' : '.dev'}.env');
   String annonKey = dotenv.get("ANNON_KEY");
   String url = dotenv.get("SUPABASE_URL");
 

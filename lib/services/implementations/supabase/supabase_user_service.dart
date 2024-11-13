@@ -1,7 +1,7 @@
 import 'package:my_wallet/models/users/administrador.dart';
 import 'package:my_wallet/models/users/aluno.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/professor.dart';
-import 'package:my_wallet/models/users/role.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 import 'package:my_wallet/services/exceptions/userexceptions.dart';
 import 'package:my_wallet/services/implementations/supabase/postgresnt_exeption_to_message.dart';
@@ -70,7 +70,7 @@ class SupabaseUserService implements UserService {
     required String nome,
     required String email,
     required String senha,
-    required Role tipo,
+    required Funcao tipo,
   }) async {
     AuthResponse response;
 
@@ -106,13 +106,13 @@ class SupabaseUserService implements UserService {
           .single();
 
       Usuario usuario = Usuario(
-        id_supabase: user.id,
-        id_instituicao_ensino: idInstituicaoEnsino,
-        id_usuario: result['id'],
+        idSupabase: user.id,
+        idInstituicaoEnsino: idInstituicaoEnsino,
+        idUsuario: result['id'],
         nome: nome,
         email: user.email!,
         tipoUsuario: tipo,
-        created_at: DateTime.parse(user.createdAt),
+        criadoEm: DateTime.parse(user.createdAt),
       );
 
       return usuario;
@@ -139,14 +139,14 @@ class SupabaseUserService implements UserService {
         nome: nome,
         email: email,
         senha: senha,
-        tipo: Role.Aluno,
+        tipo: Funcao.Aluno,
       );
 
       // inserir na tabela de alunos com o id
       await Supabase.instance.client.from('aluno').insert({
         'cpf': cpf.replaceAll('.', '').replaceAll('-', '').replaceAll('/', ''),
         'dinheiro': dinheiro,
-        'fk_usuario_id': usuario.id_usuario,
+        'fk_usuario_id': usuario.idUsuario,
         'fk_turma_id': idTurma,
         'fk_escolaridades_id': escolaridade,
       });
@@ -180,12 +180,12 @@ class SupabaseUserService implements UserService {
       nome: nome,
       email: email,
       senha: senha,
-      tipo: Role.Professor,
+      tipo: Funcao.Professor,
     );
 
     await Supabase.instance.client.from('professor').insert({
       "cnpjcpf": cnpjcpf,
-      "fk_usuario_id": usuario.id_usuario,
+      "fk_usuario_id": usuario.idUsuario,
     });
   }
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/app/home/trilhas/aluno_trilha_item.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'trail_item.dart';
 
 class TrailsView extends StatefulWidget {
   const TrailsView({super.key});
@@ -29,7 +28,7 @@ class _TrailsViewState extends State<TrailsView> {
         .from('trilha_turma')
         .select()
         .eq('id_trilha', trilhaID)
-        .eq('id_turma', _userProvider.aluno.id_turma);
+        .eq('id_turma', _userProvider.aluno.idTurma);
 
     return response.isNotEmpty;
   }
@@ -38,13 +37,13 @@ class _TrailsViewState extends State<TrailsView> {
     if (await trilhaJaLiberada(trilhaID)) return;
 
     await Supabase.instance.client.from('trilha_turma').insert(
-        {'id_turma': _userProvider.aluno.id_turma, 'id_trilha': trilhaID});
+        {'id_turma': _userProvider.aluno.idTurma, 'id_trilha': trilhaID});
 
     //pra cada aluno da turma, criar a relação atividade-aluno de todas as atividades dessa trilha
     final alunos = await Supabase.instance.client
         .from('aluno')
         .select()
-        .eq('id_turma', _userProvider.aluno.id_turma);
+        .eq('id_turma', _userProvider.aluno.idTurma);
     final atividades = await Supabase.instance.client
         .from('atividade')
         .select()
@@ -65,10 +64,10 @@ class _TrailsViewState extends State<TrailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final idInstituicaoEnsino = _userProvider.usuario.id_instituicao_ensino;
+    final idInstituicaoEnsino = _userProvider.usuario.idInstituicaoEnsino;
 
     if (_userProvider.eAluno) {
-      final idTurma = _userProvider.aluno.id_turma;
+      final idTurma = _userProvider.aluno.idTurma;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.max,
@@ -78,7 +77,7 @@ class _TrailsViewState extends State<TrailsView> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                _userProvider.tipoUsuario == Role.Aluno
+                _userProvider.tipoUsuario == Funcao.Aluno
                     ? "Trilhas Liberadas"
                     : "Liberar Trilhas",
                 textAlign: TextAlign.center,
@@ -133,18 +132,20 @@ class _TrailsViewState extends State<TrailsView> {
                         height: constraints.maxHeight,
                         color: Theme.of(context).colorScheme.background,
                         child: ListView.separated(
-                          separatorBuilder: (context, index) => const Divider(
-                            indent: 20,
-                            endIndent: 20,
-                          ),
-                          scrollDirection: Axis.vertical,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) => TrailItem(
-                            trilhas[index],
-                            liberarTrilha,
-                            trilhaJaLiberada,
-                          ),
-                        ),
+                            separatorBuilder: (context, index) => const Divider(
+                                  indent: 20,
+                                  endIndent: 20,
+                                ),
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return Text('Hey');
+
+                              // return AlunoTrilhaItem(
+                              //   trilhas[index],
+                              //   atualizarTrilhasView: liberarTrilha,
+                              // );
+                            }),
                       );
                     },
                   ),

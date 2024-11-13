@@ -28,8 +28,9 @@ class _ArViewState extends State<ArView> {
   Future<List<Map<String, dynamic>>> getDinheiro() async {
     var response = await Supabase.instance.client
         .from('aluno')
-        .select('dinheiro')
-        .eq('idUsuario', Supabase.instance.client.auth.currentUser!.id)
+        .select('dinheiro, usuario(fk_usuario_supabase)')
+        .eq('usuario.fk_usuario_supabase',
+            Supabase.instance.client.auth.currentUser!.id)
         .limit(1);
     return response;
   }
@@ -102,7 +103,8 @@ class _ArViewState extends State<ArView> {
             }
             return LayoutBuilder(
               builder: (context, constraints) {
-                aluno_dinheiro = snapshot.data![0]['dinheiro'];
+                aluno_dinheiro =
+                    (snapshot.data![0]['dinheiro'] as int).toDouble();
                 _controller.runJavaScript(
                     'receiveMessageFromFlutter(${aluno_dinheiro});');
                 return WebViewWidget(controller: _controller);

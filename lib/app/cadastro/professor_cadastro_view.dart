@@ -39,7 +39,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   void initState() {
     super.initState();
     _userProvider = Provider.of(context, listen: false);
-    idInstituicaoEnsino = _userProvider.usuario.id_instituicao_ensino;
+    idInstituicaoEnsino = _userProvider.usuario.idInstituicaoEnsino;
   }
 
   @override
@@ -175,7 +175,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
                           try {
                             MyWallet.userService.cadastrarProfessor(
                               idInstituicaoEnsino:
-                                  _userProvider.usuario.id_instituicao_ensino,
+                                  _userProvider.usuario.idInstituicaoEnsino,
                               nome: nomeController.text.split(' ')[0],
                               sobrenome: nomeController.text.split(' ')[1],
                               email: emailController.text,

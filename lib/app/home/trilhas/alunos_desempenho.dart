@@ -13,9 +13,7 @@ class AlunosDesempenho extends StatefulWidget {
   late TurmaProvider _turmaProvider;
   final List<Aluno> alunos = [];
 
-  AlunosDesempenho({
-    super.key});
-
+  AlunosDesempenho({super.key});
 
   @override
   State<AlunosDesempenho> createState() => _AlunosDesempenhoState();
@@ -23,24 +21,22 @@ class AlunosDesempenho extends StatefulWidget {
 
 class _AlunosDesempenhoState extends State<AlunosDesempenho> {
   @override
-  void initState()async {
+  void initState() async {
     widget._turmaProvider = Provider.of(context)<TurmaProvider>();
-
-    widget.alunoTrilhaRealiza = await MyWallet.trailsService.getAllAlunoTrilhaRealiza(widget.trilha.id, widget._turmaProvider.turma.id);
-
+    widget.alunoTrilhaRealiza = await MyWallet.trailsService
+        .getAllTrilhasDoAluno(widget.trilha.id, widget._turmaProvider.turma.id);
 
     for (var aluno in widget.alunoTrilhaRealiza) {
-      widget.alunos.add(await MyWallet.userService.getAluno(aluno.idAluno));
+      widget.alunos.add(await MyWallet.userService.getAluno(aluno.idAluno, 1));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (context, index){
+    return ListView.builder(itemBuilder: (context, index) {
       return ListTile(
         title: Text(widget.alunos[index].nome),
       );
     });
-
   }
 }

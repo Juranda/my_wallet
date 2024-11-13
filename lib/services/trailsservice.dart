@@ -8,4 +8,11 @@ abstract class TrailsService {
     int idAluno, {
     bool cached = false,
   });
+
+  Future<AlunoTrilhaRealiza> finalizarTrilha(
+      AlunoTrilhaRealiza alunoTrilha_realiza);
+
+  Future<void> liberarTrilha(int trilhaID, int turmaID);
+  Future<bool> trilhaJaLiberada(int trilhaID, int turmaID);
+  Future<List<Trilha>> getAllTrilhasEscolaridade(int idEscolaridade);
 }

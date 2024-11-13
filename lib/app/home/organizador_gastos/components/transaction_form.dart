@@ -35,7 +35,7 @@ class _TransactionFormState extends State<TransactionForm> {
     Navigator.pop(context);
 
     final createTransaction = CreateTransaction(
-      idUsuario: userProvider.usuario.id_usuario,
+      idUsuario: userProvider.usuario.idUsuario,
       idCategoria: selectedCategoria.id,
       title: title,
       value: value,

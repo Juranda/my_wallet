@@ -1,6 +1,6 @@
 import 'package:my_wallet/models/users/funcao.dart';
 
-abstract class Usuario {
+class Usuario {
   final int idUsuario;
   final String idSupabase;
   final int idInstituicaoEnsino;

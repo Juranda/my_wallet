@@ -19,15 +19,16 @@ class Atividade {
 
   factory Atividade.fromMap(Map<String, dynamic> map) {
     List<AtividadeOpcao> respostas = [];
-    for (var opcao in map['atividadeOpcao']){
+    for (var opcao in map['atividadeOpcao']) {
       respostas.add(AtividadeOpcao.fromMap(opcao));
     }
 
     return Atividade(
-        trilha: Trilha.fromMap(map['trilha']),
-        id: map['id'],
-        sequencia: map['sequencia'],
-        enunciado: map['enunciado'],
-        respostas: respostas);
+      trilha: Trilha.fromMap(map['trilha']),
+      id: map['id'],
+      sequencia: map['sequencia'],
+      enunciado: map['enunciado'],
+      respostas: respostas,
+    );
   }
 }

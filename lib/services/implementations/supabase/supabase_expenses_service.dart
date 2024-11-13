@@ -70,7 +70,7 @@ class SupabaseExpensesService implements ExpensesService {
   Future<List<Categoria>> getCategoriasUsuario(int idAluno) async {
     List<Categoria> categorias = [];
     var result = await Supabase.instance.client
-        .from('categoria_usuario')
+        .from('usuarioCategoria')
         .select('*')
         .eq("fk_usuario_id", idAluno);
     for (var map in result) {

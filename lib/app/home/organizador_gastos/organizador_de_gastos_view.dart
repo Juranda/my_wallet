@@ -175,7 +175,7 @@ class _AlunoGastosViewState extends State<AlunoGastosView> {
                     child: TextButton(
                       onPressed: () => _openTransactionFormModal(
                         context,
-                        _userProvider.usuario.id_usuario,
+                        _userProvider.usuario.idUsuario,
                       ),
                       child: Text(
                         'Adicionar transação',

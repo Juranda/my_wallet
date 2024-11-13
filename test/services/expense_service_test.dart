@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   setUp(() {
-    MyWallet.instance.initialize();
+    //MyWallet.instance.initialize();
   });
 
   test('expense_service_should_create_transaction', () async {

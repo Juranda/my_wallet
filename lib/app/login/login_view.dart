@@ -25,7 +25,6 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-
   late final UserProvider _userProvider;
   late final TurmaProvider _turmaProvider;
 
@@ -36,33 +35,37 @@ class _LoginViewState extends State<LoginView> {
     _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
   }
 
-
   Future<void> _tryLogin() async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      
       Usuario usuario = await MyWallet.userService
           .login(email: emailController.text, senha: passwordController.text);
       _userProvider.setUser(usuario);
-      
+
       //se aluno, pega turma_id dele
       //se professor, pega a turma_id da primeira turma que achar dele
-      if (usuario.tipoUsuario == Funcao.Aluno){
-        _turmaProvider.setTurma(await MyWallet.turmaService.getTurma(_userProvider.aluno.idTurma));
-      }else if(usuario.tipoUsuario == Funcao.Professor){
-        _turmaProvider.setTurma((await MyWallet.turmaService.getAllProfessorTurmas(usuario.idInstituicaoEnsino, _userProvider.professor.id)).first);
+      if (usuario.tipoUsuario == Funcao.Aluno) {
+        _turmaProvider.setTurma(
+            await MyWallet.turmaService.getTurma(_userProvider.aluno.idTurma));
+      } else if (usuario.tipoUsuario == Funcao.Professor) {
+        _turmaProvider.setTurma((await MyWallet.turmaService
+                .getAllProfessorTurmas(
+                    usuario.idInstituicaoEnsino, _userProvider.professor.id))
+            .first);
       }
 
-      if (userProvider.eAdministrador) {
+      if (_userProvider.eAdministrador) {
         Navigator.of(context).pushNamed(Routes.ADM);
         return;
       }
 
       Navigator.of(context).pushNamed(Routes.HOME);
-    } on AuthException {
+    } on AuthException catch (e) {
+      e.message;
+
       showDialog(
         context: context,
         barrierDismissible: true,
