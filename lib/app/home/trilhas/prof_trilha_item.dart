@@ -1,35 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/models/users/role.dart';
-import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/models/trilha/trilha.dart';
+import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/routes.dart';
+import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/trilha/trail.dart';
-
-class TrailItem extends StatefulWidget {
-  final Trilha trail;
-  final Future<void> Function(int) liberarTrilha;
-  final Future<bool> Function(int) trilhaJaLiberada;
-  const TrailItem(this.trail, this.liberarTrilha, this.trilhaJaLiberada,
-      {super.key});
+class ProfTrilhaItem extends StatefulWidget {
+  final Trilha trilha;
+  const ProfTrilhaItem(this.trilha, {super.key});
 
   @override
-  State<TrailItem> createState() => _TrailItemState();
+  State<ProfTrilhaItem> createState() => _ProfTrilhaItemState();
 }
 
-class _TrailItemState extends State<TrailItem> {
-  late UserProvider _user_provider;
+class _ProfTrilhaItemState extends State<ProfTrilhaItem> {
+  late final TurmaProvider _turmaProvider;
 
   void abrirTrilha(context) async {
-    Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE,
-        arguments: widget.trail);
+    Map<String, dynamic> arguments = {};
+    arguments['trilha'] = widget.trilha;
+    arguments['atividades'] = await MyWallet.atividadeService.getAtividadesDeTrilha(widget.trilha.id);
+
+
+
+    Navigator.pushNamed(context, Routes.TRAILS_TRAIL_DETALHE_PROF,
+        arguments: arguments);
   }
 
   @override
   void initState() {
     super.initState();
-    _user_provider = Provider.of<UserProvider>(context, listen: false);
+    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
   }
+
+  
+  void showAlertDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Liberar Trilha?"),
+      content:
+          Text("Ao confirmar, essa Trilha será liberada para todos os alunos da turma!"),
+      actions: [
+        ElevatedButton(
+          child: Text("Cancelar"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        ElevatedButton(
+          child: Text("Confirmar"),
+          onPressed: () async {
+            Navigator.pop(context);
+            await MyWallet.trailsService.liberarTrilha(widget.trilha.id, _turmaProvider.turma.id);
+            setState(() {});
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                content: Text('Trilha liberada!'),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Ok'),
+                  )
+                ],
+              ),
+            );
+          },
+        )
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +95,7 @@ class _TrailItemState extends State<TrailItem> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: _user_provider.eAluno ? () => abrirTrilha(context) : null,
+          onTap: ()=>abrirTrilha(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -62,7 +115,7 @@ class _TrailItemState extends State<TrailItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.trail.nome,
+                        widget.trilha.nome,
                         style: Theme.of(context).textTheme.headlineMedium,
                         textAlign: TextAlign.left,
                       ),
@@ -70,10 +123,10 @@ class _TrailItemState extends State<TrailItem> {
                   ),
                 ),
               ),
-              if (_user_provider.tipoUsuario == Role.Professor)
                 IconButton(
                   onPressed: () async {
-                    if (await widget.trilhaJaLiberada(widget.trail.id)) {
+                    if (await MyWallet.trailsService.trilhaJaLiberada(
+                        widget.trilha.id, _turmaProvider.turma.id)) {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -87,23 +140,12 @@ class _TrailItemState extends State<TrailItem> {
                         ),
                       );
                     } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          content: Text('Trilha liberada!'),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Ok'),
-                            )
-                          ],
-                        ),
-                      );
-                      widget.liberarTrilha(widget.trail.id);
+                      showAlertDialog(context);
                     }
                   },
                   icon: FutureBuilder<bool>(
-                    future: widget.trilhaJaLiberada(widget.trail.id),
+                    future: MyWallet.trailsService.trilhaJaLiberada(
+                        widget.trilha.id, _turmaProvider.turma.id),
                     builder: (context, snapshot) {
                       if (snapshot.data == true) {
                         return Icon(Icons.check);

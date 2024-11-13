@@ -5,7 +5,7 @@ import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../models/users/role.dart';
+import '../../../models/users/funcao.dart';
 
 class TurmasView extends StatefulWidget {
   TurmasView({super.key});
@@ -27,14 +27,14 @@ class _TurmasViewState extends State<TurmasView> {
     _roleProvider = Provider.of<UserProvider>(context, listen: false);
     if (_roleProvider.eAluno) {
       _alunoStream = Supabase.instance.client.from('aluno').stream(
-          primaryKey: ['id']).eq('id_turma', _roleProvider.aluno.id_turma);
+          primaryKey: ['id']).eq('id_turma', _roleProvider.aluno.idTurma);
     }
   }
 
   Future<void> removerAlunoDaTurma(int id) async {
     await Supabase.instance.client
         .from('aluno')
-        .update({'id_turma': null}).eq('id', id);
+        .update({'fk_turma_id': null}).eq('id', id);
   }
 
   @override
@@ -58,7 +58,7 @@ class _TurmasViewState extends State<TurmasView> {
                   (_roleProvider.eProfessor
                       ? _roleProvider.professor.turmaAtual
                       : _roleProvider.eAluno
-                          ? _roleProvider.aluno.nome_turma
+                          ? _roleProvider.aluno.nomeTurma
                           : ''),
               style: TextStyle(fontSize: 40),
             ),
@@ -87,7 +87,7 @@ class _TurmasViewState extends State<TurmasView> {
                         style: TextStyle(fontSize: 30),
                         textAlign: TextAlign.center);
                   }),
-              if (_roleProvider.tipoUsuario == Role.Professor)
+              if (_roleProvider.tipoUsuario == Funcao.Professor)
                 IconButton(
                   onPressed: () {
                     showDialog(
@@ -134,11 +134,11 @@ class _TurmasViewState extends State<TurmasView> {
                   itemBuilder: (context, index) {
                     final aluno = alunosData[index];
                     return ListTile(
-                      key: Key(aluno['id_usuario']),
+                      key: Key(aluno['idUsuario']),
                       title: Text(
                         aluno['nome'],
                       ),
-                      trailing: _roleProvider.tipoUsuario == Role.Professor
+                      trailing: _roleProvider.tipoUsuario == Funcao.Professor
                           ? IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {

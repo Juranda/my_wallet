@@ -9,7 +9,10 @@ import 'package:my_wallet/app/cadastro/professor_cadastro_view.dart';
 import 'package:my_wallet/app/cadastro/turma_cadastro_view.dart';
 import 'package:my_wallet/app/home/homepage_view.dart';
 import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
-import 'package:my_wallet/app/home/trilhas/trail_view.dart';
+import 'package:my_wallet/app/home/trilhas/alunos_desempenho.dart';
+import 'package:my_wallet/app/home/trilhas/atividades_prof_view.dart';
+import 'package:my_wallet/app/home/trilhas/atividades_aluno_view.dart';
+import 'package:my_wallet/app/home/trilhas/old_trail_view.dart';
 import 'package:my_wallet/app/login/login_view.dart';
 
 class Routes {
@@ -25,7 +28,9 @@ class Routes {
   static const String ADM_CADASTRO_ALUNO = '/adm/cadastro-aluno';
   static const String ADM_CADASTRO_PROFESSOR = '/adm/cadastro-professor';
   static const String ADM_CADASTRO_TURMA = '/adm/cadastro-turma';
-  static const String TRAILS_TRAIL_DETALHE = '/trails/trail';
+  static const String TRAILS_TRAIL_DETALHE_ALUNO = '/trails/trailAluno';
+  static const String TRAILS_TRAIL_DETALHE_PROF = '/trails/trailProf';
+  static const String ALUNOS_DESEMPENHO = '/trails/alunosDesempenho';
 
   static final Map<String, WidgetBuilder> routes = {
     AR: (context) => ArView(),
@@ -39,6 +44,8 @@ class Routes {
     ADM_CADASTRO_ALUNO: (context) => AlunoCadastroView(),
     ADM_CADASTRO_PROFESSOR: (context) => ProfessorCadastroView(),
     ADM_CADASTRO_TURMA: (context) => TurmaCadastroView(),
-    TRAILS_TRAIL_DETALHE: (context) => TrailView()
+    TRAILS_TRAIL_DETALHE_ALUNO: (context) => AtividadesAlunoView(),
+    TRAILS_TRAIL_DETALHE_PROF: (context) => AtividadesProfView(),
+    ALUNOS_DESEMPENHO: (context) => AlunosDesempenho(),
   };
 }

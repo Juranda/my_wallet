@@ -23,7 +23,7 @@ SELECT au.created_at,
        au.email,
        a.cpf,
        t.id as "id_turma",
-       t.nome as "nome_turma",
+       t.nome as "nomeTurma",
        e.id as "id_escolaridade",
        e.nome as "escolaridade"
 FROM aluno a

@@ -17,7 +17,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
   final _formKey = GlobalKey<FormState>();
   Map<String, dynamic>? professorSelecionado;
   int escolaridade = 1;
-  int id_instituicao_ensino = 0;
+  int idInstituicaoEnsino = 0;
   late Future<List<Map<String, dynamic>>> fetchProfessores;
 
   List<(String nome, int id)> escolaridades = [
@@ -40,8 +40,8 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
       await Supabase.instance.client.from('turma').insert({
         'nome': nomeController.text,
         'nivel_escolaridade': escolaridade,
-        'id_professor': professorSelecionado!['id'],
-        'id_instituicao_ensino': id_instituicao_ensino
+        'idProfessor': professorSelecionado!['id'],
+        'id_instituicao_ensino': idInstituicaoEnsino
       });
       showDialog(
         context: context,
@@ -92,7 +92,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
       context,
       listen: false,
     );
-    id_instituicao_ensino = userProvider.usuario.id_instituicao_ensino;
+    idInstituicaoEnsino = userProvider.usuario.idInstituicaoEnsino;
     fetchProfessores = getProfessores();
   }
 
@@ -221,7 +221,7 @@ class _TurmaCadastroViewState extends State<TurmaCadastroView> {
                           final response2 = await Supabase.instance.client
                               .from('turma')
                               .select()
-                              .eq('id_professor', professorSelecionado!['id']);
+                              .eq('idProfessor', professorSelecionado!['id']);
                           if (response2.isNotEmpty) {
                             showDialog(
                               context: context,

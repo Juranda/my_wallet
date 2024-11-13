@@ -1,14 +1,14 @@
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 
 class Administrador extends Usuario {
   final int id;
 
   const Administrador({
-    required super.created_at,
-    required super.id_supabase,
-    required super.id_instituicao_ensino,
-    required super.id_usuario,
+    required super.criadoEm,
+    required super.idSupabase,
+    required super.idInstituicaoEnsino,
+    required super.idUsuario,
     required this.id,
     required super.nome,
     required super.email,
@@ -17,13 +17,13 @@ class Administrador extends Usuario {
 
   factory Administrador.fromMap(Map<String, dynamic> map) {
     return Administrador(
-      created_at: DateTime.parse(map['created_at']),
-      id_supabase: map['id_supabase'],
-      id_instituicao_ensino: map['id_instituicao_ensino'],
-      id_usuario: map['id_usuario'],
+      criadoEm: DateTime.parse(map['created_at']),
+      idSupabase: map['id_supabase'],
+      idInstituicaoEnsino: map['id_instituicao_ensino'],
+      idUsuario: map['id_usuario'],
       id: map['id'],
       nome: map['nome'],
-      tipoUsuario: Role.Administrador,
+      tipoUsuario: Funcao.Administrador,
       email: map['email'],
     );
   }

@@ -1,5 +1,5 @@
 import 'package:my_wallet/models/users/aluno.dart';
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 
 abstract class UserService {
@@ -14,7 +14,7 @@ abstract class UserService {
     required String nome,
     required String email,
     required String senha,
-    required Role tipo,
+    required Funcao tipo,
   });
 
   Future<void> cadastrarAluno({

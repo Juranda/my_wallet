@@ -123,7 +123,7 @@ class _AlunoGastosViewState extends State<AlunoGastosView> {
     return LayoutBuilder(builder: (context, constraints) {
       return StreamBuilder<Conta>(
         stream: MyWallet.expensesService.getTransacoesStream(
-          idInstituicao: _userProvider.usuario.id_instituicao_ensino,
+          idInstituicao: _userProvider.usuario.idInstituicaoEnsino,
           idAluno: _userProvider.aluno.id,
         ),
         builder: (context, snapshot) {

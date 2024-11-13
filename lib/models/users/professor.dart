@@ -1,4 +1,4 @@
-import 'package:my_wallet/models/users/role.dart';
+import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 
 class Professor extends Usuario {
@@ -7,10 +7,10 @@ class Professor extends Usuario {
   String turmaAtual = "";
 
   Professor({
-    required super.id_usuario,
-    required super.created_at,
-    required super.id_supabase,
-    required super.id_instituicao_ensino,
+    required super.criadoEm,
+    required super.idSupabase,
+    required super.idInstituicaoEnsino,
+    required super.idUsuario,
     required this.id,
     required super.nome,
     required super.email,
@@ -20,14 +20,14 @@ class Professor extends Usuario {
 
   factory Professor.fromMap(Map<String, dynamic> map) {
     return Professor(
-      created_at: DateTime.parse(map['created_at']),
-      id_supabase: map['id_supabase'],
-      id_instituicao_ensino: map['id_instituicao_ensino'],
-      id_usuario: map['id_usuario'],
+      criadoEm: DateTime.parse(map['created_at']),
+      idSupabase: map['id_supabase'],
+      idInstituicaoEnsino: map['id_instituicao_ensino'],
+      idUsuario: map['id_usuario'],
       id: map['id'],
       nome: map['nome'],
       email: map['email'],
-      tipoUsuario: Role.Professor,
+      tipoUsuario: Funcao.Professor,
       cpfcnpj: map['cnpjcpf'],
     );
   }

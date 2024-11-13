@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/users/role.dart';
+import '../../../models/users/funcao.dart';
 
 class AlunoListTile extends StatelessWidget {
   final String nome;
@@ -27,7 +27,7 @@ class AlunoListTile extends StatelessWidget {
           Text(nome),
         ],
       ),
-      trailing: _user_provider.tipoUsuario == Role.Professor
+      trailing: _user_provider.tipoUsuario == Funcao.Professor
           ? IconButton(
               icon: Icon(Icons.delete),
               onPressed: () => removerAluno(tileID),

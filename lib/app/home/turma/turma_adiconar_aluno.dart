@@ -55,7 +55,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     for (var alunoTile in alunos) {
       await Supabase.instance.client.from('aluno').update(
         {
-          'id_turma': _user_provider.aluno.id_turma,
+          'idTurma': _user_provider.aluno.idTurma,
         },
       ).eq('id', alunoTile.tileID);
     }

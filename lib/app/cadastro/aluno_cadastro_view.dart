@@ -21,7 +21,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   final _formKey = GlobalKey<FormState>();
   int escolaridade = 1;
   int turmaSelecionada = 0;
-  int id_instituicao_ensino = 0;
+  int idInstituicaoEnsino = 0;
   List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
     ('Ensino Fundamental', 1),
@@ -41,7 +41,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
     final turmasNovas = await Supabase.instance.client
         .from('turma')
         .select('id, nome')
-        .eq('fk_instituicaoensino_id', id_instituicao_ensino)
+        .eq('fk_instituicaoensino_id', idInstituicaoEnsino)
         .eq('fk_escolaridades_id', nivel);
 
     setState(() {
@@ -63,7 +63,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
   void initState() {
     super.initState();
     UserProvider userProvider = Provider.of(context, listen: false);
-    id_instituicao_ensino = userProvider.usuario.id_instituicao_ensino;
+    idInstituicaoEnsino = userProvider.usuario.idInstituicaoEnsino;
   }
 
   @override
@@ -238,7 +238,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                         onPressed: () async {
                           try {
                             await MyWallet.userService.cadastrarAluno(
-                              idInstituicaoEnsino: id_instituicao_ensino,
+                              idInstituicaoEnsino: idInstituicaoEnsino,
                               nome: nomeController.text.substring(
                                   0, nomeController.text.indexOf(" ")),
                               sobrenome: nomeController.text

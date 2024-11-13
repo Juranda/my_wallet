@@ -16,7 +16,7 @@ CREATE TABLE Atividade (
     PRIMARY KEY (id, sequencia)
 );
 
-CREATE TABLE AtividadeQuestao (
+CREATE TABLE AtividadeOpcao (
     fk_Atividade_id int,
     sequencia int not null,
     enunciado text not null,
@@ -24,7 +24,7 @@ CREATE TABLE AtividadeQuestao (
     PRIMARY KEY (fk_Atividade_id, sequencia)
 );
 
-ALTER TABLE AtividadeQuestao ADD CONSTRAINT Fk_AtividadeQuestao_1 
+ALTER TABLE AtividadeOpcao ADD CONSTRAINT Fk_AtividadeQuestao_1 
  FOREIGN KEY (fk_Atividade_id) REFERENCES Atividade (id);
 
 CREATE TABLE Jogos (
@@ -59,6 +59,7 @@ CREATE TABLE AtividadeCompleta_Aluno (
     feito bool NOT NULL,
     acerto float not null,
     opcao_selecionada int DEFAULT 0 not null ,
+    liberada bool DEFAULT false not null,
     fk_AlunoTrilha_Realiza_id int not null,
     fk_Trilha_id int not null,
     fk_Atividade_id int not null

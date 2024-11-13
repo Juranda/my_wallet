@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/users/role.dart';
+import '../../../models/users/funcao.dart';
 
 class AlunoProfile extends StatelessWidget {
   AlunoProfile(this.myList, this.id, this.removeFromList);
@@ -29,7 +29,7 @@ class AlunoProfile extends StatelessWidget {
             ),
           ],
         ),
-        if (roleProvider.tipoUsuario == Role.Professor)
+        if (roleProvider.tipoUsuario == Funcao.Professor)
           IconButton(
             onPressed: () {
               showDialog(

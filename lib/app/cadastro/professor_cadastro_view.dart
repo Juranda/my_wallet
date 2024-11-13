@@ -18,7 +18,7 @@ class ProfessorCadastroView extends StatefulWidget {
 }
 
 class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
-  int id_instituicao_ensino = 0;
+  int idInstituicaoEnsino = 0;
   List<(int, String)>? turmas = [];
   List<(String nome, int id)> escolaridades = [
     ('Ensino Fundamental', 1),
@@ -39,7 +39,7 @@ class _ProfessorCadastroViewState extends State<ProfessorCadastroView> {
   void initState() {
     super.initState();
     _userProvider = Provider.of(context, listen: false);
-    id_instituicao_ensino = _userProvider.usuario.id_instituicao_ensino;
+    idInstituicaoEnsino = _userProvider.usuario.id_instituicao_ensino;
   }
 
   @override

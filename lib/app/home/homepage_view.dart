@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:my_wallet/app/home/organizador_gastos/organizador_de_gastos_view.dart';
 import 'package:my_wallet/app/home/lobby/lobby.dart';
 import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
-import 'package:my_wallet/app/home/trilhas/trails_view.dart';
+import 'package:my_wallet/app/home/trilhas/trilhas_view.dart';
 import 'package:my_wallet/app/home/turma/turmas_view.dart';
 import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/users/role.dart';
+import '../../models/users/funcao.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -29,7 +29,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   final List<Widget> destinations = [
     Lobby(),
-    TrailsView(),
+    TrilhasView(),
     TurmasView(),
     ArView()
   ];
@@ -39,7 +39,7 @@ class _HomePageViewState extends State<HomePageView> {
     super.initState();
     _userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    if (_userProvider.tipoUsuario == Role.Aluno) {
+    if (_userProvider.tipoUsuario == Funcao.Aluno) {
       navigationBarDestinations.insert(
         2,
         NavigationDestination(icon: Icon(Icons.abc), label: 'Gastos'),
@@ -101,12 +101,12 @@ class _HomePageViewState extends State<HomePageView> {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             switch (_userProvider.tipoUsuario) {
-                              Role.Professor => Text('Professor'),
-                              Role.Aluno => Text(
-                                  'Turma ' + (_userProvider.aluno.nome_turma),
+                              Funcao.Professor => Text('Professor'),
+                              Funcao.Aluno => Text(
+                                  'Turma ' + (_userProvider.aluno.nomeTurma),
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
-                              Role.Administrador => Text('ADMINISTRADOR'),
+                              Funcao.Administrador => Text('ADMINISTRADOR'),
                             }
                           ],
                         ),
