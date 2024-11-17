@@ -1,6 +1,10 @@
+import 'package:my_wallet/services/implementations/supabase/supabase_expenses_service.dart';
+import 'package:my_wallet/services/implementations/supabase/supabase_trails_service.dart';
+import 'package:my_wallet/services/implementations/supabase/supabase_user_service.dart';
 import 'package:my_wallet/services/atividade_service.dart';
 import 'package:my_wallet/services/expenses_service.dart';
 import 'package:my_wallet/services/news_service.dart';
+import 'package:my_wallet/services/trailsservice.dart';
 import 'package:my_wallet/services/trilha_service.dart';
 import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
@@ -8,9 +12,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyWallet {
   static final MyWallet instance = MyWallet._();
-  static final TrilhaService trailsService = TrilhaService();
-  static final UserService userService = UserService();
-  static final ExpensesService expensesService = ExpensesService();
+  static final TrailsService trailsService = SupabaseTrailsService();
+  static final UserService userService = SupabaseUserService();
+  static final ExpensesService expensesService = SupabaseExpensesService();
   static final TurmaService turmaService = TurmaService();
   static final AtividadeService atividadeService = AtividadeService();
   static final NoticiasService noticiasService = StaticNoticiasService();
@@ -19,17 +23,18 @@ class MyWallet {
   bool _initialized = false;
 
   Future<void> initialize(
-      // String anonKey,
-      // String url,
-      ) async {
+    String anonKey,
+    String url,
+  ) async {
     assert(
       !instance._initialized,
       'This instance is already initialized',
     );
     await Supabase.initialize(
-        url: "https://bierpaosxpulmlvgzbht.supabase.co",
-        anonKey:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpZXJwYW9zeHB1bG1sdmd6Ymh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU5ODI1NTIsImV4cCI6MjAzMTU1ODU1Mn0.uxVn2A0Eo6lLAMt6o8i8RiodilGLKirfbrvK-clYhzI");
+      url: url,
+      anonKey: anonKey,
+      debug: false,
+    );
     _initialized = true;
   }
 }

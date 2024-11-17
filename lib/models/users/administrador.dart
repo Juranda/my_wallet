@@ -17,7 +17,7 @@ class Administrador extends Usuario {
 
   factory Administrador.fromMap(Map<String, dynamic> map) {
     return Administrador(
-      criadoEm: map['created_at'],
+      criadoEm: DateTime.parse(map['created_at']),
       idSupabase: map['id_supabase'],
       idInstituicaoEnsino: map['id_instituicao_ensino'],
       idUsuario: map['id_usuario'],

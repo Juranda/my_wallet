@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_wallet/main.dart';
-import 'package:my_wallet/services/mywallet.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

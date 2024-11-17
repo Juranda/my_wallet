@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/providers/settings_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
@@ -8,16 +11,19 @@ import 'package:provider/provider.dart';
 
 import 'routes.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting();
 
-  // String annonKey = dotenv.get("ANNON_KEY");
-  // String url = dotenv.get("URL");
+  await dotenv.load(
+      fileName: 'assets/env/${!kReleaseMode ? '.prod' : '.dev'}.env');
+  String annonKey = dotenv.get("ANNON_KEY");
+  String url = dotenv.get("SUPABASE_URL");
 
   MyWallet.instance.initialize(
-      // annonKey,
-      // url,
-      );
+    annonKey,
+    url,
+  );
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

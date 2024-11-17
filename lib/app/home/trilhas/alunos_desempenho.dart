@@ -43,7 +43,6 @@ class _AlunosDesempenhoState extends State<AlunosDesempenho> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text('Desempenho da turma'),
       ),
-      
       body: ListView.builder(
           itemCount: widget.alunoTrilhaRealiza.length,
           itemBuilder: (context, index) {
@@ -57,11 +56,14 @@ class _AlunosDesempenhoState extends State<AlunosDesempenho> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Scaffold(
-                                backgroundColor: Theme.of(context).colorScheme.background,
-                                appBar: AppBar(
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  title: Text('Desempenho do aluno '+widget.alunos[index].nome),
-                                ),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                  appBar: AppBar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    title: Text('Desempenho do aluno ' +
+                                        widget.alunos[index].nome),
+                                  ),
                                   body: ResultadosView(
                                       alunoTrilhaRealiza:
                                           widget.alunoTrilhaRealiza[index]),

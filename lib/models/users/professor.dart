@@ -5,7 +5,7 @@ class Professor extends Usuario {
   final int id;
   final String cpfcnpj;
 
-  const Professor({
+  Professor({
     required super.criadoEm,
     required super.idSupabase,
     required super.idInstituicaoEnsino,

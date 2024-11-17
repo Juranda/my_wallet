@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:my_wallet/app/cadastro/mw_dropdown_input.dart';
 import 'package:my_wallet/app/cadastro/mw_form_input.dart';
 import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/services/exceptions/userexceptions.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -40,8 +41,8 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
     final turmasNovas = await Supabase.instance.client
         .from('turma')
         .select('id, nome')
-        .eq('id_instituicao_ensino', idInstituicaoEnsino)
-        .eq('nivel_escolaridade', nivel);
+        .eq('fk_instituicaoensino_id', idInstituicaoEnsino)
+        .eq('fk_escolaridades_id', nivel);
 
     setState(() {
       escolaridade = nivel;
@@ -236,7 +237,7 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                       ElevatedButton(
                         onPressed: () async {
                           try {
-                            MyWallet.userService.cadastrarAluno(
+                            await MyWallet.userService.cadastrarAluno(
                               idInstituicaoEnsino: idInstituicaoEnsino,
                               nome: nomeController.text.substring(
                                   0, nomeController.text.indexOf(" ")),
@@ -264,11 +265,16 @@ class _AlunoCadastroViewState extends State<AlunoCadastroView> {
                                 ],
                               ),
                             );
-                          } catch (e) {
+                          } on RegisterUserException catch (e) {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return Text(e.toString());
+                                return AlertDialog.adaptive(
+                                  title: Text(
+                                    'Um erro ocorreu, tente novamente mais tarde',
+                                  ),
+                                  content: Text(e.message),
+                                );
                               },
                             );
                           }

@@ -29,7 +29,7 @@ class MyWalletDropdownInput extends StatelessWidget {
             border: InputBorder.none,
           ),
           isExpanded: true,
-          value: 2,
+          value: value,
           items: items,
           onChanged: onChanged,
         ),

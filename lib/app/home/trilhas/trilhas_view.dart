@@ -5,7 +5,6 @@ import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'aluno_trilha_item.dart';
 
@@ -38,7 +37,6 @@ class _TrilhasViewState extends State<TrilhasView> {
 
   @override
   Widget build(BuildContext context) {
-    final idInstituicaoEnsino = _userProvider.usuario.idInstituicaoEnsino;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.max,
