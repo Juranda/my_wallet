@@ -3,8 +3,6 @@ import 'package:my_wallet/app/home/organizador_gastos/models/transaction.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'components/transactions_list.dart';
-
 class OrganizadorGastosOriginal extends StatefulWidget {
   @override
   State<OrganizadorGastosOriginal> createState() => _OrganizadorGastos();
@@ -61,9 +59,7 @@ class _OrganizadorGastos extends State<OrganizadorGastosOriginal> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TransactionsList(),
-              ],
+              children: [],
             ),
           ),
         ),

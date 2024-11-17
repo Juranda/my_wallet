@@ -65,7 +65,7 @@ class _AtividadeProfViewState extends State<AtividadeProfView> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(widget.atividade.enunciado),
+            Text(widget.atividade.enunciado, textAlign: TextAlign.center,style: TextStyle(fontSize: 20),),
             ...alternativas,
           ],
         ),

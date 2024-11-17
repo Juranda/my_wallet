@@ -2,7 +2,6 @@ import 'package:my_wallet/models/users/funcao.dart';
 import 'package:my_wallet/models/users/usuario.dart';
 
 class Aluno extends Usuario {
-  final int idUsuario;
   final int id;
   final String cpf;
   final int idTurma;
@@ -14,7 +13,7 @@ class Aluno extends Usuario {
     required super.criadoEm,
     required super.idSupabase,
     required super.idInstituicaoEnsino,
-    required this.idUsuario,
+    required super.idUsuario,
     required this.id,
     required super.nome,
     required super.email,

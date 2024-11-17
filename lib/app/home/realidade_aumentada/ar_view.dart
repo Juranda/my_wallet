@@ -16,7 +16,7 @@ class ArView extends StatefulWidget {
 
 class _ArViewState extends State<ArView> {
   late final WebViewController _controller;
-  late double aluno_dinheiro;
+  late int aluno_dinheiro;
 
   Future<void> _requestPermissions() async {
     var status = await Permission.camera.status;
@@ -28,8 +28,8 @@ class _ArViewState extends State<ArView> {
   Future<List<Map<String, dynamic>>> getDinheiro() async {
     var response = await Supabase.instance.client
         .from('aluno')
-        .select('dinheiro')
-        .eq('idUsuario', Supabase.instance.client.auth.currentUser!.id)
+        .select('dinheiro, usuario(fk_usuario_supabase)')
+        .eq('usuario.fk_usuario_supabase', Supabase.instance.client.auth.currentUser!.id)
         .limit(1);
     return response;
   }
@@ -40,7 +40,6 @@ class _ArViewState extends State<ArView> {
   void initState() {
     super.initState();
 
-    getDinheiro();
     Permission.camera.request();
 
     late final PlatformWebViewControllerCreationParams params;
@@ -104,7 +103,7 @@ class _ArViewState extends State<ArView> {
               builder: (context, constraints) {
                 aluno_dinheiro = snapshot.data![0]['dinheiro'];
                 _controller.runJavaScript(
-                    'receiveMessageFromFlutter(${aluno_dinheiro});');
+                    'receiveMessageFromFlutter(${20});');
                 return WebViewWidget(controller: _controller);
               },
             );

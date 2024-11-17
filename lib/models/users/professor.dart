@@ -4,13 +4,12 @@ import 'package:my_wallet/models/users/usuario.dart';
 class Professor extends Usuario {
   final int id;
   final String cpfcnpj;
-  final int idUsuario;
 
   const Professor({
     required super.criadoEm,
     required super.idSupabase,
     required super.idInstituicaoEnsino,
-    required this.idUsuario,
+    required super.idUsuario,
     required this.id,
     required super.nome,
     required super.email,

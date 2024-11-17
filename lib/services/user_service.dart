@@ -62,7 +62,9 @@ class UserService {
   }
 
   Future<Aluno> getAluno(int alunoId)async{
-    var response = await Supabase.instance.client.from('view_usuario').select('aluno(fk_usuario_supabase)').eq('id', alunoId).single();
+    var response = await Supabase.instance.client.from('aluno').select('*').eq('id', alunoId).single();
+    var response2 = await Supabase.instance.client.from('view_aluno').select('*').eq('id',alunoId).single();
+    response.addAll(response2);
     return Aluno.fromMap(response);
   }
 

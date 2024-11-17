@@ -31,8 +31,11 @@ class TrilhaService {
     List<AlunoTrilhaRealiza> alunoTrilhaRealiza = [];
 
     for (var aluno in alunos) {
-      var response = await Supabase.instance.client.from('alunoTrilha_realiza').select().eq('fk_aluno_id', aluno['id']).single();
-      alunoTrilhaRealiza.add(AlunoTrilhaRealiza.fromMap(response));
+      var response = await Supabase.instance.client.from('alunoTrilha_realiza').select('*,trilha(*),alunoAtividade_realiza(*,atividade(*,trilha(*),atividadeOpcao(*)))').eq('fk_aluno_id', aluno['id']).eq('fk_trilha_id', trilhaId);
+
+
+
+      if(response.isNotEmpty) alunoTrilhaRealiza.add(AlunoTrilhaRealiza.fromMap(response[0]));
     }
     return alunoTrilhaRealiza;
   }
@@ -129,7 +132,7 @@ class TrilhaService {
     alunoTrilhas = await Supabase.instance.client
         .from('alunoTrilha_realiza')
         .select(
-            'id, pontuacao, completada_em, trilha(id, nome, fk_escolaridades_id, img_url), aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_realiza!inner(fk_trilha_id,fk_alunotrilha_realiza_id,id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeOpcao(sequencia, enunciado, correta), trilha(id,nome,img_url,fk_escolaridades_id), jogos(id)))')
+            'id, pontuacao, completada_em, trilha(id, nome, fk_escolaridades_id, img_url),fk_aluno_id, aluno!inner(id, usuario!inner(instituicaoensino(id))), alunoAtividade_realiza!inner(fk_trilha_id,fk_alunotrilha_realiza_id,id, acerto, feito, opcao_selecionada, atividade!inner(id, sequencia, enunciado, atividadeOpcao(sequencia, enunciado, correta), trilha(id,nome,img_url,fk_escolaridades_id), jogos(id)))')
         .eq('aluno.usuario.instituicaoensino.id', idInstituicao)
         .eq('aluno.id', idAluno);
 

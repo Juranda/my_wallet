@@ -1,6 +1,7 @@
 import 'package:my_wallet/models/users/funcao.dart';
 
-abstract class Usuario {
+class Usuario {
+  final int idUsuario;
   final String idSupabase;
   final int idInstituicaoEnsino;
   final String nome;
@@ -9,6 +10,7 @@ abstract class Usuario {
   final String email;
 
   const Usuario({
+    required this.idUsuario,
     required this.idSupabase,
     required this.nome,
     required this.idInstituicaoEnsino,

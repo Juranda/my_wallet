@@ -1,5 +1,6 @@
 import 'package:my_wallet/services/atividade_service.dart';
 import 'package:my_wallet/services/expenses_service.dart';
+import 'package:my_wallet/services/news_service.dart';
 import 'package:my_wallet/services/trilha_service.dart';
 import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
@@ -12,6 +13,7 @@ class MyWallet {
   static final ExpensesService expensesService = ExpensesService();
   static final TurmaService turmaService = TurmaService();
   static final AtividadeService atividadeService = AtividadeService();
+  static final NoticiasService noticiasService = StaticNoticiasService();
 
   MyWallet._();
   bool _initialized = false;

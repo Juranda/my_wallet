@@ -1,46 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/app/home/trilhas/resultados_view.dart';
 import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
-import 'package:my_wallet/models/trilha/trilha.dart';
-import 'package:my_wallet/models/turma.dart';
 import 'package:my_wallet/models/users/aluno.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 
 class AlunosDesempenho extends StatefulWidget {
-  late Trilha trilha;
   late List<AlunoTrilhaRealiza> alunoTrilhaRealiza;
-  late TurmaProvider _turmaProvider;
-  final List<Aluno> alunos = [];
+  late List<Aluno> alunos;
 
-  AlunosDesempenho({
-    super.key});
-
+  AlunosDesempenho({super.key});
 
   @override
   State<AlunosDesempenho> createState() => _AlunosDesempenhoState();
 }
 
 class _AlunosDesempenhoState extends State<AlunosDesempenho> {
-  @override
-  void initState()async {
-    widget._turmaProvider = Provider.of(context)<TurmaProvider>();
+  calcularAcertos(AlunoTrilhaRealiza trilhaRealiza) {
+    if (trilhaRealiza.completadaEm == null) return "Não realizou";
 
-    widget.alunoTrilhaRealiza = await MyWallet.trailsService.getAllAlunoTrilhaRealiza(widget.trilha.id, widget._turmaProvider.turma.id);
-
-
-    for (var aluno in widget.alunoTrilhaRealiza) {
-      widget.alunos.add(await MyWallet.userService.getAluno(aluno.idAluno));
+    int acertos = 0;
+    for (var atividade in trilhaRealiza.atividades) {
+      if (atividade.acerto == true) {
+        acertos++;
+      }
     }
+    return "${acertos}/${trilhaRealiza.atividades.length}";
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (context, index){
-      return ListTile(
-        title: Text(widget.alunos[index].nome),
-      );
-    });
+    Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
+    widget.alunoTrilhaRealiza = args['alunoTrilhaRealiza'];
+    widget.alunos = args['alunos'];
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text('Desempenho da turma'),
+      ),
+      
+      body: ListView.builder(
+          itemCount: widget.alunoTrilhaRealiza.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+                title: Text(widget.alunos[index].nome),
+                trailing:
+                    Text(calcularAcertos(widget.alunoTrilhaRealiza[index])),
+                onTap: widget.alunoTrilhaRealiza[index].completadaEm == null
+                    ? null
+                    : () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                                backgroundColor: Theme.of(context).colorScheme.background,
+                                appBar: AppBar(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  title: Text('Desempenho do aluno '+widget.alunos[index].nome),
+                                ),
+                                  body: ResultadosView(
+                                      alunoTrilhaRealiza:
+                                          widget.alunoTrilhaRealiza[index]),
+                                ))));
+          }),
+    );
   }
 }

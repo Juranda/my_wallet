@@ -3,13 +3,12 @@ import 'package:my_wallet/models/users/usuario.dart';
 
 class Administrador extends Usuario {
   final int id;
-  final int idUsuario;
 
   const Administrador({
     required super.criadoEm,
     required super.idSupabase,
     required super.idInstituicaoEnsino,
-    required this.idUsuario,
+    required super.idUsuario,
     required this.id,
     required super.nome,
     required super.email,
