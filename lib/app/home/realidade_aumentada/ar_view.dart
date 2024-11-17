@@ -102,8 +102,7 @@ class _ArViewState extends State<ArView> {
             }
             return LayoutBuilder(
               builder: (context, constraints) {
-                aluno_dinheiro =
-                    (snapshot.data![0]['dinheiro'] as int).toDouble();
+                aluno_dinheiro = (snapshot.data![0]['dinheiro'] as int);
                 _controller.runJavaScript('receiveMessageFromFlutter(${20});');
                 return WebViewWidget(controller: _controller);
               },

@@ -4,15 +4,15 @@ import 'package:my_wallet/services/implementations/supabase/supabase_user_servic
 import 'package:my_wallet/services/atividade_service.dart';
 import 'package:my_wallet/services/expenses_service.dart';
 import 'package:my_wallet/services/news_service.dart';
-import 'package:my_wallet/services/trailsservice.dart';
 import 'package:my_wallet/services/trilha_service.dart';
+import 'package:my_wallet/services/old_trilha_service.dart';
 import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyWallet {
   static final MyWallet instance = MyWallet._();
-  static final TrailsService trailsService = SupabaseTrailsService();
+  static final TrilhaService trailsService = SupabaseTrailsService();
   static final UserService userService = SupabaseUserService();
   static final ExpensesService expensesService = SupabaseExpensesService();
   static final TurmaService turmaService = TurmaService();

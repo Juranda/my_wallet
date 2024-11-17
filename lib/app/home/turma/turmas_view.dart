@@ -30,13 +30,18 @@ class _TurmasViewState extends State<TurmasView> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     _roleProvider = Provider.of<UserProvider>(context, listen: false);
     _turmaProvider = Provider.of<TurmaProvider>(context, listen: true);
     _alunoStream = Supabase.instance.client
         .from('aluno')
         .stream(primaryKey: ['id']).eq('fk_turma_id', _turmaProvider.turma.id);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     if (_roleProvider.eProfessor) {
       return const Text('Olá professor');
     }
@@ -54,7 +59,7 @@ class _TurmasViewState extends State<TurmasView> {
             child: Text(
               'Turma ' +
                   (_roleProvider.eProfessor
-                      ? _roleProvider.professor.turmaAtual
+                      ? _turmaProvider.turma.nome
                       : _roleProvider.eAluno
                           ? _roleProvider.aluno.nomeTurma
                           : ''),

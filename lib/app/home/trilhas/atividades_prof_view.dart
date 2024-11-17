@@ -86,9 +86,11 @@ class _AtividadesProfViewState extends State<AtividadesProfView> {
                 title: Text(trilha!.nome),
                 actions: [
                   IconButton(
-                    onPressed: !snapshot.hasData?null:() => Navigator.pushNamed(
-                        context, Routes.ALUNOS_DESEMPENHO,
-                        arguments: snapshot.data),
+                    onPressed: !snapshot.hasData
+                        ? null
+                        : () => Navigator.pushNamed(
+                            context, Routes.ALUNOS_DESEMPENHO,
+                            arguments: snapshot.data),
                     icon: Icon(Icons.people),
                   ),
                 ],
@@ -105,7 +107,9 @@ class _AtividadesProfViewState extends State<AtividadesProfView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
-                            onPressed: atividadeExibida == 0? null:() => changeSelectedIndex(-1),
+                            onPressed: atividadeExibida == 0
+                                ? null
+                                : () => changeSelectedIndex(-1),
                             child: Text('Anterior')),
                         if (atividadeExibida == atividadesViews.length - 1)
                           ElevatedButton(

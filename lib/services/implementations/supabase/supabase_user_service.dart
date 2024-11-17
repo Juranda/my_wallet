@@ -155,7 +155,7 @@ class SupabaseUserService implements UserService {
     }
   }
 
-  Future<Aluno> getAluno(int idAluno, int idInstituicao) async {
+  Future<Aluno> getAluno(int idAluno) async {
     var aluno = await Supabase.instance.client
         .from('view_aluno')
         .select('*')

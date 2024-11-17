@@ -38,5 +38,5 @@ abstract class UserService {
     required String cnpjcpf,
   });
 
-  Future<Aluno> getAluno(int idAluno, int idInstituicao);
+  Future<Aluno> getAluno(int idAluno);
 }
