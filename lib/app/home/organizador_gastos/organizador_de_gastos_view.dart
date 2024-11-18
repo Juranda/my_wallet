@@ -25,49 +25,6 @@ class _InvestimentsState extends State<Investiments> {
     _userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 
-  // Future<void> sumMoney(double money) async {
-  //   final dinheiro = await Supabase.instance.client
-  //       .from('aluno')
-  //       .select('dinheiro')
-  //       .eq(
-  //         'id_usuario',
-  //         Supabase.instance.client.auth.currentUser!.id,
-  //       )
-  //       .single();
-  //   await Supabase.instance.client
-  //       .from('aluno')
-  //       .update({'dinheiro': (dinheiro['dinheiro'] + money)}).eq(
-  //     'id_usuario',
-  //     Supabase.instance.client.auth.currentUser!.id,
-  //   );
-  // }
-
-  // Future<void> insertTransaction({
-  //   required int idUsuario,
-  //   required int idCategoria,
-  //   required String title,
-  //   required double value,
-  //   required DateTime data,
-  // }) async {
-  //   // await Supabase.instance.client.from('gasto').insert({
-  //   //   'valor': value,
-  //   //   'titulo': title,
-  //   //   'data': data,
-  //   //   'id_usuario': Supabase.instance.client.auth.currentUser!.id
-  //   // });
-  //   //sumMoney(-value);
-
-  //   var transacao = CreateTransaction(
-  //     idUsuario: idUsuario,
-  //     idCategoria: idCategoria,
-  //     date: data,
-  //     title: title,
-  //     value: value,
-  //   );
-
-  //   MyWallet.expensesService.inserirTransacao(transacao);
-  // }
-
   @override
   Widget build(BuildContext context) {
     if (_userProvider.eAluno)
@@ -103,6 +60,9 @@ class AlunoGastosView extends StatefulWidget {
 }
 
 class _AlunoGastosViewState extends State<AlunoGastosView> {
+  late final Stream<Conta> _transacoesStream;
+  late final UserProvider _userProvider;
+
   void _openTransactionFormModal(BuildContext context, int userId) async {
     List<Categoria> categorias =
         await MyWallet.expensesService.getCategoriasUsuario(userId);
@@ -118,14 +78,22 @@ class _AlunoGastosViewState extends State<AlunoGastosView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _transacoesStream = MyWallet.expensesService.getTransacoesStream(
+      idInstituicao: _userProvider.usuario.idInstituicaoEnsino,
+      idAluno: _userProvider.aluno.id,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     UserProvider _userProvider = Provider.of(context);
     return LayoutBuilder(builder: (context, constraints) {
       return StreamBuilder<Conta>(
-        stream: MyWallet.expensesService.getTransacoesStream(
-          idInstituicao: _userProvider.usuario.idInstituicaoEnsino,
-          idAluno: _userProvider.aluno.id,
-        ),
+        stream: _transacoesStream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             debugPrint(snapshot.error.toString());

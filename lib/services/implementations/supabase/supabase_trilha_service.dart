@@ -7,7 +7,7 @@ import 'package:my_wallet/models/trilha/trilha.dart';
 import 'package:my_wallet/services/trilha_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseTrailsService implements TrilhaService {
+class SupabaseTrilhaService implements TrilhaService {
   Future<List<Trilha>> getAllTrilhas(
       int idInstituicaoEnsino, int idTurma) async {
     final maps = await Supabase.instance.client
