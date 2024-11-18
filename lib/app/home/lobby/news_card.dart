@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/services/news_service.dart';
 
 class NewsCard extends StatelessWidget {
-  final String title;
-  final String description;
+  final Noticia noticia;
+
   const NewsCard({
     super.key,
-    required this.title,
-    required this.description,
+    required this.noticia,
   });
 
   @override
@@ -14,7 +14,6 @@ class NewsCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
-        height: 300,
         width: 200,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -23,10 +22,11 @@ class NewsCard extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-              border: Border.all(
-            color: Colors.white,
-            width: 5,
-          )),
+            border: Border.all(
+              color: Colors.white,
+              width: 5,
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -39,28 +39,28 @@ class NewsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      title,
+                      noticia.title,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     Text(
-                      description,
+                      noticia.content,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  height: 75,
-                  child: Image.asset(
-                    'assets/images/dinheiro.jpg',
-                    fit: BoxFit.fitWidth,
+              if (noticia.urlImg != null)
+                Expanded(
+                  child: Container(
+                    child: Image.network(
+                      noticia.urlImg.toString(),
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
