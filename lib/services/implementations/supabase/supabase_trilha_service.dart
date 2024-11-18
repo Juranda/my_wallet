@@ -4,10 +4,10 @@ import 'package:my_wallet/models/trilha/aluno_trilha_realiza.dart';
 import 'package:my_wallet/models/trilha/atividade.dart';
 import 'package:my_wallet/models/trilha/atividade_opcao.dart';
 import 'package:my_wallet/models/trilha/trilha.dart';
-import 'package:my_wallet/services/trailsservice.dart';
+import 'package:my_wallet/services/trilha_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseTrailsService implements TrailsService {
+class SupabaseTrilhaService implements TrilhaService {
   Future<List<Trilha>> getAllTrilhas(
       int idInstituicaoEnsino, int idTurma) async {
     final maps = await Supabase.instance.client
@@ -30,6 +30,28 @@ class SupabaseTrailsService implements TrailsService {
     }
 
     return trilhas;
+  }
+
+  Future<List<AlunoTrilhaRealiza>> getAllAlunoTrilhaRealiza(
+      int trilhaId, int turmaId) async {
+    var alunos = await Supabase.instance.client
+        .from('aluno')
+        .select()
+        .eq('fk_turma_id', turmaId);
+    List<AlunoTrilhaRealiza> alunoTrilhaRealiza = [];
+
+    for (var aluno in alunos) {
+      var response = await Supabase.instance.client
+          .from('alunoTrilha_realiza')
+          .select(
+              '*,trilha(*),alunoAtividade_realiza(*,atividade(*,trilha(*),atividadeOpcao(*)))')
+          .eq('fk_aluno_id', aluno['id'])
+          .eq('fk_trilha_id', trilhaId);
+
+      if (response.isNotEmpty)
+        alunoTrilhaRealiza.add(AlunoTrilhaRealiza.fromMap(response[0]));
+    }
+    return alunoTrilhaRealiza;
   }
 
   Future<List<AlunoTrilhaRealiza>> getAllTrilhasDoAluno(

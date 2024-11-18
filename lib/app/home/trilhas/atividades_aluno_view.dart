@@ -98,7 +98,9 @@ class _AtividadesAlunoViewState extends State<AtividadesAlunoView> {
       inicializarViews(alunoTrilhaRealiza!);
     }
     return Scaffold(
-        appBar: AppBar(title: Text(alunoTrilhaRealiza!.trilha.nome)),
+              backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: AppBar(title: Text(alunoTrilhaRealiza!.trilha.nome),
+                backgroundColor: Theme.of(context).colorScheme.primary, ),
         body: Column(
           children: [
             Expanded(child: atividadesViews[atividadeExibida]),
@@ -107,7 +109,7 @@ class _AtividadesAlunoViewState extends State<AtividadesAlunoView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                    onPressed: () => changeSelectedIndex(-1),
+                    onPressed: atividadeExibida == 0? null:() => changeSelectedIndex(-1),
                     child: Text('Anterior')),
                 if (atividadeExibida == atividadesViews.length - 1)
                   ElevatedButton(

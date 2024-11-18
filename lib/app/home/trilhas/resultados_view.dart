@@ -67,9 +67,10 @@ class _ResultadosViewState extends State<ResultadosView> {
               Text("Total: " + calcularAcertos()),
               ExpansionPanelList(
                 expandedHeaderPadding: EdgeInsets.zero,
-                
+                elevation: 0,
                 children: [
                   ExpansionPanel(
+                    
                     backgroundColor: Theme.of(context).colorScheme.background,
                     headerBuilder: (context, isOpen) => Center(child: Text('Mostrar Detalhes'),),
                     body: Column(children: detalhes,),
@@ -78,7 +79,6 @@ class _ResultadosViewState extends State<ResultadosView> {
                 ],
                 expansionCallback: (i, isOpen)=>setState(() {
                   exibindoDetalhes = !exibindoDetalhes;
-                  print(exibindoDetalhes);
                 })
               ),
             ],

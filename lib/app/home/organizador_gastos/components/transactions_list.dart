@@ -35,6 +35,7 @@ class TransactionsList extends StatelessWidget {
                     subtitle: Text(
                       dateFormat.format(transacao.realizadaEm),
                     ),
+                    trailing: Text(transacao.categoria.nome),
                     leading: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,

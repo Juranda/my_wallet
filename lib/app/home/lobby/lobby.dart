@@ -95,12 +95,13 @@ class _LobbyAnimationState extends State<LobbyAnimation> {
 }
 
 class LobbyNoticiasWidget extends StatelessWidget {
+  late final UserProvider _userProvider;
+  late final TurmaProvider _turmaProvider;
+
   @override
   Widget build(BuildContext context) {
-    late final _userProvider =
-        Provider.of<UserProvider>(context, listen: false);
-    late final _turmaProvider =
-        Provider.of<TurmaProvider>(context, listen: false);
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
     final int turma = _turmaProvider.turma.id;
     final int instituicao = _userProvider.usuario.idInstituicaoEnsino;
 

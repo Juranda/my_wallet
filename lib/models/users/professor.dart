@@ -4,7 +4,6 @@ import 'package:my_wallet/models/users/usuario.dart';
 class Professor extends Usuario {
   final int id;
   final String cpfcnpj;
-  String turmaAtual = "";
 
   Professor({
     required super.criadoEm,

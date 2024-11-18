@@ -28,7 +28,6 @@ class _NewsSectionState extends State<NewsSection> {
     setState(() {
       widget.items!.clear();
     });
-    print(widget.items);
   }
 
   void removerNoticia(TrailLobbyNewsCard newCard) {

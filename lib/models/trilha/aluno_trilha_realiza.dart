@@ -4,7 +4,7 @@ import 'package:my_wallet/models/trilha/trilha.dart';
 class AlunoTrilhaRealiza {
   final int id;
   final int idAluno;
-  final int pontuacao;
+  final int? pontuacao;
   final DateTime? completadaEm;
   final Trilha trilha;
   final List<AlunoAtividadeRealiza> atividades;
@@ -29,7 +29,8 @@ class AlunoTrilhaRealiza {
     }
     return AlunoTrilhaRealiza(
       id: map['id'],
-      idAluno: map['aluno']['id'],
+      idAluno:
+          map['fk_aluno_id'] == null ? map['aluno']['id'] : map['fk_aluno_id'],
       pontuacao: map['pontuacao'] ?? 0,
       completadaEm: map['completada_em'] == null
           ? null

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/app/home/turma/aluno_list_tile.dart';
+import 'package:my_wallet/models/users/aluno.dart';
+import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
+import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:validadores/ValidarEmail.dart';
@@ -16,7 +19,7 @@ class AdicionarAluno extends StatefulWidget {
 
 class _AdicionarAlunoState extends State<AdicionarAluno> {
   final _emailController = TextEditingController();
-  late final UserProvider _user_provider;
+  late final TurmaProvider _turmaProvider;
   final adicionados = [];
 
   String? validateEmail(String? email) {
@@ -28,42 +31,18 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     return null;
   }
 
-  List<AlunoListTile> alunos = [];
-
-  // _AdicionarAlunoState() {
-  //   alunos = List.generate(5, (index) => AlunoProfile(alunos,index, removeAluno));
-  // }
+  List<AlunoListTile> alunosTile = [];
+  List<Aluno> alunos = [];
 
   @override
   void initState() {
     super.initState();
-    _user_provider = Provider.of<UserProvider>(context, listen: false);
-  }
-  // void removeAluno(AlunoProfile target) {
-  //   setState(() {
-  //     alunos.remove(target);
-  //   });
-  // }
-
-  // void adicionaAluno(AlunoProfile novoAluno) {
-  //   setState(() {
-  //     alunos.add(novoAluno);
-  //   });
-  // }
-
-  Future<void> adicionarAlunos() async {
-    for (var alunoTile in alunos) {
-      await Supabase.instance.client.from('aluno').update(
-        {
-          'idTurma': _user_provider.aluno.idTurma,
-        },
-      ).eq('id', alunoTile.tileID);
-    }
+    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
   }
 
   void removerAluno(int id) {
     setState(() {
-      alunos.removeWhere((x) => x.tileID == id);
+      alunosTile.removeWhere((x) => x.tileID == id);
     });
   }
 
@@ -74,7 +53,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
         .eq('email', email)
         .maybeSingle();
     if (response != null && !response.isEmpty) {
-      if (alunos.any((x) => x.tileID == response['id'])) {
+      if (alunosTile.any((x) => x.tileID == response['id'])) {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -89,7 +68,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
         return;
       }
       setState(() {
-        alunos.add(AlunoListTile(
+        alunosTile.add(AlunoListTile(
             nome: response['nome'],
             tileID: response['id'],
             removerAluno: removerAluno));
@@ -162,7 +141,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
           height: 350,
           width: MediaQuery.of(context).size.width,
           child: ListView(
-            children: [...alunos],
+            children: [...alunosTile],
           ),
         ),
         Expanded(
@@ -170,7 +149,8 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
             alignment: Alignment.bottomRight,
             child: TextButton(
               onPressed: () {
-                adicionarAlunos();
+                MyWallet.turmaService
+                    .adicionarAlunos(alunosTile, _turmaProvider.turma.id);
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(

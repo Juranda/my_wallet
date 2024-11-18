@@ -15,8 +15,7 @@ class ResultadoDetalhes extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(alunoAtividadeRealiza.atividade.enunciado),
-              Icon(alunoAtividadeRealiza.acerto ==true?Icons.check:Icons.close)
+              Expanded(child: Text(alunoAtividadeRealiza.atividade.enunciado, style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))
             ],
           ),
           ...alunoAtividadeRealiza.atividade.respostas.map((resposta)=> (resposta.sequencia == alunoAtividadeRealiza.opcaoSelecionada && resposta.correta == false)?Container(color: Colors.red,child: Text(' • '+resposta.enunciado)): Container(color: resposta.correta?Colors.green:null,child: Text(' • '+resposta.enunciado))).toList(),

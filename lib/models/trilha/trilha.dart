@@ -19,7 +19,7 @@ class Trilha {
       nome: map['nome'],
       imgUrl: map['img_url'] != null ? map['img_url'] : "",
       escolaridade:
-          Escolaridade.values.elementAt(map['escolaridades']['id'] - 1),
+          Escolaridade.values.elementAt(map['fk_escolaridades_id'] - 1),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:my_wallet/app/home/organizador_gastos/organizador_de_gastos_view
 import 'package:my_wallet/app/home/lobby/lobby.dart';
 import 'package:my_wallet/app/home/realidade_aumentada/ar_view.dart';
 import 'package:my_wallet/app/home/trilhas/trilhas_view.dart';
-import 'package:my_wallet/app/home/turma/turmas_view.dart';
+import 'package:my_wallet/app/home/turma/turma_view.dart';
 import 'package:my_wallet/routes.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +30,7 @@ class _HomePageViewState extends State<HomePageView> {
   final List<Widget> destinations = [
     Lobby(),
     TrilhasView(),
-    TurmasView(),
+    TurmaView(),
     ArView()
   ];
 
@@ -51,6 +51,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: LayoutBuilder(
         builder: (context, constraints) => Column(

@@ -5,6 +5,6 @@ class Categoria {
   const Categoria({required this.id, required this.nome});
 
   factory Categoria.fromMap(Map<String, dynamic> result) {
-    return Categoria(id: result['id'], nome: result['nome']);
+    return Categoria(id: result['fk_categoria_id'], nome: result['nome']);
   }
 }

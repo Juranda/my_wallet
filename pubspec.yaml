@@ -55,6 +55,8 @@ dependencies:
 
   webview_flutter_android: any
   webview_flutter_wkwebview: any
+# dependency_overrides:
+#   win32: ^5.5.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
