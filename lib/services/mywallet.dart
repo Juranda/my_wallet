@@ -1,10 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_expenses_service.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_trilha_service.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_turma_service.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_user_service.dart';
 import 'package:my_wallet/services/atividade_service.dart';
 import 'package:my_wallet/services/expenses_service.dart';
-import 'package:my_wallet/services/news_service.dart';
 import 'package:my_wallet/services/trilha_service.dart';
 import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
@@ -33,7 +33,7 @@ class MyWallet {
     await Supabase.initialize(
       url: url,
       anonKey: anonKey,
-      debug: false,
+      debug: kDebugMode,
     );
     _initialized = true;
   }

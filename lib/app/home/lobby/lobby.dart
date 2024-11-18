@@ -13,59 +13,83 @@ class Lobby extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              color: Theme.of(context).primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Container(
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
-                          borderRadius: BorderRadius.circular(20),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          height: constraints.maxWidth,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: constraints.maxHeight * 0.2,
+                  width: constraints.maxWidth,
+                  color: Theme.of(context).secondaryHeaderColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: LobbyAnimation(),
                         ),
-                        child: Center(
-                          child: Text(
-                            'TAREFA LIBERADA!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 30,
-                            ),
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    NewsSection(
+                      sectionTitle: 'Notícias',
+                      sectionHeight: 150,
+                      items: ['FIIs', 'Cartão de Credito', 'Renda Fixa']
+                          .map(
+                            (e) => TrailLobbyCard(
+                              trailName: e,
+                              trailDescription: 'Lorem ipsum',
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    LobbyNoticiasWidget(),
                   ],
                 ),
-              ),
-            ),
-            Column(
-              children: [
-                NewsSection(
-                  sectionTitle: 'Notícias',
-                  sectionHeight: 150,
-                  items: ['FIIs', 'Cartão de Credito', 'Renda Fixa']
-                      .map(
-                        (e) => TrailLobbyCard(
-                          trailName: e,
-                          trailDescription: 'Lorem ipsum',
-                        ),
-                      )
-                      .toList(),
-                ),
-                LobbyNoticiasWidget(),
               ],
             ),
-          ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class LobbyAnimation extends StatefulWidget {
+  const LobbyAnimation({
+    super.key,
+  });
+
+  @override
+  State<LobbyAnimation> createState() => _LobbyAnimationState();
+}
+
+class _LobbyAnimationState extends State<LobbyAnimation> {
+  double left = 20;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AnimatedPositioned(
+          child: Text('Hey'),
+          left: left,
+          curve: Curves.easeIn,
+          duration: Duration(
+            seconds: 2,
+          ),
+          onEnd: () {
+            setState(() {
+              left = 40;
+            });
+          },
         ),
-      ),
+      ],
     );
   }
 }
