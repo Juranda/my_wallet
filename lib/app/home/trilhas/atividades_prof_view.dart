@@ -53,7 +53,8 @@ class _AtividadesProfViewState extends State<AtividadesProfView> {
         .getAllAlunoTrilhaRealiza(trilha!.id, _turma_provider.turma.id);
     List<Aluno> alunos = [];
     for (var trilhaRealiza in alunoTrilhaRealiza) {
-      alunos.add(await MyWallet.userService.getAluno(trilhaRealiza.idAluno));
+      alunos
+          .add(await MyWallet.userService.getAlunoPorId(trilhaRealiza.idAluno));
     }
 
     Map<String, dynamic> dados = {

@@ -155,7 +155,7 @@ class SupabaseUserService implements UserService {
     }
   }
 
-  Future<Aluno> getAluno(int idAluno) async {
+  Future<Aluno> getAlunoPorId(int idAluno) async {
     var aluno = await Supabase.instance.client
         .from('view_aluno')
         .select('*')
@@ -164,6 +164,16 @@ class SupabaseUserService implements UserService {
         .single();
 
     return Aluno.fromMap(aluno);
+  }
+
+  Future<Aluno?> getAlunoPorEmail(String email) async {
+    var aluno = await Supabase.instance.client
+        .from('view_aluno')
+        .select('*')
+        .eq('email', email)
+        .limit(1);
+    if (aluno.isEmpty) return null;
+    return Aluno.fromMap(aluno[0]);
   }
 
   @override
@@ -189,70 +199,3 @@ class SupabaseUserService implements UserService {
     });
   }
 }
-
-// class SupabaseUserService implements UserService {
-//   @override
-//   Future<Aluno> getAluno(int idAluno, int idInstituicao) async {
-//     var aluno = await Supabase.instance.client
-//         .from('view_aluno')
-//         .select('*')
-//         .eq('id', idAluno)
-//         .limit(1)
-//         .single();
-
-//     return Aluno.fromMap(aluno);
-//   }
-
-//   @override
-//   Future<Usuario> inserirUsuario({
-//     required int idInstituicaoEnsino,
-//     required String nome,
-//     required String email,
-//     required String senha,
-//     required Role tipo,
-//   }) async {
-//     AuthResponse response;
-
-//     try {
-//       response = await Supabase.instance.client.auth.signUp(
-//         email: email,
-//         password: senha,
-//       );
-//     } on AuthApiException {
-//       response = await Supabase.instance.client.auth.signInWithPassword(
-//         email: email,
-//         password: senha,
-//       );
-//     }
-
-//     final User? user = response.user;
-
-//     if (user == null) {
-//       throw Exception('Não foi possivel cadastrar o usuário');
-//     }
-
-//     final result = await Supabase.instance.client
-//         .from('usuario')
-//         .insert({
-//           'nome': nome,
-//           'fk_instituicaoensino_id': idInstituicaoEnsino,
-//           'fk_tipousuario_id': tipo.index + 1,
-//           'fk_usuario_supabase': user.id
-//         })
-//         .select('id')
-//         .limit(1)
-//         .single();
-
-//     Usuario usuario = Usuario(
-//       id_supabase: user.id,
-//       id_instituicao_ensino: idInstituicaoEnsino,
-//       id_usuario: result['id'],
-//       nome: nome,
-//       email: user.email!,
-//       tipoUsuario: tipo,
-//       created_at: DateTime.parse(user.createdAt),
-//     );
-
-//     return usuario;
-//   }
-// }

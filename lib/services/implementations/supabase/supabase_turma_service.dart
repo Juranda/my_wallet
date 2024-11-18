@@ -65,9 +65,16 @@ class SupabaseTurmaService implements TurmaService {
     for (var aluno in alunos) {
       await Supabase.instance.client.from('aluno').update(
         {
-          'idTurma': idTurma,
+          'fk_turma_id': idTurma,
         },
       ).eq('id', aluno.id);
     }
+  }
+
+  @override
+  Future<void> removerAlunoDaTurma(int idAluno, int idTurma) async {
+    await Supabase.instance.client
+        .from('aluno')
+        .update({'fk_turma_id': null}).eq('id', idAluno);
   }
 }

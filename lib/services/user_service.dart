@@ -38,5 +38,6 @@ abstract class UserService {
     required String cnpjcpf,
   });
 
-  Future<Aluno> getAluno(int idAluno);
+  Future<Aluno> getAlunoPorId(int idAluno);
+  Future<Aluno?> getAlunoPorEmail(String email);
 }

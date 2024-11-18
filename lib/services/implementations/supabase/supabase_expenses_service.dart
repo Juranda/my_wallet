@@ -17,7 +17,7 @@ class SupabaseExpensesService implements ExpensesService {
         .limit(1)
         .single();
 
-    Aluno aluno = await MyWallet.userService.getAluno(idAluno);
+    Aluno aluno = await MyWallet.userService.getAlunoPorId(idAluno);
 
     List<Transacao> transacoes = [];
 

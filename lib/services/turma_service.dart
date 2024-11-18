@@ -8,4 +8,5 @@ abstract class TurmaService {
   Future<Turma> getTurma(int idTurma);
   Future<List<Aluno>> getAlunosDaTurma(int idTurma);
   Future<void> adicionarAlunos(List<Aluno> alunos, int idTurma);
+  Future<void> removerAlunoDaTurma(int idAluno, int idTurma);
 }

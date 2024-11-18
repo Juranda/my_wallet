@@ -25,15 +25,10 @@ class _TurmaViewState extends State<TurmaView> {
   late UserProvider _roleProvider;
   late TurmaProvider _turmaProvider;
 
-  Future<void> removerAlunoDaTurma(int id) async {
-    await Supabase.instance.client
-        .from('aluno')
-        .update({'fk_turma_id': null}).eq('id', id);
-  }
-
   void showRemoverAlunoDialog(BuildContext context, int alunoId) {
     AlertDialog alert = AlertDialog(
-      title: Text("Remover Aluno da turma?"),
+      title: Text("Confirmação"),
+      content: Text("Remover aluno da turma?"),
       actionsAlignment: MainAxisAlignment.spaceAround,
       actions: [
         TextButton(
@@ -44,9 +39,8 @@ class _TurmaViewState extends State<TurmaView> {
         ),
         TextButton(
           onPressed: () {
-            removerAlunoDaTurma(
-              alunoId,
-            );
+            MyWallet.turmaService
+                .removerAlunoDaTurma(alunoId, _turmaProvider.turma.id);
             Navigator.pop(context);
           },
           child: Text("Confirmar"),
@@ -74,14 +68,6 @@ class _TurmaViewState extends State<TurmaView> {
 
   @override
   Widget build(BuildContext context) {
-    // if (_roleProvider.eProfessor) {
-    //   return const Text('Olá professor');
-    // }
-
-    // if (_roleProvider.eAdministrador) {
-    //   return const Text('Olá administrador');
-    // }
-
     return StreamBuilder(
         stream: _alunoStream,
         builder: (context, snapshot) {

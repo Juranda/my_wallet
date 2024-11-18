@@ -31,7 +31,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     return null;
   }
 
-  List<AlunoListTile> alunosTile = [];
+  List<AlunoListTile> alunoTiles = [];
   List<Aluno> alunos = [];
 
   @override
@@ -40,44 +40,17 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
     _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
   }
 
-  void removerAluno(int id) {
-    setState(() {
-      alunosTile.removeWhere((x) => x.tileID == id);
-    });
-  }
+  void adicionarAluno(BuildContext context, String email) async {
+    var aluno =
+        await MyWallet.userService.getAlunoPorEmail(_emailController.text);
 
-  Future<void> fetchAluno(String email) async {
-    final response = await Supabase.instance.client
-        .from('view_aluno')
-        .select()
-        .eq('email', email)
-        .maybeSingle();
-    if (response != null && !response.isEmpty) {
-      if (alunosTile.any((x) => x.tileID == response['id'])) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text('Aluno já está na lista'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('Ok'),
-                    )
-                  ],
-                ));
-        return;
-      }
-      setState(() {
-        alunosTile.add(AlunoListTile(
-            nome: response['nome'],
-            tileID: response['id'],
-            removerAluno: removerAluno));
-      });
-    } else {
+    //checa se encontrou aluno com esse email
+    if (aluno == null) {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text('Aluno não encontrado'),
+                title: Text('Aviso'),
+                content: Text('Nenhum aluno econtrado com este email.'),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
@@ -85,7 +58,55 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
                   )
                 ],
               ));
+      return;
     }
+
+    //checa se aluno ja esta na turma
+    if (aluno.idTurma == _turmaProvider.turma.id) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Alerta'),
+                content: Text('Aluno já está nessa turma!'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Ok'),
+                  )
+                ],
+              ));
+      return;
+    }
+
+    //checa se aluno ja foi selecionado
+    if (alunos.any((x) => x.id == aluno.id)) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Aviso'),
+                content: Text('Aluno já foi selecionado!'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Ok'),
+                  )
+                ],
+              ));
+      return;
+    }
+
+    //cria listTile e adiciona nas listas
+    alunos.add(aluno);
+    setState(() {
+      alunoTiles.add(AlunoListTile(
+          key: ValueKey(aluno.id), aluno: aluno, removerAluno: removerAluno));
+    });
+  }
+
+  void removerAluno(int id) {
+    alunoTiles.removeWhere((x) => x.aluno.id == id);
+    alunos.removeWhere((x) => x.id == id);
+    setState(() {});
   }
 
   @override
@@ -117,7 +138,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
                 child: TextButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      fetchAluno(_emailController.text);
+                      adicionarAluno(context, _emailController.text);
                     }
                   },
                   child: Text(
@@ -141,7 +162,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
           height: 350,
           width: MediaQuery.of(context).size.width,
           child: ListView(
-            children: [...alunosTile],
+            children: [...alunoTiles],
           ),
         ),
         Expanded(
@@ -150,7 +171,7 @@ class _AdicionarAlunoState extends State<AdicionarAluno> {
             child: TextButton(
               onPressed: () {
                 MyWallet.turmaService
-                    .adicionarAlunos(alunosTile, _turmaProvider.turma.id);
+                    .adicionarAlunos(alunos, _turmaProvider.turma.id);
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(

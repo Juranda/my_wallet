@@ -4,8 +4,8 @@ import 'package:my_wallet/models/users/usuario.dart';
 class Aluno extends Usuario {
   final int id;
   final String cpf;
-  final int idTurma;
-  final String nomeTurma;
+  final int? idTurma;
+  final String? nomeTurma;
   final int idEscolaridade;
   final String escolaridade;
 
@@ -36,8 +36,8 @@ class Aluno extends Usuario {
       idUsuario: map['id_usuario'],
       id: map['id'],
       cpf: map['cpf'],
-      idTurma: map['id_turma'] ?? 0,
-      nomeTurma: map['nome_turma'] ?? "",
+      idTurma: map['id_turma'] ?? null,
+      nomeTurma: map['nome_turma'] ?? null,
       idEscolaridade: map['id_escolaridade'],
       escolaridade: map['escolaridade'],
     );
