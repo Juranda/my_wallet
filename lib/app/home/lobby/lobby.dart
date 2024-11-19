@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/news_section.dart';
-import 'package:my_wallet/app/home/lobby/section.dart';
-import 'package:my_wallet/app/home/lobby/news_card.dart';
+import 'package:my_wallet/app/home/lobby/lobby_info_card.dart';
+import 'package:my_wallet/app/home/lobby/stateful_section.dart';
+import 'package:my_wallet/app/home/lobby/stateless_section.dart';
+import 'package:my_wallet/app/home/lobby/lobby_noticia_card.dart';
 import 'package:my_wallet/app/home/lobby/trail_lobby_card.dart';
+import 'package:my_wallet/models/noticia.dart';
 import 'package:my_wallet/providers/turma_provider.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:my_wallet/services/mywallet.dart';
 import 'package:provider/provider.dart';
 
-class Lobby extends StatelessWidget {
+class Lobby extends StatefulWidget {
   const Lobby({super.key});
+
+  @override
+  State<Lobby> createState() => _LobbyState();
+}
+
+class _LobbyState extends State<Lobby> {
+  late TurmaProvider _turmaProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +45,42 @@ class Lobby extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          child: LobbyAnimation(),
-                        ),
+                            child: Text(
+                                'Felipe o LobbyAnimation ta quebrado parça')),
                       ],
                     ),
                   ),
                 ),
                 Column(
                   children: [
-                    NewsSection(
-                      sectionTitle: 'Notícias',
-                      sectionHeight: 150,
-                      items: ['FIIs', 'Cartão de Credito', 'Renda Fixa']
-                          .map(
-                            (e) => TrailLobbyCard(
-                              trailName: e,
-                              trailDescription: 'Lorem ipsum',
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    LobbyNoticiasWidget(),
+                    StatelessSection(
+                        sectionTitle: 'Dicas, Informações e Investimentos',
+                        sectionHeight: 255,
+                        items: [
+                          LobbyInfoCard(
+                              titulo: 'titulo', descricao: 'descricao')
+                        ]),
+                    FutureBuilder(
+                        future: MyWallet.noticiasService
+                            .getNoticiasTurma(_turmaProvider.turma.id),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError)
+                            return Text(
+                                'Um erro ocorreu ao procurar notícias.');
+                          if (!snapshot.hasData)
+                            return Center(child: CircularProgressIndicator());
+                          if (snapshot.data!.isEmpty)
+                            return Text('Nenhuma notícia encontrada.');
+
+                          List<Noticia> noticias = snapshot.data!;
+
+                          return StatefulSection(
+                              sectionTitle: 'Notícias',
+                              sectionHeight: 150,
+                              items: noticias
+                                  .map((x) => LobbyNoticiaCard(noticia: x))
+                                  .toList());
+                        }),
                   ],
                 ),
               ],
@@ -94,37 +125,37 @@ class _LobbyAnimationState extends State<LobbyAnimation> {
   }
 }
 
-class LobbyNoticiasWidget extends StatelessWidget {
-  late final TurmaProvider _turmaProvider;
+// class LobbyNoticiasWidget extends StatelessWidget {
+//   late final TurmaProvider _turmaProvider;
 
-  @override
-  Widget build(BuildContext context) {
-    _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
+//   @override
+//   Widget build(BuildContext context) {
+//     _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
 
-    return FutureBuilder(
-      future:
-          MyWallet.noticiasService.getNoticiasTurma(_turmaProvider.turma.id),
-      builder: (ctx, snapshot) {
-        if (snapshot.hasError) {
-          return const Text('Erro ao carregar noticias');
-        }
+//     return FutureBuilder(
+//       future:
+//           MyWallet.noticiasService.getNoticiasTurma(_turmaProvider.turma.id),
+//       builder: (ctx, snapshot) {
+//         if (snapshot.hasError) {
+//           return const Text('Erro ao carregar noticias');
+//         }
 
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
+//         if (!snapshot.hasData) {
+//           return Center(child: CircularProgressIndicator());
+//         }
 
-        if (snapshot.data!.isEmpty) {
-          return const Text('Nenhuma noticia foi encontrada');
-        }
+//         if (snapshot.data!.isEmpty) {
+//           return const Text('Nenhuma noticia foi encontrada');
+//         }
 
-        final noticias = snapshot.data!;
+//         final noticias = snapshot.data!;
 
-        return Section(
-          sectionTitle: 'Dicas, Informações e Investimentos',
-          sectionHeight: 255,
-          items: noticias.map((n) => NewsCard(noticia: n)).toList(),
-        );
-      },
-    );
-  }
-}
+//         return Section(
+//           sectionTitle: 'Dicas, Informações e Investimentos',
+//           sectionHeight: 255,
+//           items: noticias.map((n) => NewsCard(noticia: n)).toList(),
+//         );
+//       },
+//     );
+//   }
+// }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/lobby/trail_lobby_news_card.dart';
+import 'package:my_wallet/app/home/lobby/lobby_info_card.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -10,8 +10,8 @@ class LobbyAddNews extends StatefulWidget {
     required this.adicionarNoticia,
   });
 
-  final void Function(TrailLobbyNewsCard) removerNoticia;
-  final void Function(TrailLobbyNewsCard) adicionarNoticia;
+  final void Function(LobbyInfoCard) removerNoticia;
+  final void Function(LobbyInfoCard) adicionarNoticia;
   @override
   State<LobbyAddNews> createState() => _LobbyAddNewsState();
 }
@@ -78,10 +78,10 @@ class _LobbyAddNewsState extends State<LobbyAddNews> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       widget.adicionarNoticia(
-                        TrailLobbyNewsCard(
-                          trailName: _newsNameController.text,
-                          trailDescription: _newsDescriptionController.text,
-                          removeCard: widget.removerNoticia,
+                        LobbyInfoCard(
+                          titulo: _newsNameController.text,
+                          descricao: _newsDescriptionController.text,
+                          //removeCard: widget.removerNoticia,
                         ),
                       );
                       Navigator.pop(context);

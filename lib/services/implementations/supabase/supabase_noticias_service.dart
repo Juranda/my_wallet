@@ -60,4 +60,6 @@ class SupabaseNoticiasService implements NoticiasService {
       'fk_usuario_id': noticia.idProf,
     });
   }
+
+  Stream<Noticia> getNoticiasStream(int idTurma) async {}
 }

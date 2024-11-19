@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/app/home/lobby/trail_lobby_news_card.dart';
+import 'package:my_wallet/app/home/lobby/lobby_info_card.dart';
 import 'package:my_wallet/app/home/lobby/lobby_add_news.dart';
 import 'package:my_wallet/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/users/funcao.dart';
+import '../../../models/users/funcao.dart';
 
-class NewsSection extends StatefulWidget {
+class StatefulSection extends StatefulWidget {
   final String sectionTitle;
   final List<Widget>? items;
   final List<Widget> addedItems = [];
   final double sectionHeight;
 
-  NewsSection({
+  StatefulSection({
     super.key,
     this.items,
     required this.sectionTitle,
@@ -20,17 +20,17 @@ class NewsSection extends StatefulWidget {
   });
 
   @override
-  State<NewsSection> createState() => _NewsSectionState();
+  State<StatefulSection> createState() => _StatefulSectionState();
 }
 
-class _NewsSectionState extends State<NewsSection> {
-  adicionarNoticia(TrailLobbyNewsCard newCard) {
+class _StatefulSectionState extends State<StatefulSection> {
+  adicionarNoticia(LobbyInfoCard newCard) {
     setState(() {
       widget.items!.clear();
     });
   }
 
-  void removerNoticia(TrailLobbyNewsCard newCard) {
+  void removerNoticia(LobbyInfoCard newCard) {
     setState(() {
       widget.items!.add(newCard);
     });

@@ -4,16 +4,12 @@ import 'package:provider/provider.dart';
 
 import '../../../models/users/funcao.dart';
 
-class TrailLobbyNewsCard extends StatelessWidget {
-  final String trailName;
-  final String trailDescription;
-  final void Function(TrailLobbyNewsCard) removeCard;
+class LobbyInfoCard extends StatelessWidget {
+  final String titulo;
+  final String descricao;
 
-  const TrailLobbyNewsCard(
-      {super.key,
-      required this.trailName,
-      required this.trailDescription,
-      required this.removeCard});
+  const LobbyInfoCard(
+      {super.key, required this.titulo, required this.descricao});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +45,7 @@ class TrailLobbyNewsCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        trailName,
+                        titulo,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       if (roleProvider.tipoUsuario == Funcao.Professor)
@@ -85,7 +81,7 @@ class TrailLobbyNewsCard extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    trailDescription,
+                    descricao,
                   )
                 ],
               ),

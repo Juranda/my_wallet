@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Section extends StatelessWidget {
+class StatelessSection extends StatelessWidget {
   final String sectionTitle;
   final List<Widget>? items;
   final double sectionHeight;
 
-  const Section({
+  const StatelessSection({
     super.key,
     this.items,
     required this.sectionTitle,

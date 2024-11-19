@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/models/noticia.dart';
 
-class NewsCard extends StatelessWidget {
+class LobbyNoticiaCard extends StatelessWidget {
   final Noticia noticia;
 
-  const NewsCard({
+  const LobbyNoticiaCard({
     super.key,
     required this.noticia,
   });
