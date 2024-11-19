@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_wallet/services/news_service.dart';
+import 'package:my_wallet/models/noticia.dart';
 
 class NewsCard extends StatelessWidget {
   final Noticia noticia;
@@ -39,13 +39,13 @@ class NewsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      noticia.title,
+                      noticia.titulo,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     Text(
-                      noticia.content,
+                      noticia.descricao,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                     ),

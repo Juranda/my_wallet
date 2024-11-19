@@ -98,7 +98,7 @@ class _TurmaViewState extends State<TurmaView> {
                         (_roleProvider.eProfessor
                             ? _turmaProvider.turma.nome
                             : _roleProvider.eAluno
-                                ? _roleProvider.aluno.nomeTurma
+                                ? _roleProvider.aluno.nomeTurma!
                                 : ''),
                     style: TextStyle(fontSize: 40),
                   ),

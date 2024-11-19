@@ -95,25 +95,22 @@ class _LobbyAnimationState extends State<LobbyAnimation> {
 }
 
 class LobbyNoticiasWidget extends StatelessWidget {
-  late final UserProvider _userProvider;
   late final TurmaProvider _turmaProvider;
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of<UserProvider>(context, listen: false);
     _turmaProvider = Provider.of<TurmaProvider>(context, listen: false);
-    final int turma = _turmaProvider.turma.id;
-    final int instituicao = _userProvider.usuario.idInstituicaoEnsino;
 
     return FutureBuilder(
-      future: MyWallet.noticiasService.getNoticiasTurma(instituicao, turma),
+      future:
+          MyWallet.noticiasService.getNoticiasTurma(_turmaProvider.turma.id),
       builder: (ctx, snapshot) {
         if (snapshot.hasError) {
           return const Text('Erro ao carregar noticias');
         }
 
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.data!.isEmpty) {

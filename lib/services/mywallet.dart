@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_expenses_service.dart';
+import 'package:my_wallet/services/implementations/supabase/supabase_noticias_service.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_trilha_service.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_turma_service.dart';
 import 'package:my_wallet/services/implementations/supabase/supabase_user_service.dart';
 import 'package:my_wallet/services/atividade_service.dart';
 import 'package:my_wallet/services/expenses_service.dart';
+import 'package:my_wallet/services/noticias_service.dart';
 import 'package:my_wallet/services/trilha_service.dart';
 import 'package:my_wallet/services/turma_service.dart';
 import 'package:my_wallet/services/user_service.dart';
@@ -17,7 +19,7 @@ class MyWallet {
   static final ExpensesService expensesService = SupabaseExpensesService();
   static final TurmaService turmaService = SupabaseTurmaService();
   static final AtividadeService atividadeService = AtividadeService();
-  static final NoticiasService noticiasService = StaticNoticiasService();
+  static final NoticiasService noticiasService = SupabaseNoticiasService();
 
   MyWallet._();
   bool _initialized = false;

@@ -104,7 +104,7 @@ class _HomePageViewState extends State<HomePageView> {
                             switch (_userProvider.tipoUsuario) {
                               Funcao.Professor => Text('Professor'),
                               Funcao.Aluno => Text(
-                                  'Turma ' + (_userProvider.aluno.nomeTurma),
+                                  'Turma ' + (_userProvider.aluno.nomeTurma!),
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               Funcao.Administrador => Text('ADMINISTRADOR'),

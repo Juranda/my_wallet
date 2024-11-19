@@ -48,8 +48,22 @@ class _LoginViewState extends State<LoginView> {
       //se aluno, pega turma_id dele
       //se professor, pega a turma_id da primeira turma que achar dele
       if (usuario.tipoUsuario == Funcao.Aluno) {
+        if (_userProvider.aluno.idTurma == null) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text('Aviso'),
+                    content: Text('Aluno não possui turma.'),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Ok'))
+                    ],
+                  ));
+          return;
+        }
         _turmaProvider.setTurma(
-            await MyWallet.turmaService.getTurma(_userProvider.aluno.idTurma));
+            await MyWallet.turmaService.getTurma(_userProvider.aluno.idTurma!));
       } else if (usuario.tipoUsuario == Funcao.Professor) {
         _turmaProvider.setTurma((await MyWallet.turmaService
                 .getAllProfessorTurmas(
